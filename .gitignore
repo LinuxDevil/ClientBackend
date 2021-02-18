@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /*.env
-heroku.yml
+
 # Logs
 logs
 *.log
