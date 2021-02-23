@@ -108,4 +108,27 @@ export class AuthService {
         }
     }
 
+    async refreshToken(username: string) {
+        console.log(username);
+        if (username === undefined) {
+            let error =  new Error("Please provide a good username");
+            return {
+                error,
+                status: 0
+            }
+        }
+        const usernameToken = this.jwtService.decode(username);
+        if (usernameToken === null) return  {
+            message: "decoding failed",
+            status: 0
+        };
+        console.log(usernameToken);
+        const token = this.jwtService.sign({username: usernameToken['username']});
+        console.log(token);
+        return {
+            token,
+            status: 1
+        };
+    }
+
 }

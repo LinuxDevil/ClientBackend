@@ -10,7 +10,7 @@ export class DatabaseConnectionService implements TypeOrmOptionsFactory {
             host: process.env.DATABAE_HOST,
             port: Number(process.env.DATABASE_PORT),
             username: 'postgres',
-            password: 'conquer001',
+            password: 'postgres',
             database: process.env.DATABASE_DB,
             synchronize: true,
             dropSchema: false,

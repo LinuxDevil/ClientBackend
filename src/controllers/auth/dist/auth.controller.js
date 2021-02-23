@@ -51,6 +51,9 @@ var AuthController = /** @class */ (function () {
     function AuthController(authService) {
         this.authService = authService;
     }
+    AuthController.prototype.refreshToken = function (body) {
+        return this.authService.refreshToken(body.username);
+    };
     AuthController.prototype.register = function (credentials) {
         var regCred = {
             email: credentials.username + "@myclinic.com",
@@ -99,6 +102,10 @@ var AuthController = /** @class */ (function () {
     AuthController.prototype.deleteUser = function (body) {
         return this.authService.deleteUser(body.username);
     };
+    __decorate([
+        common_1.Post('/refreshtoken'),
+        __param(0, common_1.Body())
+    ], AuthController.prototype, "refreshToken");
     __decorate([
         common_1.Post(),
         __param(0, common_1.Body(common_1.ValidationPipe))

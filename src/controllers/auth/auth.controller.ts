@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginDTO, LoginOTP, RegisterationOTP, RegistrationDTO } from 'src/models/user.model';
 import { AuthService } from '../../services/auth.service';
 
@@ -6,6 +6,11 @@ import { AuthService } from '../../services/auth.service';
 export class AuthController {
 
     constructor(private authService: AuthService) {}
+
+    @Post('/refreshtoken')
+    refreshToken(@Body() body: {username: string}) {
+      return this.authService.refreshToken(body.username);
+    }
 
     @Post()
     register(@Body(ValidationPipe) credentials: RegisterationOTP) {
@@ -58,5 +63,7 @@ export class AuthController {
     deleteUser(@Body() body: {username: string}) {
        return this.authService.deleteUser(body.username);
     }
+
+
 
 }

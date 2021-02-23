@@ -230,6 +230,34 @@ var AuthService = /** @class */ (function () {
             });
         });
     };
+    AuthService.prototype.refreshToken = function (username) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error, usernameToken, token;
+            return __generator(this, function (_a) {
+                console.log(username);
+                if (username === undefined) {
+                    error = new Error("Please provide a good username");
+                    return [2 /*return*/, {
+                            error: error,
+                            status: 0
+                        }];
+                }
+                usernameToken = this.jwtService.decode(username);
+                if (usernameToken === null)
+                    return [2 /*return*/, {
+                            message: "decoding failed",
+                            status: 0
+                        }];
+                console.log(usernameToken);
+                token = this.jwtService.sign({ username: usernameToken['username'] });
+                console.log(token);
+                return [2 /*return*/, {
+                        token: token,
+                        status: 1
+                    }];
+            });
+        });
+    };
     AuthService = __decorate([
         common_1.Injectable(),
         __param(0, typeorm_1.InjectRepository(user_entity_1.UserEntity)),
