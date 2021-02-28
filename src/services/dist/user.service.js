@@ -74,8 +74,8 @@ var UserService = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username } })];
                     case 1:
                         user = _a.sent();
-                        if (!data.insuranceCompanyId) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.insuranceRepo.findOne({ where: { id: data.insuranceCompanyId } })];
+                        if (!(data.insuranceCompanyId !== null && data.insuranceCompanyId !== undefined)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.insuranceRepo.findOne({ where: { id: +data.insuranceCompanyId } })];
                     case 2:
                         insurance = _a.sent();
                         if (insurance === null || insurance === undefined) {
@@ -88,10 +88,12 @@ var UserService = /** @class */ (function () {
                         return [4 /*yield*/, user.save()];
                     case 3:
                         _a.sent();
-                        delete data.insuranceCompanyId;
-                        _a.label = 4;
-                    case 4: return [4 /*yield*/, this.userRepo.update({ username: username }, data)];
-                    case 5:
+                        return [4 /*yield*/, delete data.insuranceCompanyId];
+                    case 4:
+                        _a.sent();
+                        _a.label = 5;
+                    case 5: return [4 /*yield*/, this.userRepo.update({ username: username }, data)];
+                    case 6:
                         _a.sent();
                         return [2 /*return*/, user];
                 }

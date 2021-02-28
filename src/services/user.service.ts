@@ -20,8 +20,8 @@ export class UserService {
 
     async updateUser(username: string, data: UpdateUserDTO) {
         let user = await this.userRepo.findOne({where: {username}});
-        if (data.insuranceCompanyId) {
-            let insurance = await this.insuranceRepo.findOne({where: {id: data.insuranceCompanyId}});
+        if (data.insuranceCompanyId !== null && data.insuranceCompanyId !== undefined) {
+            let insurance = await this.insuranceRepo.findOne({where: {id: +data.insuranceCompanyId}});
             if (insurance === null || insurance === undefined) {
                 return {
                     status: 0,
@@ -30,7 +30,7 @@ export class UserService {
             }
             user.insuranceCompany = insurance;
             await user.save();
-            delete data.insuranceCompanyId;
+            await delete data.insuranceCompanyId;
         }
         await this.userRepo.update({ username }, data);
         return user;
