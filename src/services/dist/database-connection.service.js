@@ -13,12 +13,12 @@ var DatabaseConnectionService = /** @class */ (function () {
     }
     DatabaseConnectionService.prototype.createTypeOrmOptions = function () {
         return {
-            name: 'default',
+            name: 'myclinic',
             type: 'postgres',
             host: process.env.DATABAE_HOST,
             port: Number(process.env.DATABASE_PORT),
             username: 'postgres',
-            password: 'postgres',
+            password: 'conquer001',
             database: process.env.DATABASE_DB,
             synchronize: true,
             dropSchema: false,

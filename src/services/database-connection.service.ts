@@ -5,12 +5,12 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 export class DatabaseConnectionService implements TypeOrmOptionsFactory {
     createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
-            name: 'default',
+            name: 'myclinic',
             type: 'postgres',
             host: process.env.DATABAE_HOST,
             port: Number(process.env.DATABASE_PORT),
             username: 'postgres',
-            password: 'postgres',
+            password: 'conquer001',
             database: process.env.DATABASE_DB,
             synchronize: true,
             dropSchema: false,
