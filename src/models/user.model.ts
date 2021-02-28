@@ -66,6 +66,28 @@ export class UpdateUserDTO {
     nationalityId: string;
 }
 
+export class UpdateDoctorDTO {
+    @IsString()
+    @IsOptional()
+    name: string;
+    @IsEmail()
+    @IsOptional()
+    email: string;
+    @IsOptional()
+    image: string;
+    @IsOptional()
+    bio: string;
+    @IsString()
+    @IsOptional()
+    insuranceNumber: string;
+    @IsString()
+    @IsOptional()
+    insuranceCompanyId: string;
+    @IsString()
+    @IsOptional()
+    nationalityId: string;
+}
+
 export interface AuthPayload {
     username: string;
 }

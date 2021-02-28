@@ -49,11 +49,40 @@ exports.DoctorsService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var doctor_entity_1 = require("src/entities/doctor.entity");
+var insurance_entity_1 = require("src/entities/insurance.entity");
 require("../helpers/DateExt");
 var DoctorsService = /** @class */ (function () {
-    function DoctorsService(doctorRepo) {
+    function DoctorsService(doctorRepo, insuranceRepo) {
         this.doctorRepo = doctorRepo;
+        this.insuranceRepo = insuranceRepo;
     }
+    DoctorsService.prototype.getAllDoctors = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.doctorRepo.find({ relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital'] })];
+            });
+        });
+    };
+    DoctorsService.prototype.getDoctorById = function (doctorId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                message: 'there is no doctor with that id',
+                                status: 0
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     DoctorsService.prototype.getTimes = function (date, newDuration, shift) {
         var quarterHours = ["00"];
         if (newDuration === "0") {
@@ -102,7 +131,6 @@ var DoctorsService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         doctor = upDoctor;
-                        console.log('Called');
                         if (doctor === null) {
                             return [2 /*return*/, new common_1.InternalServerErrorException("Doctor Entity is null")];
                         }
@@ -127,7 +155,6 @@ var DoctorsService = /** @class */ (function () {
                         doctor.appointmentDates.forEach(function (appointment) {
                             appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, doctor.shiftDuration));
                         });
-                        console.log(appointmens);
                         doctor.appointmentTimes = appointmens;
                         return [4 /*yield*/, doctor.save()];
                     case 1:
@@ -137,6 +164,45 @@ var DoctorsService = /** @class */ (function () {
                     case 2:
                         _a.sent();
                         return [2 /*return*/, upDoctor];
+                }
+            });
+        });
+    };
+    DoctorsService.prototype.updateDoctor = function (username, data) {
+        return __awaiter(this, void 0, void 0, function () {
+            var doctor, insurance;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
+                    case 1:
+                        doctor = _a.sent();
+                        if (doctor === undefined || doctor === null) {
+                            return [2 /*return*/, {
+                                    status: 0,
+                                    message: 'There is no doctor with username' + username
+                                }];
+                        }
+                        if (!data.insuranceCompanyId) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.insuranceRepo.findOne({ where: { id: data.insuranceCompanyId } })];
+                    case 2:
+                        insurance = _a.sent();
+                        if (insurance === null || insurance === undefined) {
+                            return [2 /*return*/, {
+                                    status: 0,
+                                    message: 'There is no insurance with id' + data.insuranceCompanyId
+                                }];
+                        }
+                        doctor.insuranceCompany = insurance;
+                        return [4 /*yield*/, doctor.save()];
+                    case 3:
+                        _a.sent();
+                        delete data.insuranceCompanyId;
+                        _a.label = 4;
+                    case 4: return [4 /*yield*/, this.doctorRepo.update({ username: "+".concat(username) }, data)];
+                    case 5:
+                        _a.sent();
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
+                    case 6: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -161,9 +227,30 @@ var DoctorsService = /** @class */ (function () {
             });
         });
     };
+    DoctorsService.prototype.deleteDoctorById = function (doctorId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.doctorRepo["delete"]({ id: +doctorId })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                message: 'there is no doctor with that id',
+                                status: 0
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     DoctorsService = __decorate([
         common_1.Injectable(),
-        __param(0, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity))
+        __param(0, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity)),
+        __param(1, typeorm_1.InjectRepository(insurance_entity_1.InsuranceCompanyEntity))
     ], DoctorsService);
     return DoctorsService;
 }());

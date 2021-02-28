@@ -178,12 +178,10 @@ var AuthService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         user = this.doctorRepo.create(credentials);
-                        console.log("GOt user", credentials);
                         return [4 /*yield*/, user.save()];
                     case 1:
                         _a.sent();
                         payload = { username: user.username };
-                        console.log("payload", payload);
                         return [4 /*yield*/, this.smsService.sendVerification(user.username)];
                     case 2:
                         _a.sent();

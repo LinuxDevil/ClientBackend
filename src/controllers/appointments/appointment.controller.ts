@@ -31,6 +31,11 @@ export class AppointmentController {
         return this.appointmentService.addAppointment(data);
     }
 
+    @Post('/hospital')
+    createHospitalOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
+        return this.appointmentService.addHospitalAppointment(data);
+    }
+
     @Delete('/delete')
     @UseGuards(AuthGuard())
     deleteAppointment(@Body(new ValidationPipe({transform: true})) appointmentId: {appointmentId: string}) {

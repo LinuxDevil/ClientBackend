@@ -30,8 +30,17 @@ var AppointmentDTO = /** @class */ (function () {
         class_validator_1.IsString()
     ], AppointmentDTO.prototype, "doctor");
     __decorate([
+        class_validator_1.IsOptional(),
         class_validator_1.IsString()
     ], AppointmentDTO.prototype, "place");
+    __decorate([
+        class_validator_1.IsOptional(),
+        class_validator_1.IsString()
+    ], AppointmentDTO.prototype, "hospitalId");
+    __decorate([
+        class_validator_1.IsOptional(),
+        class_validator_1.IsString()
+    ], AppointmentDTO.prototype, "type");
     return AppointmentDTO;
 }());
 exports.AppointmentDTO = AppointmentDTO;

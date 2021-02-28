@@ -11,7 +11,7 @@ export class CityEntity extends AbstractEntity {
     @Column()
     nameEn: string;
 
-    @OneToMany(() => DistrictEntity, district => district.id)
+    @OneToMany(() => DistrictEntity   , district => district.id)
     @JoinTable()
     districts: DistrictEntity[];
 

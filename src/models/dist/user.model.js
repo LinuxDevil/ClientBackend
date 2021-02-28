@@ -19,7 +19,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.UpdateUserDTO = exports.RegistrationDTO = exports.RegisterationOTP = exports.LoginOTP = exports.LoginDTO = void 0;
+exports.UpdateDoctorDTO = exports.UpdateUserDTO = exports.RegistrationDTO = exports.RegisterationOTP = exports.LoginOTP = exports.LoginDTO = void 0;
 var class_validator_1 = require("class-validator");
 var LoginDTO = /** @class */ (function () {
     function LoginDTO() {
@@ -115,3 +115,35 @@ var UpdateUserDTO = /** @class */ (function () {
     return UpdateUserDTO;
 }());
 exports.UpdateUserDTO = UpdateUserDTO;
+var UpdateDoctorDTO = /** @class */ (function () {
+    function UpdateDoctorDTO() {
+    }
+    __decorate([
+        class_validator_1.IsString(),
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "name");
+    __decorate([
+        class_validator_1.IsEmail(),
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "email");
+    __decorate([
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "image");
+    __decorate([
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "bio");
+    __decorate([
+        class_validator_1.IsString(),
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "insuranceNumber");
+    __decorate([
+        class_validator_1.IsString(),
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "insuranceCompanyId");
+    __decorate([
+        class_validator_1.IsString(),
+        class_validator_1.IsOptional()
+    ], UpdateDoctorDTO.prototype, "nationalityId");
+    return UpdateDoctorDTO;
+}());
+exports.UpdateDoctorDTO = UpdateDoctorDTO;

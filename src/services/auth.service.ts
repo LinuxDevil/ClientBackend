@@ -77,10 +77,8 @@ export class AuthService {
     async registerDoctor(credentials: RegistrationDTO) {
         try {
             const user = this.doctorRepo.create(credentials);
-            console.log("GOt user", credentials);
             await user.save();
             const payload = { username: user.username };
-            console.log("payload", payload);
             await this.smsService.sendVerification(user.username);
             const token = this.jwtService.sign(payload);
             return { doctor: { ...user.toJSON(), token } };

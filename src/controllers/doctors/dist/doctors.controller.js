@@ -53,6 +53,26 @@ var DoctorsController = /** @class */ (function () {
     function DoctorsController(doctorService) {
         this.doctorService = doctorService;
     }
+    DoctorsController.prototype.getAllDoctors = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.doctorService.getAllDoctors()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    DoctorsController.prototype.getDoctorById = function (body) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.doctorService.getDoctorById(body.id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     DoctorsController.prototype.updateDoctorAppointmentDuration = function (doctor, newDuratonObject) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -73,6 +93,26 @@ var DoctorsController = /** @class */ (function () {
             });
         });
     };
+    DoctorsController.prototype.update = function (username, data) {
+        return this.doctorService.updateDoctor(username, data);
+    };
+    DoctorsController.prototype.deleteDoctorById = function (body) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.doctorService.deleteDoctorById(body.id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    __decorate([
+        common_1.Get('/all')
+    ], DoctorsController.prototype, "getAllDoctors");
+    __decorate([
+        common_1.Get(),
+        __param(0, common_1.Body())
+    ], DoctorsController.prototype, "getDoctorById");
     __decorate([
         common_1.Post('times'),
         common_1.UseGuards(passport_1.AuthGuard()),
@@ -83,6 +123,14 @@ var DoctorsController = /** @class */ (function () {
         common_1.UseGuards(passport_1.AuthGuard()),
         __param(0, user_decorator_1.Doctor()), __param(1, common_1.Body())
     ], DoctorsController.prototype, "updateDoctorAppointmentDates");
+    __decorate([
+        common_1.Put(),
+        __param(0, common_1.Query('username')), __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+    ], DoctorsController.prototype, "update");
+    __decorate([
+        common_1.Delete('/delete'),
+        __param(0, common_1.Body())
+    ], DoctorsController.prototype, "deleteDoctorById");
     DoctorsController = __decorate([
         common_1.Controller('doctors')
     ], DoctorsController);

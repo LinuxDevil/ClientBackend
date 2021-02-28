@@ -23,6 +23,7 @@ exports.AppointmentEntity = void 0;
 var typeorm_1 = require("typeorm");
 var abstract_entities_1 = require("./abstract-entities");
 var doctor_entity_1 = require("./doctor.entity");
+var hospital_entity_1 = require("./hospital.entity");
 var place_entity_1 = require("./place.entity");
 var user_entity_1 = require("./user.entity");
 var AppointmentEntity = /** @class */ (function (_super) {
@@ -66,6 +67,12 @@ var AppointmentEntity = /** @class */ (function (_super) {
         }),
         typeorm_1.JoinTable()
     ], AppointmentEntity.prototype, "user");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.appointments; }, {
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinTable()
+    ], AppointmentEntity.prototype, "hospital");
     __decorate([
         typeorm_1.ManyToOne(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, {
             onDelete: 'CASCADE'

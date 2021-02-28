@@ -2,6 +2,7 @@ import { Delete } from "@nestjs/common";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { AbstractEntity } from "./abstract-entities";
 import { DoctorEntity } from "./doctor.entity";
+import { HospitalEntity } from "./hospital.entity";
 import { PlaceEntity } from "./place.entity";
 import { UserEntity } from "./user.entity";
 
@@ -43,6 +44,12 @@ export class AppointmentEntity extends AbstractEntity {
     })
     @JoinTable()
     user: UserEntity;
+
+    @ManyToOne(() => HospitalEntity, (hospital: HospitalEntity) => hospital.appointments, {
+        onDelete: 'CASCADE'
+    })
+    @JoinTable()
+    hospital: HospitalEntity;
 
     // M-M with place
     @ManyToOne(() => PlaceEntity, (place: PlaceEntity) => place.id, {

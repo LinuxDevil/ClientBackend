@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { AbstractEntity } from "./abstract-entities";
 import { AppointmentEntity } from "./appointment.entity";
 import { CityEntity } from "./city.entity";
@@ -37,42 +37,60 @@ export class HospitalEntity extends AbstractEntity {
     @Column() 
     isAvialable: boolean;
 
+    @Column({default: 8, nullable: true})
+    shiftDuration: number;
+
+    @Column({default: '10', nullable: true})
+    duration: string;
+
+    @Column('text', {array: true, nullable: true})
+    appointmentTimes: string[];
+
+    @Column('text', {array: true, nullable: true})
+    appointmentDurations: string[];
+
+    @Column('text', {array: true, nullable: true})
+    appointmentDates: string[];
+
     @Column('text', {array: true})
     insurances: string[];
 
     @Column('date', {array: true})
     holidays: Date[];
 
-    @OneToOne(() => CityEntity, city => city.id)
-    @JoinTable()
-    location: CityEntity[];
+    @ManyToOne(() => CityEntity, city => city.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
+    location: CityEntity;
 
-    @OneToMany(() => AppointmentEntity, appointment => appointment.id)
+    @OneToMany(() => AppointmentEntity, appointment => appointment.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     @JoinTable()
-    appointments: AppointmentEntity[];
+    JoinColumn: AppointmentEntity[];
 
-    @OneToMany(() => PlaceEntity, place => place.id)
-    @JoinTable()
+    @OneToMany(() => PlaceEntity, place => place.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
     labs: PlaceEntity[];
 
-    @OneToMany(() => PlaceEntity, place => place.id)
-    @JoinTable()
+    @OneToMany(() => PlaceEntity, place => place.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
     xrays: PlaceEntity[];
 
-    @OneToMany(() => PlaceEntity, place => place.id)
-    @JoinTable()
+    @OneToMany(() => PlaceEntity, place => place.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
     pharmacies: PlaceEntity[];
 
-    @OneToMany(() => DoctorEntity, doctor => doctor.id)
-    @JoinTable()
+    @OneToMany(() => DoctorEntity, doctor => doctor.hospital, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn({name: 'doctors'})
     doctors: DoctorEntity[];
 
-    @OneToMany(() => UserEntity, user => user.id)
-    @JoinTable()
+    @OneToMany(() => UserEntity, user => user.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
     user: UserEntity[];
 
-    @OneToMany(() => HospitalEntity, hospital => hospital.id)
-    @JoinTable()
+    @OneToMany(() => HospitalEntity, hospital => hospital.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
     subHospitals: HospitalEntity[];
 
+    @ManyToOne(() => AppointmentEntity, appointment => appointment.hospital)
+    @JoinTable()
+    appointments: AppointmentEntity[];
 }

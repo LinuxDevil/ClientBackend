@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsEmail, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsEmail, IsNumber, IsString } from "class-validator";
 
 export class HospitalDTO {
     @IsString()
@@ -34,5 +34,8 @@ export class HospitalDTO {
 
     @IsArray()
     holidays: Date[];
+
+    @IsString()
+    cityId: string;
 
 }

@@ -19,17 +19,20 @@ import { InsuranceController } from 'src/controllers/insurance/insurance.control
 import { HospitalEntity } from 'src/entities/hospital.entity';
 import { HospitalsController } from 'src/controllers/hospitals/hospitals.controller';
 import { HospitalsService } from 'src/services/hospitals/hospitals.service';
+import { CityEntity } from 'src/entities/city.entity';
+import { CitiesService } from 'src/services/cities.service';
+import { CitiesController } from 'src/controllers/cities/cities.controller';
 
 
 @Module({
   imports: [
     MenuitemsModule,
     TypeOrmModule.forFeature(
-      [InsuranceCompanyEntity, AppointmentEntity, UserEntity, DoctorEntity, PlaceEntity, MenuItem, HospitalEntity]),
+      [InsuranceCompanyEntity, AppointmentEntity, UserEntity, DoctorEntity, PlaceEntity, MenuItem, HospitalEntity, CityEntity]),
     AuthModule
   ],
-  providers: [InsuranceService ,AppointmentService, MenuitemsService, DoctorsService, HospitalsService],
-  controllers: [InsuranceController ,AppointmentController, MenuitemsController, DoctorsController, HospitalsController],
+  providers: [InsuranceService ,AppointmentService, MenuitemsService, DoctorsService, HospitalsService, CitiesService],
+  controllers: [InsuranceController ,AppointmentController, MenuitemsController, DoctorsController, HospitalsController, CitiesController],
   exports: [AppointmentService, MenuitemsService, DoctorsService]
 })
 export class AppointmentModule { }

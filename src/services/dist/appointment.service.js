@@ -50,14 +50,16 @@ var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var appointment_entity_1 = require("src/entities/appointment.entity");
 var doctor_entity_1 = require("src/entities/doctor.entity");
+var hospital_entity_1 = require("src/entities/hospital.entity");
 var place_entity_1 = require("src/entities/place.entity");
 var user_entity_1 = require("src/entities/user.entity");
 var AppointmentService = /** @class */ (function () {
-    function AppointmentService(appointmentRepo, doctorRepo, userRepo, placeRepo) {
+    function AppointmentService(appointmentRepo, doctorRepo, userRepo, placeRepo, hospitalRepo) {
         this.appointmentRepo = appointmentRepo;
         this.doctorRepo = doctorRepo;
         this.userRepo = userRepo;
         this.placeRepo = placeRepo;
+        this.hospitalRepo = hospitalRepo;
     }
     AppointmentService.prototype.findUser = function (username, user) {
         return __awaiter(this, void 0, Promise, function () {
@@ -85,7 +87,7 @@ var AppointmentService = /** @class */ (function () {
     };
     AppointmentService.prototype.addAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor, user, place, appointmentEntity;
+            var doctor, user, place, appointmentEntity, index, date, convertedDate;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: appointment.doctor } })];
@@ -99,19 +101,85 @@ var AppointmentService = /** @class */ (function () {
                         place = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
                         appointmentEntity.user = user;
+                        index = doctor.appointmentTimes.indexOf(appointment.time);
+                        if (index === -1) {
+                            return [2 /*return*/, {
+                                    status: 0,
+                                    message: 'there was no time'
+                                }];
+                        }
+                        doctor.appointmentTimes.splice(index, 1);
+                        return [4 /*yield*/, doctor.save()];
+                    case 4:
+                        _a.sent();
                         appointmentEntity.doctor = doctor;
                         appointmentEntity.place = place;
-                        appointmentEntity.date = new Date(appointment.date);
+                        date = appointment.date.split("/");
+                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
                         appointmentEntity.location = appointment.location;
                         appointmentEntity.inProgress = true;
                         appointmentEntity.shift = appointment.shift;
                         return [4 /*yield*/, this.appointmentRepo.create(appointmentEntity)];
-                    case 4:
+                    case 5:
                         _a.sent();
                         return [4 /*yield*/, appointmentEntity.save()];
+                    case 6:
+                        _a.sent();
+                        return [2 /*return*/, appointmentEntity];
+                }
+            });
+        });
+    };
+    /**
+     * when the user clicks on add appointment.
+     * External for example, he get's an appointment inside the hospital.
+     * So here, update the hospital appointemnts to that, with the corresponding type.
+     */
+    AppointmentService.prototype.addHospitalAppointment = function (appointment) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hospital, user, place, appointmentEntity, index, date, convertedDate;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +appointment.hospitalId } })];
+                    case 1:
+                        hospital = _a.sent();
+                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                    case 2:
+                        user = _a.sent();
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { placeName: appointment.place } })];
+                    case 3:
+                        place = _a.sent();
+                        appointmentEntity = new appointment_entity_1.AppointmentEntity();
+                        appointmentEntity.user = user;
+                        index = hospital.appointmentTimes.indexOf(appointment.time);
+                        if (index === -1) {
+                            return [2 /*return*/, {
+                                    status: 0,
+                                    message: 'there was no time'
+                                }];
+                        }
+                        hospital.appointmentTimes.splice(index, 1);
+                        return [4 /*yield*/, hospital.save()];
+                    case 4:
+                        _a.sent();
+                        appointmentEntity.hospital = hospital;
+                        appointmentEntity.place = place;
+                        date = appointment.date.split("/");
+                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        appointmentEntity.date = new Date(convertedDate);
+                        appointmentEntity.time = appointment.time;
+                        appointmentEntity.rate = 0;
+                        appointmentEntity.location = appointment.location;
+                        appointmentEntity.inProgress = true;
+                        appointmentEntity.shift = appointment.shift;
+                        return [4 /*yield*/, this.appointmentRepo.create(appointmentEntity)];
                     case 5:
+                        _a.sent();
+                        return [4 /*yield*/, appointmentEntity.save()];
+                    case 6:
                         _a.sent();
                         return [2 /*return*/, appointmentEntity];
                 }
@@ -169,7 +237,8 @@ var AppointmentService = /** @class */ (function () {
         __param(0, typeorm_1.InjectRepository(appointment_entity_1.AppointmentEntity)),
         __param(1, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity)),
         __param(2, typeorm_1.InjectRepository(user_entity_1.UserEntity)),
-        __param(3, typeorm_1.InjectRepository(place_entity_1.PlaceEntity))
+        __param(3, typeorm_1.InjectRepository(place_entity_1.PlaceEntity)),
+        __param(4, typeorm_1.InjectRepository(hospital_entity_1.HospitalEntity))
     ], AppointmentService);
     return AppointmentService;
 }());

@@ -48,16 +48,79 @@ exports.__esModule = true;
 exports.HospitalsService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
+var city_entity_1 = require("src/entities/city.entity");
+var doctor_entity_1 = require("src/entities/doctor.entity");
 var hospital_entity_1 = require("src/entities/hospital.entity");
 var HospitalsService = /** @class */ (function () {
-    function HospitalsService(hospitalRepo) {
+    function HospitalsService(hospitalRepo, cityRepository, doctorRepo) {
         this.hospitalRepo = hospitalRepo;
+        this.cityRepository = cityRepository;
+        this.doctorRepo = doctorRepo;
     }
+    HospitalsService.prototype.getTimes = function (date, newDuration, shift) {
+        var quarterHours = ["00"];
+        if (newDuration === "0") {
+            quarterHours = ["00", "15", "30", "45"];
+        }
+        else {
+            var oldValue = +newDuration;
+            while (newDuration < 60) {
+                quarterHours.push(newDuration);
+                newDuration = +newDuration + oldValue;
+            }
+        }
+        var times = [];
+        var appointmentStartTime = Number.parseInt(date.split(" ")[1]);
+        for (var i = appointmentStartTime; i < appointmentStartTime + shift; i++) {
+            for (var j = 0; j < quarterHours.length; j++) {
+                var time = i + ":" + quarterHours[j];
+                if (i < 10) {
+                    time = "0" + time;
+                }
+                times.push(date.split(" ")[0] + " " + time);
+            }
+        }
+        return times;
+    };
+    HospitalsService.prototype.getDaysArray = function (start, end, timeToAdd) {
+        for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+            arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
+        }
+        return arr;
+    };
+    ;
+    HospitalsService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
+        var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
+        daylist.map(function (v) {
+            var thing = v.slice(0, 15);
+            return thing;
+        }).join("");
+        return daylist;
+    };
     //Create new hospital
     HospitalsService.prototype.createNewHospital = function (hospital) {
         return __awaiter(this, void 0, void 0, function () {
+            var city, hospitalEntity;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        if (hospital === null) {
+                            return [2 /*return*/, new Error("Invalid input")];
+                        }
+                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: hospital.cityId } })];
+                    case 1:
+                        city = _a.sent();
+                        if (city === null)
+                            return [2 /*return*/, new Error("City id is not found")];
+                        return [4 /*yield*/, this.hospitalRepo.create(hospital)];
+                    case 2:
+                        hospitalEntity = _a.sent();
+                        hospitalEntity.location = city;
+                        return [4 /*yield*/, hospitalEntity.save()];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, hospitalEntity];
+                }
             });
         });
     };
@@ -77,7 +140,18 @@ var HospitalsService = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "Private" } })];
+                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    //Get all private hospitals
+    HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -103,9 +177,151 @@ var HospitalsService = /** @class */ (function () {
             });
         });
     };
+    HospitalsService.prototype.deleteHospital = function (hospitalId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hospital;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 1:
+                        hospital = _a.sent();
+                        console.log(hospital);
+                        if (hospital === null || hospital === undefined)
+                            return [2 /*return*/, {
+                                    status: 0,
+                                    message: "Hospital not found"
+                                }];
+                        return [4 /*yield*/, hospital.remove()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    HospitalsService.prototype.deleteAllHospitals = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo["delete"]({ type: 'private' })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    //TODO:: Add place to hospital
+    HospitalsService.prototype.addPlace = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
+        });
+    };
+    //TODO: Add doctor to hospital
+    HospitalsService.prototype.addDoctor = function (doctorId, hospitalId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hospital, doctor;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 1:
+                        hospital = _a.sent();
+                        if (hospital === null || hospital === undefined) {
+                            return [2 /*return*/, {
+                                    message: "There's no hospital with that id",
+                                    status: 0
+                                }];
+                        }
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
+                    case 2:
+                        doctor = _a.sent();
+                        if (doctor === null || doctor === undefined) {
+                            return [2 /*return*/, {
+                                    message: "There's no doctor with that id",
+                                    status: 0
+                                }];
+                        }
+                        if (hospital.doctors === undefined || hospital.doctors === null) {
+                            hospital.doctors = [];
+                        }
+                        return [4 /*yield*/, hospital.doctors.push(doctor)];
+                    case 3:
+                        _a.sent();
+                        return [4 /*yield*/, hospital.save()];
+                    case 4:
+                        _a.sent();
+                        return [2 /*return*/, hospital];
+                }
+            });
+        });
+    };
+    //TODO: Generate appointment times for hospitals/ operations and everything else
+    HospitalsService.prototype.updateHospitalOperationDurations = function (hospitalId, newDuration) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hospital, date, appointmens;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 1:
+                        hospital = _a.sent();
+                        if (hospital === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital is null")];
+                        }
+                        if (hospital.shiftDuration === null) {
+                            hospital.shiftDuration = 8;
+                        }
+                        if (hospital.appointmentTimes === null) {
+                            hospital.appointmentTimes = [];
+                        }
+                        if (hospital.appointmentDates === null || hospital.appointmentDates.length < 1) {
+                            hospital.appointmentDates = [];
+                            date = new Date();
+                            hospital.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
+                            hospital.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                        }
+                        if (hospital.appointmentDurations === null || hospital.appointmentDurations.length < 1) {
+                            hospital.appointmentDurations = [];
+                            hospital.appointmentDurations.push("02:00");
+                        }
+                        hospital.duration = newDuration;
+                        appointmens = [];
+                        hospital.appointmentDates.forEach(function (appointment) {
+                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, hospital.shiftDuration));
+                        });
+                        hospital.appointmentTimes = appointmens;
+                        return [4 /*yield*/, hospital.save()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/, hospital];
+                }
+            });
+        });
+    };
+    HospitalsService.prototype.updateHospitalOperationDates = function (hospitalId, startDate, endDate) {
+        return __awaiter(this, void 0, void 0, function () {
+            var hospital;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 1:
+                        hospital = _a.sent();
+                        if (hospital === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital Entity is null")];
+                        }
+                        hospital.appointmentDates = this.getDaysList(startDate, endDate, hospital.appointmentDurations);
+                        return [4 /*yield*/, hospital.save()];
+                    case 2:
+                        _a.sent();
+                        return [4 /*yield*/, this.updateHospitalOperationDurations(hospitalId, hospital.duration)];
+                    case 3: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     HospitalsService = __decorate([
         common_1.Injectable(),
-        __param(0, typeorm_1.InjectRepository(hospital_entity_1.HospitalEntity))
+        __param(0, typeorm_1.InjectRepository(hospital_entity_1.HospitalEntity)),
+        __param(1, typeorm_1.InjectRepository(city_entity_1.CityEntity)),
+        __param(2, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity))
     ], HospitalsService);
     return HospitalsService;
 }());

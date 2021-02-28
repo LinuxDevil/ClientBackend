@@ -45,6 +45,9 @@ var HospitalDTO = /** @class */ (function () {
     __decorate([
         class_validator_1.IsArray()
     ], HospitalDTO.prototype, "holidays");
+    __decorate([
+        class_validator_1.IsString()
+    ], HospitalDTO.prototype, "cityId");
     return HospitalDTO;
 }());
 exports.HospitalDTO = HospitalDTO;

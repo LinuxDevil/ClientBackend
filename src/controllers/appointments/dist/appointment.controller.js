@@ -28,6 +28,9 @@ var AppointmentController = /** @class */ (function () {
     AppointmentController.prototype.createNewAppointment = function (user, data) {
         return this.appointmentService.addAppointment(data);
     };
+    AppointmentController.prototype.createHospitalOperationAppointment = function (data) {
+        return this.appointmentService.addHospitalAppointment(data);
+    };
     AppointmentController.prototype.deleteAppointment = function (appointmentId) {
         return this.appointmentService.deleteAppointment(appointmentId.appointmentId);
     };
@@ -55,6 +58,10 @@ var AppointmentController = /** @class */ (function () {
         common_1.UseGuards(passport_1.AuthGuard()),
         __param(0, user_decorator_1.User()), __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
     ], AppointmentController.prototype, "createNewAppointment");
+    __decorate([
+        common_1.Post('/hospital'),
+        __param(0, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+    ], AppointmentController.prototype, "createHospitalOperationAppointment");
     __decorate([
         common_1.Delete('/delete'),
         common_1.UseGuards(passport_1.AuthGuard()),

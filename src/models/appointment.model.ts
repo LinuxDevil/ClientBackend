@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 
 export class AppointmentDTO {
@@ -20,6 +20,16 @@ export class AppointmentDTO {
     @IsString()
     doctor: string;
 
+    @IsOptional()
     @IsString()
     place: string;
+
+    @IsOptional()
+    @IsString()
+    hospitalId;
+
+    @IsOptional()
+    @IsString()
+    type: string;
+
 }

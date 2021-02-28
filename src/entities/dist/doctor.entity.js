@@ -75,6 +75,7 @@ var bcrypt = require("bcryptjs");
 var qalification_entity_1 = require("./qalification.entity");
 var appointment_entity_1 = require("./appointment.entity");
 var insurance_entity_1 = require("./insurance.entity");
+var hospital_entity_1 = require("./hospital.entity");
 var DoctorEntity = /** @class */ (function (_super) {
     __extends(DoctorEntity, _super);
     function DoctorEntity() {
@@ -127,6 +128,12 @@ var DoctorEntity = /** @class */ (function (_super) {
         typeorm_1.Column({ "default": '' })
     ], DoctorEntity.prototype, "bio");
     __decorate([
+        typeorm_1.Column({ "default": '', nullable: true })
+    ], DoctorEntity.prototype, "nationalityId");
+    __decorate([
+        typeorm_1.Column({ "default": '' })
+    ], DoctorEntity.prototype, "name");
+    __decorate([
         typeorm_1.Column({ "default": null, nullable: true })
     ], DoctorEntity.prototype, "image");
     __decorate([
@@ -149,6 +156,9 @@ var DoctorEntity = /** @class */ (function (_super) {
         typeorm_1.Column('text', { array: true, nullable: true })
     ], DoctorEntity.prototype, "appointmentDates");
     __decorate([
+        typeorm_1.Column({ "default": '' })
+    ], DoctorEntity.prototype, "insuranceNumber");
+    __decorate([
         typeorm_1.Column({ "default": false })
     ], DoctorEntity.prototype, "isVerified");
     __decorate([
@@ -156,8 +166,8 @@ var DoctorEntity = /** @class */ (function (_super) {
         typeorm_1.JoinTable()
     ], DoctorEntity.prototype, "appointments");
     __decorate([
-        typeorm_1.OneToMany(function () { return insurance_entity_1.InsuranceCompanyEntity; }, function (insurance) { return insurance.id; }),
-        typeorm_1.JoinTable()
+        typeorm_1.OneToOne(function () { return insurance_entity_1.InsuranceCompanyEntity; }, function (insurance) { return insurance.id; }),
+        typeorm_1.JoinColumn()
     ], DoctorEntity.prototype, "insuranceCompany");
     __decorate([
         typeorm_1.ManyToMany(function (type) { return user_entity_1.UserEntity; }, function (user) { return user.username; }),
@@ -167,6 +177,9 @@ var DoctorEntity = /** @class */ (function (_super) {
         typeorm_1.OneToMany(function () { return qalification_entity_1.QalificationsEntity; }, function (qalification) { return qalification.doctor; }),
         typeorm_1.JoinTable()
     ], DoctorEntity.prototype, "qalifications");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.doctors; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+    ], DoctorEntity.prototype, "hospital");
     __decorate([
         typeorm_1.BeforeInsert()
     ], DoctorEntity.prototype, "hashPassword");

@@ -28,6 +28,9 @@ var insurance_controller_1 = require("src/controllers/insurance/insurance.contro
 var hospital_entity_1 = require("src/entities/hospital.entity");
 var hospitals_controller_1 = require("src/controllers/hospitals/hospitals.controller");
 var hospitals_service_1 = require("src/services/hospitals/hospitals.service");
+var city_entity_1 = require("src/entities/city.entity");
+var cities_service_1 = require("src/services/cities.service");
+var cities_controller_1 = require("src/controllers/cities/cities.controller");
 var AppointmentModule = /** @class */ (function () {
     function AppointmentModule() {
     }
@@ -35,11 +38,11 @@ var AppointmentModule = /** @class */ (function () {
         common_1.Module({
             imports: [
                 menuitems_module_1.MenuitemsModule,
-                typeorm_1.TypeOrmModule.forFeature([insurance_entity_1.InsuranceCompanyEntity, appointment_entity_1.AppointmentEntity, user_entity_1.UserEntity, doctor_entity_1.DoctorEntity, place_entity_1.PlaceEntity, menuitem_entity_1.MenuItem, hospital_entity_1.HospitalEntity]),
+                typeorm_1.TypeOrmModule.forFeature([insurance_entity_1.InsuranceCompanyEntity, appointment_entity_1.AppointmentEntity, user_entity_1.UserEntity, doctor_entity_1.DoctorEntity, place_entity_1.PlaceEntity, menuitem_entity_1.MenuItem, hospital_entity_1.HospitalEntity, city_entity_1.CityEntity]),
                 auth_module_1.AuthModule
             ],
-            providers: [insurance_service_1.InsuranceService, appointment_service_1.AppointmentService, menuitems_service_1.MenuitemsService, doctors_service_1.DoctorsService, hospitals_service_1.HospitalsService],
-            controllers: [insurance_controller_1.InsuranceController, appointment_controller_1.AppointmentController, menuitems_controller_1.MenuitemsController, doctors_controller_1.DoctorsController, hospitals_controller_1.HospitalsController],
+            providers: [insurance_service_1.InsuranceService, appointment_service_1.AppointmentService, menuitems_service_1.MenuitemsService, doctors_service_1.DoctorsService, hospitals_service_1.HospitalsService, cities_service_1.CitiesService],
+            controllers: [insurance_controller_1.InsuranceController, appointment_controller_1.AppointmentController, menuitems_controller_1.MenuitemsController, doctors_controller_1.DoctorsController, hospitals_controller_1.HospitalsController, cities_controller_1.CitiesController],
             exports: [appointment_service_1.AppointmentService, menuitems_service_1.MenuitemsService, doctors_service_1.DoctorsService]
         })
     ], AppointmentModule);
