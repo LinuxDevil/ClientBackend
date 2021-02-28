@@ -21,6 +21,8 @@ export class LoginOTP {
     username: string;
 }
 
+
+
 export class RegisterationOTP {
     @IsString()
     @MinLength(9)
