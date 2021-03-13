@@ -19,107 +19,107 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.PlaceEntity = void 0;
+exports.ArmyPlaceEntity = void 0;
 var typeorm_1 = require("typeorm");
 var abstract_entities_1 = require("./abstract-entities");
 var appointment_entity_1 = require("./appointment.entity");
 var city_entity_1 = require("./city.entity");
 var doctor_entity_1 = require("./doctor.entity");
+var hospital_entity_1 = require("./hospital.entity");
+var place_entity_1 = require("./place.entity");
 var user_entity_1 = require("./user.entity");
-var PlaceEntity = /** @class */ (function (_super) {
-    __extends(PlaceEntity, _super);
-    function PlaceEntity() {
+var ArmyPlaceEntity = /** @class */ (function (_super) {
+    __extends(ArmyPlaceEntity, _super);
+    function ArmyPlaceEntity() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    PlaceEntity_1 = PlaceEntity;
-    var PlaceEntity_1;
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "nameEn");
+    ], ArmyPlaceEntity.prototype, "nameEn");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "nameAr");
+    ], ArmyPlaceEntity.prototype, "nameAr");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "phone");
+    ], ArmyPlaceEntity.prototype, "phone");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "email");
+    ], ArmyPlaceEntity.prototype, "email");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "imageUrl");
+    ], ArmyPlaceEntity.prototype, "imageUrl");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "type");
+    ], ArmyPlaceEntity.prototype, "type");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "startTime");
+    ], ArmyPlaceEntity.prototype, "startTime");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "endTime");
+    ], ArmyPlaceEntity.prototype, "endTime");
     __decorate([
         typeorm_1.Column()
-    ], PlaceEntity.prototype, "isAvialable");
+    ], ArmyPlaceEntity.prototype, "isAvialable");
     __decorate([
         typeorm_1.Column({ "default": 8, nullable: true })
-    ], PlaceEntity.prototype, "shiftDuration");
+    ], ArmyPlaceEntity.prototype, "shiftDuration");
     __decorate([
         typeorm_1.Column({ "default": '10', nullable: true })
-    ], PlaceEntity.prototype, "duration");
+    ], ArmyPlaceEntity.prototype, "duration");
     __decorate([
         typeorm_1.Column('text', { array: true, nullable: true })
-    ], PlaceEntity.prototype, "appointmentTimes");
+    ], ArmyPlaceEntity.prototype, "appointmentTimes");
     __decorate([
         typeorm_1.Column('text', { array: true, nullable: true })
-    ], PlaceEntity.prototype, "appointmentDurations");
+    ], ArmyPlaceEntity.prototype, "appointmentDurations");
     __decorate([
         typeorm_1.Column('text', { array: true, nullable: true })
-    ], PlaceEntity.prototype, "appointmentDates");
+    ], ArmyPlaceEntity.prototype, "appointmentDates");
     __decorate([
         typeorm_1.Column('text', { array: true })
-    ], PlaceEntity.prototype, "insurances");
+    ], ArmyPlaceEntity.prototype, "insurances");
     __decorate([
         typeorm_1.Column('date', { array: true })
-    ], PlaceEntity.prototype, "holidays");
+    ], ArmyPlaceEntity.prototype, "holidays");
     __decorate([
         typeorm_1.ManyToOne(function () { return city_entity_1.CityEntity; }, function (city) { return city.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "location");
+    ], ArmyPlaceEntity.prototype, "location");
     __decorate([
         typeorm_1.OneToMany(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinTable()
-    ], PlaceEntity.prototype, "JoinColumn");
+    ], ArmyPlaceEntity.prototype, "JoinColumn");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "labs");
+    ], ArmyPlaceEntity.prototype, "labs");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "xrays");
+    ], ArmyPlaceEntity.prototype, "xrays");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "pharmacies");
+    ], ArmyPlaceEntity.prototype, "pharmacies");
     __decorate([
-        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.place; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.hospital; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn({ name: 'doctors' })
-    ], PlaceEntity.prototype, "doctors");
+    ], ArmyPlaceEntity.prototype, "doctors");
     __decorate([
         typeorm_1.OneToMany(function () { return user_entity_1.UserEntity; }, function (user) { return user.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "user");
+    ], ArmyPlaceEntity.prototype, "user");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
         typeorm_1.JoinColumn()
-    ], PlaceEntity.prototype, "subvPlaces");
+    ], ArmyPlaceEntity.prototype, "subHospitals");
     __decorate([
-        typeorm_1.ManyToOne(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.place; }),
+        typeorm_1.ManyToOne(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.hospital; }),
         typeorm_1.JoinTable()
-    ], PlaceEntity.prototype, "appointments");
-    PlaceEntity = PlaceEntity_1 = __decorate([
-        typeorm_1.Entity('place')
-    ], PlaceEntity);
-    return PlaceEntity;
+    ], ArmyPlaceEntity.prototype, "appointments");
+    ArmyPlaceEntity = __decorate([
+        typeorm_1.Entity('armyplace')
+    ], ArmyPlaceEntity);
+    return ArmyPlaceEntity;
 }(abstract_entities_1.AbstractEntity));
-exports.PlaceEntity = PlaceEntity;
+exports.ArmyPlaceEntity = ArmyPlaceEntity;

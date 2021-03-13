@@ -45,94 +45,97 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.AuthController = void 0;
+exports.ArmyplacesController = void 0;
 var common_1 = require("@nestjs/common");
-var AuthController = /** @class */ (function () {
-    function AuthController(authService) {
-        this.authService = authService;
+var ArmyplacesController = /** @class */ (function () {
+    function ArmyplacesController(armyPlaceService) {
+        this.armyPlaceService = armyPlaceService;
     }
-    AuthController.prototype.refreshToken = function (body) {
-        return this.authService.refreshToken(body.username);
+    ArmyplacesController.prototype.getPrivateArmyPlace = function () {
+        return this.armyPlaceService.getAllPrivateArmyPlaces();
     };
-    AuthController.prototype.register = function (credentials) {
-        var regCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username,
-            username: credentials.username
-        };
-        return this.authService.register(regCred);
+    ArmyplacesController.prototype.getFilteredPrivateArmyPlace = function (city) {
+        return this.armyPlaceService.getAllFilteredPrivateArmyPlaces(city);
     };
-    AuthController.prototype.login = function (credentials) {
-        var loginCred = {
-            email: credentials.username,
-            password: credentials.username
-        };
-        return this.authService.login(loginCred);
+    ArmyplacesController.prototype.getAllGeneralArmyPlace = function () {
+        return this.armyPlaceService.getAllGeneralArmyPlaces();
     };
-    AuthController.prototype.verify = function (body) {
+    ArmyplacesController.prototype.getFilteredGeneralArmyPlace = function (city) {
+        return this.armyPlaceService.getAllFilteredGeneralArmyPlaces(city);
+    };
+    ArmyplacesController.prototype.addNewPrivateArmyPlace = function (armyPlace) {
+        return this.armyPlaceService.createNewArmyPlace(armyPlace);
+    };
+    ArmyplacesController.prototype.createNewDoctor = function (body, armyPlaceId) {
+        return this.armyPlaceService.addDoctor(body.doctorId, armyPlaceId);
+    };
+    ArmyplacesController.prototype.updateArmyPlaceOperationDurations = function (newDuratonObject) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(body);
-                        if (body.username === undefined) {
-                            body.username = body.phoneNumber;
-                        }
-                        return [4 /*yield*/, this.authService.verify(body.username, body.code)];
+                    case 0: return [4 /*yield*/, this.armyPlaceService.updateArmyPlaceOperationDurations(newDuratonObject.id, newDuratonObject.duration)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    AuthController.prototype.loginDoctor = function (credentials) {
-        var loginCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username
-        };
-        return this.authService.loginDoctor(loginCred);
+    ArmyplacesController.prototype.updateArmyPlaceOperationDates = function (dates) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.armyPlaceService.updateArmyPlaceOperationDates(dates.id, dates.beginDate, dates.endDate)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
-    AuthController.prototype.registerDoctor = function (credentials) {
-        var regCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username,
-            username: credentials.username
-        };
-        return this.authService.registerDoctor(regCred);
-    };
-    AuthController.prototype.deleteUser = function (body) {
-        return this.authService.deleteUser(body.username);
+    ArmyplacesController.prototype.deleteNewPrivate = function (body) {
+        if (body.id === undefined) {
+            return {
+                "message": "Please provide an id",
+                status: 0
+            };
+        }
+        // return this.armyPlaceService.deleteArmyPlace(body.id);
+        return this.armyPlaceService.deleteAllArmyPlaces();
     };
     __decorate([
-        common_1.Post('/refreshtoken'),
-        __param(0, common_1.Body())
-    ], AuthController.prototype, "refreshToken");
+        common_1.Get('/private')
+    ], ArmyplacesController.prototype, "getPrivateArmyPlace");
+    __decorate([
+        common_1.Get('/private/filter'),
+        __param(0, common_1.Query('city'))
+    ], ArmyplacesController.prototype, "getFilteredPrivateArmyPlace");
+    __decorate([
+        common_1.Get('/general')
+    ], ArmyplacesController.prototype, "getAllGeneralArmyPlace");
+    __decorate([
+        common_1.Get('/general/filter'),
+        __param(0, common_1.Query('city'))
+    ], ArmyplacesController.prototype, "getFilteredGeneralArmyPlace");
     __decorate([
         common_1.Post(),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "register");
-    __decorate([
-        common_1.Post('/login'),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "login");
-    __decorate([
-        common_1.Post('/verify'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "verify");
+    ], ArmyplacesController.prototype, "addNewPrivateArmyPlace");
     __decorate([
-        common_1.Post('/doctor/login'),
+        common_1.Post('/createdoctor'),
+        __param(0, common_1.Body()), __param(1, common_1.Query('armyPlaceId'))
+    ], ArmyplacesController.prototype, "createNewDoctor");
+    __decorate([
+        common_1.Post('/operations/times'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "loginDoctor");
+    ], ArmyplacesController.prototype, "updateArmyPlaceOperationDurations");
     __decorate([
-        common_1.Post('/doctors'),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "registerDoctor");
-    __decorate([
-        common_1.Delete('/delete/user'),
+        common_1.Post('/operations/dates'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "deleteUser");
-    AuthController = __decorate([
-        common_1.Controller('users')
-    ], AuthController);
-    return AuthController;
+    ], ArmyplacesController.prototype, "updateArmyPlaceOperationDates");
+    __decorate([
+        common_1.Delete(),
+        __param(0, common_1.Body())
+    ], ArmyplacesController.prototype, "deleteNewPrivate");
+    ArmyplacesController = __decorate([
+        common_1.Controller('armyplaces')
+    ], ArmyplacesController);
+    return ArmyplacesController;
 }());
-exports.AuthController = AuthController;
+exports.ArmyplacesController = ArmyplacesController;

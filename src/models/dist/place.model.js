@@ -6,45 +6,48 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.AppointmentDTO = void 0;
+exports.PlaceDTO = void 0;
 var class_validator_1 = require("class-validator");
-var AppointmentDTO = /** @class */ (function () {
-    function AppointmentDTO() {
+var PlaceDTO = /** @class */ (function () {
+    function PlaceDTO() {
     }
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "date");
+    ], PlaceDTO.prototype, "nameEn");
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "time");
+    ], PlaceDTO.prototype, "nameAr");
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "location");
+    ], PlaceDTO.prototype, "phone");
+    __decorate([
+        class_validator_1.IsString(),
+        class_validator_1.IsEmail()
+    ], PlaceDTO.prototype, "email");
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "shift");
+    ], PlaceDTO.prototype, "imageUrl");
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "user");
+    ], PlaceDTO.prototype, "type");
     __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "doctor");
+    ], PlaceDTO.prototype, "startTime");
     __decorate([
-        class_validator_1.IsOptional(),
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "place");
+    ], PlaceDTO.prototype, "endTime");
     __decorate([
-        class_validator_1.IsOptional(),
-        class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "hospitalId");
+        class_validator_1.IsBoolean()
+    ], PlaceDTO.prototype, "isAvialable");
     __decorate([
-        class_validator_1.IsOptional(),
-        class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "type");
+        class_validator_1.IsArray()
+    ], PlaceDTO.prototype, "insurances");
     __decorate([
-        class_validator_1.IsOptional(),
+        class_validator_1.IsArray()
+    ], PlaceDTO.prototype, "holidays");
+    __decorate([
         class_validator_1.IsString()
-    ], AppointmentDTO.prototype, "tests");
-    return AppointmentDTO;
+    ], PlaceDTO.prototype, "cityId");
+    return PlaceDTO;
 }());
-exports.AppointmentDTO = AppointmentDTO;
+exports.PlaceDTO = PlaceDTO;

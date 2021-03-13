@@ -205,7 +205,7 @@ var AuthService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { email: credentials.email } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: credentials.password } })];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, user.comparePassword(credentials.password)];

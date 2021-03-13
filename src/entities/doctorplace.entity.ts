@@ -1,20 +1,16 @@
-import { classToPlain, Exclude } from "class-transformer";
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { AbstractEntity } from "./abstract-entities";
 import { AppointmentEntity } from "./appointment.entity";
 import { CityEntity } from "./city.entity";
-import { ConsultEntity } from "./consult.entity";
-import { MedicineEntity } from "./medicine.entity";
-import { PharmacyOrders } from "./pharmacyorder.entity";
-import * as bcrypt from 'bcryptjs';
-import { InsuranceCompanyEntity } from "./insurance.entity";
 import { DoctorEntity } from "./doctor.entity";
+import { HospitalEntity } from "./hospital.entity";
+import { PlaceEntity } from "./place.entity";
 import { UserEntity } from "./user.entity";
-import { Place } from "src/decorators/user.decorator";
 
-@Entity('place')
-export class PlaceEntity extends AbstractEntity {
 
+@Entity('doctorplace')
+export class DoctorPlaceEntity extends AbstractEntity {
+    
     @Column()
     nameEn: string;
     
@@ -83,7 +79,7 @@ export class PlaceEntity extends AbstractEntity {
     @JoinColumn()
     pharmacies: PlaceEntity[];
 
-    @OneToMany(() => DoctorEntity, doctor => doctor.place, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @OneToMany(() => DoctorEntity, doctor => doctor.hospital, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     @JoinColumn({name: 'doctors'})
     doctors: DoctorEntity[];
 
@@ -91,11 +87,11 @@ export class PlaceEntity extends AbstractEntity {
     @JoinColumn()
     user: UserEntity[];
 
-    @OneToMany(() => PlaceEntity, place => place.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @OneToMany(() => HospitalEntity, hospital => hospital.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     @JoinColumn()
-    subvPlaces: PlaceEntity[];
+    subHospitals: HospitalEntity[];
 
-    @ManyToOne(() => AppointmentEntity, appointment => appointment.place)
+    @ManyToOne(() => AppointmentEntity, appointment => appointment.hospital)
     @JoinTable()
     appointments: AppointmentEntity[];
 }

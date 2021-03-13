@@ -45,94 +45,85 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.AuthController = void 0;
+exports.PlacesController = void 0;
 var common_1 = require("@nestjs/common");
-var AuthController = /** @class */ (function () {
-    function AuthController(authService) {
-        this.authService = authService;
+var PlacesController = /** @class */ (function () {
+    function PlacesController(placeService) {
+        this.placeService = placeService;
     }
-    AuthController.prototype.refreshToken = function (body) {
-        return this.authService.refreshToken(body.username);
+    PlacesController.prototype.getAllPlaces = function (type) {
+        return this.placeService.getAllPlaces(type);
     };
-    AuthController.prototype.register = function (credentials) {
-        var regCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username,
-            username: credentials.username
-        };
-        return this.authService.register(regCred);
+    PlacesController.prototype.getFilteredPrivatePlaces = function (city, type) {
+        return this.placeService.getAllFilteredPlaces(city, type);
     };
-    AuthController.prototype.login = function (credentials) {
-        var loginCred = {
-            email: credentials.username,
-            password: credentials.username
-        };
-        return this.authService.login(loginCred);
+    PlacesController.prototype.addNewPrivatePlace = function (place) {
+        return this.placeService.createNewPlace(place);
     };
-    AuthController.prototype.verify = function (body) {
+    PlacesController.prototype.createNewDoctor = function (body, placeId) {
+        return this.placeService.addDoctor(body.doctorId, placeId);
+    };
+    PlacesController.prototype.updatePlaceOperationDurations = function (newDuratonObject) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(body);
-                        if (body.username === undefined) {
-                            body.username = body.phoneNumber;
-                        }
-                        return [4 /*yield*/, this.authService.verify(body.username, body.code)];
+                    case 0: return [4 /*yield*/, this.placeService.updatePlaceOperationDurations(newDuratonObject.id, newDuratonObject.duration)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    AuthController.prototype.loginDoctor = function (credentials) {
-        var loginCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username
-        };
-        return this.authService.loginDoctor(loginCred);
+    PlacesController.prototype.updatePlaceOperationDates = function (dates) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.placeService.updatePlaceOperationDates(dates.id, dates.beginDate, dates.endDate)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
-    AuthController.prototype.registerDoctor = function (credentials) {
-        var regCred = {
-            email: credentials.username + "@myclinic.com",
-            password: credentials.username,
-            username: credentials.username
-        };
-        return this.authService.registerDoctor(regCred);
-    };
-    AuthController.prototype.deleteUser = function (body) {
-        return this.authService.deleteUser(body.username);
+    PlacesController.prototype.deleteNewPrivate = function (body) {
+        if (body.id === undefined) {
+            return {
+                "message": "Please provide an id",
+                status: 0
+            };
+        }
+        // return this.placeService.deletePlace(body.id);
+        return this.placeService.deleteAllPlaces();
     };
     __decorate([
-        common_1.Post('/refreshtoken'),
-        __param(0, common_1.Body())
-    ], AuthController.prototype, "refreshToken");
+        common_1.Get('/private'),
+        __param(0, common_1.Query('type'))
+    ], PlacesController.prototype, "getAllPlaces");
+    __decorate([
+        common_1.Get('/private/filter'),
+        __param(0, common_1.Query('city')), __param(1, common_1.Query('type'))
+    ], PlacesController.prototype, "getFilteredPrivatePlaces");
     __decorate([
         common_1.Post(),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "register");
-    __decorate([
-        common_1.Post('/login'),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "login");
-    __decorate([
-        common_1.Post('/verify'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "verify");
+    ], PlacesController.prototype, "addNewPrivatePlace");
     __decorate([
-        common_1.Post('/doctor/login'),
+        common_1.Post('/createdoctor'),
+        __param(0, common_1.Body()), __param(1, common_1.Query('placeId'))
+    ], PlacesController.prototype, "createNewDoctor");
+    __decorate([
+        common_1.Post('/operations/times'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "loginDoctor");
+    ], PlacesController.prototype, "updatePlaceOperationDurations");
     __decorate([
-        common_1.Post('/doctors'),
-        __param(0, common_1.Body(common_1.ValidationPipe))
-    ], AuthController.prototype, "registerDoctor");
-    __decorate([
-        common_1.Delete('/delete/user'),
+        common_1.Post('/operations/dates'),
         __param(0, common_1.Body())
-    ], AuthController.prototype, "deleteUser");
-    AuthController = __decorate([
-        common_1.Controller('users')
-    ], AuthController);
-    return AuthController;
+    ], PlacesController.prototype, "updatePlaceOperationDates");
+    __decorate([
+        common_1.Delete(),
+        __param(0, common_1.Body())
+    ], PlacesController.prototype, "deleteNewPrivate");
+    PlacesController = __decorate([
+        common_1.Controller('places')
+    ], PlacesController);
+    return PlacesController;
 }());
-exports.AuthController = AuthController;
+exports.PlacesController = PlacesController;

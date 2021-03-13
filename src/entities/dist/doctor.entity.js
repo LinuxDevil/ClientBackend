@@ -76,6 +76,7 @@ var qalification_entity_1 = require("./qalification.entity");
 var appointment_entity_1 = require("./appointment.entity");
 var insurance_entity_1 = require("./insurance.entity");
 var hospital_entity_1 = require("./hospital.entity");
+var place_entity_1 = require("./place.entity");
 var DoctorEntity = /** @class */ (function (_super) {
     __extends(DoctorEntity, _super);
     function DoctorEntity() {
@@ -180,6 +181,9 @@ var DoctorEntity = /** @class */ (function (_super) {
     __decorate([
         typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.doctors; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
     ], DoctorEntity.prototype, "hospital");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.doctors; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+    ], DoctorEntity.prototype, "place");
     __decorate([
         typeorm_1.BeforeInsert()
     ], DoctorEntity.prototype, "hashPassword");

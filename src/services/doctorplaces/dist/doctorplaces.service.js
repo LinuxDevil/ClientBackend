@@ -45,19 +45,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.HospitalsService = void 0;
+exports.DoctorplacesService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var city_entity_1 = require("src/entities/city.entity");
 var doctor_entity_1 = require("src/entities/doctor.entity");
-var hospital_entity_1 = require("src/entities/hospital.entity");
-var HospitalsService = /** @class */ (function () {
-    function HospitalsService(hospitalRepo, cityRepository, doctorRepo) {
-        this.hospitalRepo = hospitalRepo;
+var doctorplace_entity_1 = require("src/entities/doctorplace.entity");
+var DoctorplacesService = /** @class */ (function () {
+    function DoctorplacesService(doctorPlaceRepo, cityRepository, doctorRepo) {
+        this.doctorPlaceRepo = doctorPlaceRepo;
         this.cityRepository = cityRepository;
         this.doctorRepo = doctorRepo;
     }
-    HospitalsService.prototype.getTimes = function (date, newDuration, shift) {
+    DoctorplacesService.prototype.getTimes = function (date, newDuration, shift) {
         var quarterHours = ["00"];
         if (newDuration === "0") {
             quarterHours = ["00", "15", "30", "45"];
@@ -82,14 +82,14 @@ var HospitalsService = /** @class */ (function () {
         }
         return times;
     };
-    HospitalsService.prototype.getDaysArray = function (start, end, timeToAdd) {
+    DoctorplacesService.prototype.getDaysArray = function (start, end, timeToAdd) {
         for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
             arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
         }
         return arr;
     };
     ;
-    HospitalsService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
+    DoctorplacesService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
         var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
         daylist.map(function (v) {
             var thing = v.slice(0, 15);
@@ -97,147 +97,147 @@ var HospitalsService = /** @class */ (function () {
         }).join("");
         return daylist;
     };
-    //Create new hospital
-    HospitalsService.prototype.createNewHospital = function (hospital) {
+    //Create new doctorPlace
+    DoctorplacesService.prototype.createNewDoctorPlace = function (doctorPlace) {
         return __awaiter(this, void 0, void 0, function () {
-            var city, hospitalEntity;
+            var city, doctorPlaceEntity;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (hospital === null) {
+                        if (doctorPlace === null) {
                             return [2 /*return*/, new Error("Invalid input")];
                         }
-                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: hospital.cityId } })];
+                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: doctorPlace.cityId } })];
                     case 1:
                         city = _a.sent();
                         if (city === null)
                             return [2 /*return*/, new Error("City id is not found")];
-                        return [4 /*yield*/, this.hospitalRepo.create(hospital)];
+                        return [4 /*yield*/, this.doctorPlaceRepo.create(doctorPlace)];
                     case 2:
-                        hospitalEntity = _a.sent();
-                        hospitalEntity.location = city;
-                        return [4 /*yield*/, hospitalEntity.save()];
+                        doctorPlaceEntity = _a.sent();
+                        doctorPlaceEntity.location = city;
+                        return [4 /*yield*/, doctorPlaceEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, hospitalEntity];
+                        return [2 /*return*/, doctorPlaceEntity];
                 }
             });
         });
     };
-    //Get all general hospitals
-    HospitalsService.prototype.getAllGeneralHospitals = function () {
+    //Get all general doctorPlaces
+    DoctorplacesService.prototype.getAllGeneralDoctorPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "General" } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.find()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllPrivateHospitals = function () {
+    //Get all private doctorPlaces
+    DoctorplacesService.prototype.getAllPrivateDoctorPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId) {
+    //Get all private doctorPlaces
+    DoctorplacesService.prototype.getAllFilteredPrivateDoctorPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId) {
+    //Get all private doctorPlaces
+    DoctorplacesService.prototype.getAllFilteredGeneralDoctorPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get hospital by id
-    HospitalsService.prototype.getHospitalById = function (hospitalId) {
+    //Get doctorPlace by id
+    DoctorplacesService.prototype.getDoctorPlaceById = function (doctorPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var doctorPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +doctorPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital == null) {
+                        doctorPlace = _a.sent();
+                        if (doctorPlace == null) {
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "There is no hospital with id " + hospitalId
+                                    message: "There is no doctorPlace with id " + doctorPlaceId
                                 }];
                         }
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, doctorPlace];
                 }
             });
         });
     };
-    HospitalsService.prototype.deleteHospital = function (hospitalId) {
+    DoctorplacesService.prototype.deleteDoctorPlace = function (doctorPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var doctorPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +doctorPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        console.log(hospital);
-                        if (hospital === null || hospital === undefined)
+                        doctorPlace = _a.sent();
+                        console.log(doctorPlace);
+                        if (doctorPlace === null || doctorPlace === undefined)
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "Hospital not found"
+                                    message: "DoctorPlace not found"
                                 }];
-                        return [4 /*yield*/, hospital.remove()];
+                        return [4 /*yield*/, doctorPlace.remove()];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsService.prototype.deleteAllHospitals = function () {
+    DoctorplacesService.prototype.deleteAllDoctorPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo["delete"]({ type: 'private' })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo["delete"]({ type: 'private' })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //TODO:: Add place to hospital
-    HospitalsService.prototype.addPlace = function () {
+    //TODO:: Add place to doctorPlace
+    DoctorplacesService.prototype.addPlace = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
             });
         });
     };
-    //TODO: Add doctor to hospital
-    HospitalsService.prototype.addDoctor = function (doctorId, hospitalId) {
+    //TODO: Add doctor to doctorPlace
+    DoctorplacesService.prototype.addDoctor = function (doctorId, doctorPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, doctor;
+            var doctorPlace, doctor;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +doctorPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null || hospital === undefined) {
+                        doctorPlace = _a.sent();
+                        if (doctorPlace === null || doctorPlace === undefined) {
                             return [2 /*return*/, {
-                                    message: "There's no hospital with that id",
+                                    message: "There's no doctorPlace with that id",
                                     status: 0
                                 }];
                         }
@@ -250,90 +250,90 @@ var HospitalsService = /** @class */ (function () {
                                     status: 0
                                 }];
                         }
-                        if (hospital.doctors === undefined || hospital.doctors === null) {
-                            hospital.doctors = [];
+                        if (doctorPlace.doctors === undefined || doctorPlace.doctors === null) {
+                            doctorPlace.doctors = [];
                         }
-                        return [4 /*yield*/, hospital.doctors.push(doctor)];
+                        return [4 /*yield*/, doctorPlace.doctors.push(doctor)];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, hospital.save()];
+                        return [4 /*yield*/, doctorPlace.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, doctorPlace];
                 }
             });
         });
     };
-    //TODO: Generate appointment times for hospitals/ operations and everything else
-    HospitalsService.prototype.updateHospitalOperationDurations = function (hospitalId, newDuration) {
+    //TODO: Generate appointment times for doctorPlaces/ operations and everything else
+    DoctorplacesService.prototype.updateDoctorPlaceOperationDurations = function (doctorPlaceId, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, date, appointmens;
+            var doctorPlace, date, appointmens;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +doctorPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital is null")];
+                        doctorPlace = _a.sent();
+                        if (doctorPlace === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("DoctorPlace is null")];
                         }
-                        if (hospital.shiftDuration === null) {
-                            hospital.shiftDuration = 8;
+                        if (doctorPlace.shiftDuration === null) {
+                            doctorPlace.shiftDuration = 8;
                         }
-                        if (hospital.appointmentTimes === null) {
-                            hospital.appointmentTimes = [];
+                        if (doctorPlace.appointmentTimes === null) {
+                            doctorPlace.appointmentTimes = [];
                         }
-                        if (hospital.appointmentDates === null || hospital.appointmentDates.length < 1) {
-                            hospital.appointmentDates = [];
+                        if (doctorPlace.appointmentDates === null || doctorPlace.appointmentDates.length < 1) {
+                            doctorPlace.appointmentDates = [];
                             date = new Date();
-                            hospital.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
-                            hospital.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                            doctorPlace.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
+                            doctorPlace.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
                         }
-                        if (hospital.appointmentDurations === null || hospital.appointmentDurations.length < 1) {
-                            hospital.appointmentDurations = [];
-                            hospital.appointmentDurations.push("02:00");
+                        if (doctorPlace.appointmentDurations === null || doctorPlace.appointmentDurations.length < 1) {
+                            doctorPlace.appointmentDurations = [];
+                            doctorPlace.appointmentDurations.push("02:00");
                         }
-                        hospital.duration = newDuration;
+                        doctorPlace.duration = newDuration;
                         appointmens = [];
-                        hospital.appointmentDates.forEach(function (appointment) {
-                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, hospital.shiftDuration));
+                        doctorPlace.appointmentDates.forEach(function (appointment) {
+                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, doctorPlace.shiftDuration));
                         });
-                        hospital.appointmentTimes = appointmens;
-                        return [4 /*yield*/, hospital.save()];
+                        doctorPlace.appointmentTimes = appointmens;
+                        return [4 /*yield*/, doctorPlace.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, doctorPlace];
                 }
             });
         });
     };
-    HospitalsService.prototype.updateHospitalOperationDates = function (hospitalId, startDate, endDate) {
+    DoctorplacesService.prototype.updateDoctorPlaceOperationDates = function (doctorPlaceId, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var doctorPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +doctorPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital Entity is null")];
+                        doctorPlace = _a.sent();
+                        if (doctorPlace === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("DoctorPlace Entity is null")];
                         }
-                        hospital.appointmentDates = this.getDaysList(startDate, endDate, hospital.appointmentDurations);
-                        return [4 /*yield*/, hospital.save()];
+                        doctorPlace.appointmentDates = this.getDaysList(startDate, endDate, doctorPlace.appointmentDurations);
+                        return [4 /*yield*/, doctorPlace.save()];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.updateHospitalOperationDurations(hospitalId, hospital.duration)];
+                        return [4 /*yield*/, this.updateDoctorPlaceOperationDurations(doctorPlaceId, doctorPlace.duration)];
                     case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsService = __decorate([
+    DoctorplacesService = __decorate([
         common_1.Injectable(),
-        __param(0, typeorm_1.InjectRepository(hospital_entity_1.HospitalEntity)),
+        __param(0, typeorm_1.InjectRepository(doctorplace_entity_1.DoctorPlaceEntity)),
         __param(1, typeorm_1.InjectRepository(city_entity_1.CityEntity)),
         __param(2, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity))
-    ], HospitalsService);
-    return HospitalsService;
+    ], DoctorplacesService);
+    return DoctorplacesService;
 }());
-exports.HospitalsService = HospitalsService;
+exports.DoctorplacesService = DoctorplacesService;

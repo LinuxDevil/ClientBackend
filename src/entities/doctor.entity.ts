@@ -7,6 +7,7 @@ import { QalificationsEntity } from "./qalification.entity";
 import { AppointmentEntity } from "./appointment.entity";
 import { InsuranceCompanyEntity } from "./insurance.entity";
 import { HospitalEntity } from "./hospital.entity";
+import { PlaceEntity } from "./place.entity";
 
 @Entity('doctor')
 export class DoctorEntity extends AbstractEntity {
@@ -75,6 +76,9 @@ export class DoctorEntity extends AbstractEntity {
 
     @ManyToOne(() => HospitalEntity, hospital => hospital.doctors, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     hospital: HospitalEntity;
+
+    @ManyToOne(() => PlaceEntity, place => place.doctors, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    place: PlaceEntity;
 
     @BeforeInsert()
     async hashPassword() {

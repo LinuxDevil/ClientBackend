@@ -41,7 +41,7 @@ export class AuthController {
     }
 
     @Post('/doctor/login')
-    loginDoctor(@Body(ValidationPipe) credentials: LoginOTP) {
+    loginDoctor(@Body() credentials: LoginOTP) {
        let loginCred: LoginDTO = {
          email: credentials.username + "@myclinic.com",
          password: credentials.username

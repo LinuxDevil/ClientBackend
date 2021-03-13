@@ -92,7 +92,7 @@ export class AuthService {
 
     async loginDoctor(credentials: LoginDTO) {
         try {
-            const user = await this.doctorRepo.findOne({ where: { email: credentials.email } });
+            const user = await this.doctorRepo.findOne({ where: { username: credentials.password } });
             const isValid = await user.comparePassword(credentials.password);
             if (!isValid) {
                 throw new Error()

@@ -83,6 +83,10 @@ export class HospitalsService {
     async getAllFilteredPrivateHospitals(cityId: string) {
         return await this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
     }
+    //Get all private hospitals
+    async getAllFilteredGeneralHospitals(cityId: string) {
+        return await this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+    }
 
     //Get hospital by id
     async getHospitalById(hospitalId: string) {

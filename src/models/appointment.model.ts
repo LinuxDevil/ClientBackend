@@ -32,4 +32,8 @@ export class AppointmentDTO {
     @IsString()
     type: string;
 
+    @IsOptional()
+    @IsString()
+    tests: string;
+
 }

@@ -45,19 +45,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.HospitalsService = void 0;
+exports.ArmyplacesService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
+var armyplaces_entity_1 = require("src/entities/armyplaces.entity");
 var city_entity_1 = require("src/entities/city.entity");
 var doctor_entity_1 = require("src/entities/doctor.entity");
-var hospital_entity_1 = require("src/entities/hospital.entity");
-var HospitalsService = /** @class */ (function () {
-    function HospitalsService(hospitalRepo, cityRepository, doctorRepo) {
-        this.hospitalRepo = hospitalRepo;
+var ArmyplacesService = /** @class */ (function () {
+    function ArmyplacesService(armyPlaceRepo, cityRepository, doctorRepo) {
+        this.armyPlaceRepo = armyPlaceRepo;
         this.cityRepository = cityRepository;
         this.doctorRepo = doctorRepo;
     }
-    HospitalsService.prototype.getTimes = function (date, newDuration, shift) {
+    ArmyplacesService.prototype.getTimes = function (date, newDuration, shift) {
         var quarterHours = ["00"];
         if (newDuration === "0") {
             quarterHours = ["00", "15", "30", "45"];
@@ -82,14 +82,14 @@ var HospitalsService = /** @class */ (function () {
         }
         return times;
     };
-    HospitalsService.prototype.getDaysArray = function (start, end, timeToAdd) {
+    ArmyplacesService.prototype.getDaysArray = function (start, end, timeToAdd) {
         for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
             arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
         }
         return arr;
     };
     ;
-    HospitalsService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
+    ArmyplacesService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
         var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
         daylist.map(function (v) {
             var thing = v.slice(0, 15);
@@ -97,147 +97,147 @@ var HospitalsService = /** @class */ (function () {
         }).join("");
         return daylist;
     };
-    //Create new hospital
-    HospitalsService.prototype.createNewHospital = function (hospital) {
+    //Create new armyPlace
+    ArmyplacesService.prototype.createNewArmyPlace = function (armyPlace) {
         return __awaiter(this, void 0, void 0, function () {
-            var city, hospitalEntity;
+            var city, armyPlaceEntity;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (hospital === null) {
+                        if (armyPlace === null) {
                             return [2 /*return*/, new Error("Invalid input")];
                         }
-                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: hospital.cityId } })];
+                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: armyPlace.cityId } })];
                     case 1:
                         city = _a.sent();
                         if (city === null)
                             return [2 /*return*/, new Error("City id is not found")];
-                        return [4 /*yield*/, this.hospitalRepo.create(hospital)];
+                        return [4 /*yield*/, this.armyPlaceRepo.create(armyPlace)];
                     case 2:
-                        hospitalEntity = _a.sent();
-                        hospitalEntity.location = city;
-                        return [4 /*yield*/, hospitalEntity.save()];
+                        armyPlaceEntity = _a.sent();
+                        armyPlaceEntity.location = city;
+                        return [4 /*yield*/, armyPlaceEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, hospitalEntity];
+                        return [2 /*return*/, armyPlaceEntity];
                 }
             });
         });
     };
-    //Get all general hospitals
-    HospitalsService.prototype.getAllGeneralHospitals = function () {
+    //Get all general armyPlaces
+    ArmyplacesService.prototype.getAllGeneralArmyPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "General" } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllPrivateHospitals = function () {
+    //Get all private armyPlaces
+    ArmyplacesService.prototype.getAllPrivateArmyPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId) {
+    //Get all private armyPlaces
+    ArmyplacesService.prototype.getAllFilteredPrivateArmyPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId) {
+    //Get all private armyPlaces
+    ArmyplacesService.prototype.getAllFilteredGeneralArmyPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //Get hospital by id
-    HospitalsService.prototype.getHospitalById = function (hospitalId) {
+    //Get armyPlace by id
+    ArmyplacesService.prototype.getArmyPlaceById = function (armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var armyPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital == null) {
+                        armyPlace = _a.sent();
+                        if (armyPlace == null) {
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "There is no hospital with id " + hospitalId
+                                    message: "There is no armyPlace with id " + armyPlaceId
                                 }];
                         }
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, armyPlace];
                 }
             });
         });
     };
-    HospitalsService.prototype.deleteHospital = function (hospitalId) {
+    ArmyplacesService.prototype.deleteArmyPlace = function (armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var armyPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        console.log(hospital);
-                        if (hospital === null || hospital === undefined)
+                        armyPlace = _a.sent();
+                        console.log(armyPlace);
+                        if (armyPlace === null || armyPlace === undefined)
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "Hospital not found"
+                                    message: "ArmyPlace not found"
                                 }];
-                        return [4 /*yield*/, hospital.remove()];
+                        return [4 /*yield*/, armyPlace.remove()];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsService.prototype.deleteAllHospitals = function () {
+    ArmyplacesService.prototype.deleteAllArmyPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo["delete"]({ type: 'private' })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo["delete"]({ type: 'private' })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    //TODO:: Add place to hospital
-    HospitalsService.prototype.addPlace = function () {
+    //TODO:: Add place to armyPlace
+    ArmyplacesService.prototype.addPlace = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
             });
         });
     };
-    //TODO: Add doctor to hospital
-    HospitalsService.prototype.addDoctor = function (doctorId, hospitalId) {
+    //TODO: Add doctor to armyPlace
+    ArmyplacesService.prototype.addDoctor = function (doctorId, armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, doctor;
+            var armyPlace, doctor;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null || hospital === undefined) {
+                        armyPlace = _a.sent();
+                        if (armyPlace === null || armyPlace === undefined) {
                             return [2 /*return*/, {
-                                    message: "There's no hospital with that id",
+                                    message: "There's no armyPlace with that id",
                                     status: 0
                                 }];
                         }
@@ -250,90 +250,90 @@ var HospitalsService = /** @class */ (function () {
                                     status: 0
                                 }];
                         }
-                        if (hospital.doctors === undefined || hospital.doctors === null) {
-                            hospital.doctors = [];
+                        if (armyPlace.doctors === undefined || armyPlace.doctors === null) {
+                            armyPlace.doctors = [];
                         }
-                        return [4 /*yield*/, hospital.doctors.push(doctor)];
+                        return [4 /*yield*/, armyPlace.doctors.push(doctor)];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, hospital.save()];
+                        return [4 /*yield*/, armyPlace.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, armyPlace];
                 }
             });
         });
     };
-    //TODO: Generate appointment times for hospitals/ operations and everything else
-    HospitalsService.prototype.updateHospitalOperationDurations = function (hospitalId, newDuration) {
+    //TODO: Generate appointment times for armyPlaces/ operations and everything else
+    ArmyplacesService.prototype.updateArmyPlaceOperationDurations = function (armyPlaceId, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, date, appointmens;
+            var armyPlace, date, appointmens;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital is null")];
+                        armyPlace = _a.sent();
+                        if (armyPlace === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("ArmyPlace is null")];
                         }
-                        if (hospital.shiftDuration === null) {
-                            hospital.shiftDuration = 8;
+                        if (armyPlace.shiftDuration === null) {
+                            armyPlace.shiftDuration = 8;
                         }
-                        if (hospital.appointmentTimes === null) {
-                            hospital.appointmentTimes = [];
+                        if (armyPlace.appointmentTimes === null) {
+                            armyPlace.appointmentTimes = [];
                         }
-                        if (hospital.appointmentDates === null || hospital.appointmentDates.length < 1) {
-                            hospital.appointmentDates = [];
+                        if (armyPlace.appointmentDates === null || armyPlace.appointmentDates.length < 1) {
+                            armyPlace.appointmentDates = [];
                             date = new Date();
-                            hospital.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
-                            hospital.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                            armyPlace.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
+                            armyPlace.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
                         }
-                        if (hospital.appointmentDurations === null || hospital.appointmentDurations.length < 1) {
-                            hospital.appointmentDurations = [];
-                            hospital.appointmentDurations.push("02:00");
+                        if (armyPlace.appointmentDurations === null || armyPlace.appointmentDurations.length < 1) {
+                            armyPlace.appointmentDurations = [];
+                            armyPlace.appointmentDurations.push("02:00");
                         }
-                        hospital.duration = newDuration;
+                        armyPlace.duration = newDuration;
                         appointmens = [];
-                        hospital.appointmentDates.forEach(function (appointment) {
-                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, hospital.shiftDuration));
+                        armyPlace.appointmentDates.forEach(function (appointment) {
+                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, armyPlace.shiftDuration));
                         });
-                        hospital.appointmentTimes = appointmens;
-                        return [4 /*yield*/, hospital.save()];
+                        armyPlace.appointmentTimes = appointmens;
+                        return [4 /*yield*/, armyPlace.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, armyPlace];
                 }
             });
         });
     };
-    HospitalsService.prototype.updateHospitalOperationDates = function (hospitalId, startDate, endDate) {
+    ArmyplacesService.prototype.updateArmyPlaceOperationDates = function (armyPlaceId, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital;
+            var armyPlace;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +hospitalId } })];
+                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
                     case 1:
-                        hospital = _a.sent();
-                        if (hospital === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Hospital Entity is null")];
+                        armyPlace = _a.sent();
+                        if (armyPlace === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException("ArmyPlace Entity is null")];
                         }
-                        hospital.appointmentDates = this.getDaysList(startDate, endDate, hospital.appointmentDurations);
-                        return [4 /*yield*/, hospital.save()];
+                        armyPlace.appointmentDates = this.getDaysList(startDate, endDate, armyPlace.appointmentDurations);
+                        return [4 /*yield*/, armyPlace.save()];
                     case 2:
                         _a.sent();
-                        return [4 /*yield*/, this.updateHospitalOperationDurations(hospitalId, hospital.duration)];
+                        return [4 /*yield*/, this.updateArmyPlaceOperationDurations(armyPlaceId, armyPlace.duration)];
                     case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsService = __decorate([
+    ArmyplacesService = __decorate([
         common_1.Injectable(),
-        __param(0, typeorm_1.InjectRepository(hospital_entity_1.HospitalEntity)),
+        __param(0, typeorm_1.InjectRepository(armyplaces_entity_1.ArmyPlaceEntity)),
         __param(1, typeorm_1.InjectRepository(city_entity_1.CityEntity)),
         __param(2, typeorm_1.InjectRepository(doctor_entity_1.DoctorEntity))
-    ], HospitalsService);
-    return HospitalsService;
+    ], ArmyplacesService);
+    return ArmyplacesService;
 }());
-exports.HospitalsService = HospitalsService;
+exports.ArmyplacesService = ArmyplacesService;

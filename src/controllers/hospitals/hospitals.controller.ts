@@ -22,6 +22,11 @@ export class HospitalsController {
         return this.hospitalService.getAllGeneralHospitals();
     }
 
+    @Get('/general/filter')
+    getFilteredGeneralHospitals(@Query('city') city: string) {
+        return this.hospitalService.getAllFilteredGeneralHospitals(city);
+    }
+
     @Post()
     addNewPrivateHospital(@Body() hospital: HospitalDTO) {
         return this.hospitalService.createNewHospital(hospital);

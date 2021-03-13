@@ -45,97 +45,97 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.HospitalsController = void 0;
+exports.DoctorplacesController = void 0;
 var common_1 = require("@nestjs/common");
-var HospitalsController = /** @class */ (function () {
-    function HospitalsController(hospitalService) {
-        this.hospitalService = hospitalService;
+var DoctorplacesController = /** @class */ (function () {
+    function DoctorplacesController(doctorPlaceService) {
+        this.doctorPlaceService = doctorPlaceService;
     }
-    HospitalsController.prototype.getPrivateHospitals = function () {
-        return this.hospitalService.getAllPrivateHospitals();
+    DoctorplacesController.prototype.getPrivateDoctorPlace = function () {
+        return this.doctorPlaceService.getAllPrivateDoctorPlaces();
     };
-    HospitalsController.prototype.getFilteredPrivateHospitals = function (city) {
-        return this.hospitalService.getAllFilteredPrivateHospitals(city);
+    DoctorplacesController.prototype.getFilteredPrivateDoctorPlace = function (city) {
+        return this.doctorPlaceService.getAllFilteredPrivateDoctorPlaces(city);
     };
-    HospitalsController.prototype.getAllGeneralHospitals = function () {
-        return this.hospitalService.getAllGeneralHospitals();
+    DoctorplacesController.prototype.getAllGeneralDoctorPlace = function () {
+        return this.doctorPlaceService.getAllGeneralDoctorPlaces();
     };
-    HospitalsController.prototype.getFilteredGeneralHospitals = function (city) {
-        return this.hospitalService.getAllFilteredGeneralHospitals(city);
+    DoctorplacesController.prototype.getFilteredGeneralDoctorPlace = function (city) {
+        return this.doctorPlaceService.getAllFilteredGeneralDoctorPlaces(city);
     };
-    HospitalsController.prototype.addNewPrivateHospital = function (hospital) {
-        return this.hospitalService.createNewHospital(hospital);
+    DoctorplacesController.prototype.addNewPrivateDoctorPlace = function (doctorplace) {
+        return this.doctorPlaceService.createNewDoctorPlace(doctorplace);
     };
-    HospitalsController.prototype.createNewDoctor = function (body, hospitalId) {
-        return this.hospitalService.addDoctor(body.doctorId, hospitalId);
+    DoctorplacesController.prototype.createNewDoctor = function (body, doctorplaceId) {
+        return this.doctorPlaceService.addDoctor(body.doctorId, doctorplaceId);
     };
-    HospitalsController.prototype.updateHospitalOperationDurations = function (newDuratonObject) {
+    DoctorplacesController.prototype.updateDoctorPlaceOperationDurations = function (newDuratonObject) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalService.updateHospitalOperationDurations(newDuratonObject.id, newDuratonObject.duration)];
+                    case 0: return [4 /*yield*/, this.doctorPlaceService.updateDoctorPlaceOperationDurations(newDuratonObject.id, newDuratonObject.duration)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsController.prototype.updateHospitalOperationDates = function (dates) {
+    DoctorplacesController.prototype.updateDoctorPlaceOperationDates = function (dates) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalService.updateHospitalOperationDates(dates.id, dates.beginDate, dates.endDate)];
+                    case 0: return [4 /*yield*/, this.doctorPlaceService.updateDoctorPlaceOperationDates(dates.id, dates.beginDate, dates.endDate)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    HospitalsController.prototype.deleteNewPrivate = function (body) {
+    DoctorplacesController.prototype.deleteNewPrivate = function (body) {
         if (body.id === undefined) {
             return {
                 "message": "Please provide an id",
                 status: 0
             };
         }
-        // return this.hospitalService.deleteHospital(body.id);
-        return this.hospitalService.deleteAllHospitals();
+        // return this.doctorPlaceService.deleteDoctorPlace(body.id);
+        return this.doctorPlaceService.deleteAllDoctorPlaces();
     };
     __decorate([
         common_1.Get('/private')
-    ], HospitalsController.prototype, "getPrivateHospitals");
+    ], DoctorplacesController.prototype, "getPrivateDoctorPlace");
     __decorate([
         common_1.Get('/private/filter'),
         __param(0, common_1.Query('city'))
-    ], HospitalsController.prototype, "getFilteredPrivateHospitals");
+    ], DoctorplacesController.prototype, "getFilteredPrivateDoctorPlace");
     __decorate([
         common_1.Get('/general')
-    ], HospitalsController.prototype, "getAllGeneralHospitals");
+    ], DoctorplacesController.prototype, "getAllGeneralDoctorPlace");
     __decorate([
         common_1.Get('/general/filter'),
         __param(0, common_1.Query('city'))
-    ], HospitalsController.prototype, "getFilteredGeneralHospitals");
+    ], DoctorplacesController.prototype, "getFilteredGeneralDoctorPlace");
     __decorate([
         common_1.Post(),
         __param(0, common_1.Body())
-    ], HospitalsController.prototype, "addNewPrivateHospital");
+    ], DoctorplacesController.prototype, "addNewPrivateDoctorPlace");
     __decorate([
         common_1.Post('/createdoctor'),
-        __param(0, common_1.Body()), __param(1, common_1.Query('hospitalId'))
-    ], HospitalsController.prototype, "createNewDoctor");
+        __param(0, common_1.Body()), __param(1, common_1.Query('doctorplaceId'))
+    ], DoctorplacesController.prototype, "createNewDoctor");
     __decorate([
         common_1.Post('/operations/times'),
         __param(0, common_1.Body())
-    ], HospitalsController.prototype, "updateHospitalOperationDurations");
+    ], DoctorplacesController.prototype, "updateDoctorPlaceOperationDurations");
     __decorate([
         common_1.Post('/operations/dates'),
         __param(0, common_1.Body())
-    ], HospitalsController.prototype, "updateHospitalOperationDates");
+    ], DoctorplacesController.prototype, "updateDoctorPlaceOperationDates");
     __decorate([
         common_1.Delete(),
         __param(0, common_1.Body())
-    ], HospitalsController.prototype, "deleteNewPrivate");
-    HospitalsController = __decorate([
-        common_1.Controller('hospitals')
-    ], HospitalsController);
-    return HospitalsController;
+    ], DoctorplacesController.prototype, "deleteNewPrivate");
+    DoctorplacesController = __decorate([
+        common_1.Controller('doctorplaces')
+    ], DoctorplacesController);
+    return DoctorplacesController;
 }());
-exports.HospitalsController = HospitalsController;
+exports.DoctorplacesController = DoctorplacesController;

@@ -22,17 +22,25 @@ import { HospitalsService } from 'src/services/hospitals/hospitals.service';
 import { CityEntity } from 'src/entities/city.entity';
 import { CitiesService } from 'src/services/cities.service';
 import { CitiesController } from 'src/controllers/cities/cities.controller';
+import { DoctorPlaceEntity } from 'src/entities/doctorplace.entity';
+import { DoctorplacesService } from 'src/services/doctorplaces/doctorplaces.service';
+import { DoctorplacesController } from 'src/controllers/doctorplaces/doctorplaces.controller';
+import { ArmyPlaceEntity } from 'src/entities/armyplaces.entity';
+import { ArmyplacesService } from 'src/services/armyplaces/armyplaces.service';
+import { ArmyplacesController } from 'src/controllers/armyplaces/armyplaces.controller';
+import { PlacesService } from 'src/services/places/places.service';
+import { PlacesController } from 'src/controllers/places/places.controller';
 
 
 @Module({
   imports: [
     MenuitemsModule,
     TypeOrmModule.forFeature(
-      [InsuranceCompanyEntity, AppointmentEntity, UserEntity, DoctorEntity, PlaceEntity, MenuItem, HospitalEntity, CityEntity]),
+      [InsuranceCompanyEntity, AppointmentEntity, UserEntity, DoctorEntity, PlaceEntity, MenuItem, HospitalEntity, CityEntity, DoctorPlaceEntity, ArmyPlaceEntity, PlaceEntity]),
     AuthModule
   ],
-  providers: [InsuranceService ,AppointmentService, MenuitemsService, DoctorsService, HospitalsService, CitiesService],
-  controllers: [InsuranceController ,AppointmentController, MenuitemsController, DoctorsController, HospitalsController, CitiesController],
+  providers: [InsuranceService ,AppointmentService, MenuitemsService, DoctorsService, HospitalsService, CitiesService, DoctorplacesService, ArmyplacesService, PlacesService],
+  controllers: [InsuranceController ,AppointmentController, MenuitemsController, DoctorsController, HospitalsController, CitiesController, DoctorplacesController, ArmyplacesController, PlacesController],
   exports: [AppointmentService, MenuitemsService, DoctorsService]
 })
 export class AppointmentModule { }
