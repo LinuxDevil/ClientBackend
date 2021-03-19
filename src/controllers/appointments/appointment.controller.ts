@@ -36,6 +36,23 @@ export class AppointmentController {
         return this.appointmentService.addHospitalAppointment(data);
     }
 
+    @Post('/doctorplaces')
+    createDoctorPlaceOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
+        return this.appointmentService.addDoctorPlaceAppointment(data);
+    }
+
+    @Post('/places')
+    createPlacesOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
+        return this.appointmentService.addPlacesAppointment(data);
+    }
+
+
+    @Post('/armyplaces')
+    createArmyPlaceAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
+        return this.appointmentService.addArmyPlaceAppointment(data);
+    }
+
+
     @Delete('/delete')
     @UseGuards(AuthGuard())
     deleteAppointment(@Body(new ValidationPipe({transform: true})) appointmentId: {appointmentId: string}) {

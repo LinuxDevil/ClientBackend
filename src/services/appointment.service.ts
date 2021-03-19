@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { doc } from 'prettier';
 import { User } from 'src/decorators/user.decorator';
 import { AppointmentEntity } from 'src/entities/appointment.entity';
+import { ArmyPlaceEntity } from 'src/entities/armyplaces.entity';
 import { DoctorEntity } from 'src/entities/doctor.entity';
+import { DoctorPlaceEntity } from 'src/entities/doctorplace.entity';
 import { HospitalEntity } from 'src/entities/hospital.entity';
 import { PlaceEntity } from 'src/entities/place.entity';
 import { UserEntity } from 'src/entities/user.entity';
@@ -18,7 +20,9 @@ export class AppointmentService {
         @InjectRepository(DoctorEntity) private doctorRepo: Repository<DoctorEntity>,
         @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
         @InjectRepository(PlaceEntity) private placeRepo: Repository<PlaceEntity>,
-        @InjectRepository(HospitalEntity) private hospitalRepo: Repository<HospitalEntity>
+        @InjectRepository(HospitalEntity) private hospitalRepo: Repository<HospitalEntity>,
+        @InjectRepository(DoctorPlaceEntity) private doctorPlaceRepo: Repository<DoctorPlaceEntity>,
+        @InjectRepository(ArmyPlaceEntity) private armyPlaceRepo:  Repository<ArmyPlaceEntity>
         ) {}
 
     async findUser(username: string, user?: UserEntity): Promise<UserEntity> {
@@ -95,6 +99,95 @@ export class AppointmentService {
         await appointmentEntity.save();
         return appointmentEntity;
     }
+
+    async addPlacesAppointment(appointment: AppointmentDTO) {
+        let user = await this.userRepo.findOne({where: {username: appointment.user}});
+        let place = await this.placeRepo.findOne({where: {id: +appointment.place}});
+        let appointmentEntity: AppointmentEntity = new AppointmentEntity();
+        appointmentEntity.user = user;
+        let index = place.appointmentTimes.indexOf(appointment.time);
+        if (index === -1) {
+            return {
+                status: 0,
+                message: 'there was no time'
+            }
+        }
+        place.appointmentTimes.splice(index, 1);
+        await place.save();
+        appointmentEntity.place = place;
+        let date = appointment.date.split("/");
+        let convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+        appointmentEntity.date = new Date(convertedDate);
+        appointmentEntity.time = appointment.time;
+        appointmentEntity.rate = 0;
+        appointmentEntity.location = appointment.location;
+        appointmentEntity.inProgress = true;
+        appointmentEntity.shift = appointment.shift;
+        await this.appointmentRepo.create(appointmentEntity);
+        await appointmentEntity.save();
+        return appointmentEntity;
+    }
+
+
+
+    async addDoctorPlaceAppointment(appointment: AppointmentDTO) {
+        let doctorPlacce = await this.doctorPlaceRepo.findOne({where: {id: +appointment.place}});
+        let user = await this.userRepo.findOne({where: {username: appointment.user}});
+        let appointmentEntity: AppointmentEntity = new AppointmentEntity();
+        appointmentEntity.user = user;
+        let index = doctorPlacce.appointmentTimes.indexOf(appointment.time);
+        if (index === -1) {
+            return {
+                status: 0,
+                message: 'there was no time'
+            }
+        }
+        doctorPlacce.appointmentTimes.splice(index, 1);
+        await doctorPlacce.save();
+        appointmentEntity.doctorPlaces = doctorPlacce;
+        let date = appointment.date.split("/");
+        let convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+        appointmentEntity.date = new Date(convertedDate);
+        appointmentEntity.time = appointment.time;
+        appointmentEntity.rate = 0;
+        appointmentEntity.location = appointment.location;
+        appointmentEntity.inProgress = true;
+        appointmentEntity.shift = appointment.shift;
+        await this.appointmentRepo.create(appointmentEntity);
+        await appointmentEntity.save();
+        return appointmentEntity;
+    }
+
+    async addArmyPlaceAppointment(appointment: AppointmentDTO) {
+        let armyPlace = await this.armyPlaceRepo.findOne({where: {id: +appointment.place}});
+        let user = await this.userRepo.findOne({where: {username: appointment.user}});
+        let appointmentEntity: AppointmentEntity = new AppointmentEntity();
+        appointmentEntity.user = user;
+        let index = armyPlace.appointmentTimes.indexOf(appointment.time);
+        if (index === -1) {
+            return {
+                status: 0,
+                message: 'there was no time'
+            }
+        }
+        armyPlace.appointmentTimes.splice(index, 1);
+        await armyPlace.save();
+        appointmentEntity.armyPlaces = armyPlace;
+        let date = appointment.date.split("/");
+        let convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+        appointmentEntity.date = new Date(convertedDate);
+        appointmentEntity.time = appointment.time;
+        appointmentEntity.rate = 0;
+        appointmentEntity.location = appointment.location;
+        appointmentEntity.inProgress = true;
+        appointmentEntity.shift = appointment.shift;
+        await this.appointmentRepo.create(appointmentEntity);
+        await appointmentEntity.save();
+        return appointmentEntity;
+    }
+
+
+
 
     async deleteAppointment(appointment: string) {
         let appointmentEntity = await this.appointmentRepo.findOne({where: {id: appointment}});

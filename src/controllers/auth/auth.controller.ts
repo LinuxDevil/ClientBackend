@@ -23,7 +23,8 @@ export class AuthController {
     }
 
     @Post('/login')
-    login(@Body(ValidationPipe) credentials: LoginOTP) {
+    login(@Body() credentials: LoginOTP) {
+       console.log("Login: ", credentials);
        let loginCred: LoginDTO = {
          email: credentials.username ,
          password: credentials.username

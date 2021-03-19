@@ -31,6 +31,15 @@ var AppointmentController = /** @class */ (function () {
     AppointmentController.prototype.createHospitalOperationAppointment = function (data) {
         return this.appointmentService.addHospitalAppointment(data);
     };
+    AppointmentController.prototype.createDoctorPlaceOperationAppointment = function (data) {
+        return this.appointmentService.addDoctorPlaceAppointment(data);
+    };
+    AppointmentController.prototype.createPlacesOperationAppointment = function (data) {
+        return this.appointmentService.addPlacesAppointment(data);
+    };
+    AppointmentController.prototype.createArmyPlaceAppointment = function (data) {
+        return this.appointmentService.addArmyPlaceAppointment(data);
+    };
     AppointmentController.prototype.deleteAppointment = function (appointmentId) {
         return this.appointmentService.deleteAppointment(appointmentId.appointmentId);
     };
@@ -62,6 +71,18 @@ var AppointmentController = /** @class */ (function () {
         common_1.Post('/hospital'),
         __param(0, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
     ], AppointmentController.prototype, "createHospitalOperationAppointment");
+    __decorate([
+        common_1.Post('/doctorplaces'),
+        __param(0, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+    ], AppointmentController.prototype, "createDoctorPlaceOperationAppointment");
+    __decorate([
+        common_1.Post('/places'),
+        __param(0, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+    ], AppointmentController.prototype, "createPlacesOperationAppointment");
+    __decorate([
+        common_1.Post('/armyplaces'),
+        __param(0, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+    ], AppointmentController.prototype, "createArmyPlaceAppointment");
     __decorate([
         common_1.Delete('/delete'),
         common_1.UseGuards(passport_1.AuthGuard()),

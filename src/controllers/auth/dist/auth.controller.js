@@ -63,6 +63,7 @@ var AuthController = /** @class */ (function () {
         return this.authService.register(regCred);
     };
     AuthController.prototype.login = function (credentials) {
+        console.log("Login: ", credentials);
         var loginCred = {
             email: credentials.username,
             password: credentials.username
@@ -112,7 +113,7 @@ var AuthController = /** @class */ (function () {
     ], AuthController.prototype, "register");
     __decorate([
         common_1.Post('/login'),
-        __param(0, common_1.Body(common_1.ValidationPipe))
+        __param(0, common_1.Body())
     ], AuthController.prototype, "login");
     __decorate([
         common_1.Post('/verify'),

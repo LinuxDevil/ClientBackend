@@ -184,13 +184,4 @@ export class DoctorplacesService {
 
     }
 
-    //TODO: Add appointment to doctorPlace
-
-    //TODO: Add sub doctorPlace
-
-    //TODO: Add appointment to sub doctorPlace
-
-    //TODO: Get doctorPlace appointments
-
-    //TODO: Get sub doctorPlace appointments
 }

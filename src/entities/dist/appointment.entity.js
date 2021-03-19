@@ -22,7 +22,9 @@ exports.__esModule = true;
 exports.AppointmentEntity = void 0;
 var typeorm_1 = require("typeorm");
 var abstract_entities_1 = require("./abstract-entities");
+var armyplaces_entity_1 = require("./armyplaces.entity");
 var doctor_entity_1 = require("./doctor.entity");
+var doctorplace_entity_1 = require("./doctorplace.entity");
 var hospital_entity_1 = require("./hospital.entity");
 var place_entity_1 = require("./place.entity");
 var user_entity_1 = require("./user.entity");
@@ -73,6 +75,18 @@ var AppointmentEntity = /** @class */ (function (_super) {
         }),
         typeorm_1.JoinTable()
     ], AppointmentEntity.prototype, "hospital");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return doctorplace_entity_1.DoctorPlaceEntity; }, function (doctorPlace) { return doctorPlace.appointments; }, {
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinTable()
+    ], AppointmentEntity.prototype, "doctorPlaces");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return armyplaces_entity_1.ArmyPlaceEntity; }, function (armyPlace) { return armyPlace.appointments; }, {
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinTable()
+    ], AppointmentEntity.prototype, "armyPlaces");
     __decorate([
         typeorm_1.ManyToOne(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, {
             onDelete: 'CASCADE'
