@@ -119,7 +119,7 @@ var HospitalsService = /** @class */ (function () {
                         return [4 /*yield*/, hospitalEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, hospitalEntity];
+                        return [2 /*return*/, { hospitalEntity: hospitalEntity }];
                 }
             });
         });
@@ -127,10 +127,15 @@ var HospitalsService = /** @class */ (function () {
     //Get all general hospitals
     HospitalsService.prototype.getAllGeneralHospitals = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var hospitals;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "General" } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "general" } })];
+                    case 1:
+                        hospitals = _a.sent();
+                        return [2 /*return*/, {
+                                hospitals: hospitals
+                            }];
                 }
             });
         });
@@ -138,10 +143,15 @@ var HospitalsService = /** @class */ (function () {
     //Get all private hospitals
     HospitalsService.prototype.getAllPrivateHospitals = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var hospitals;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        hospitals = _a.sent();
+                        return [2 /*return*/, {
+                                hospitals: hospitals
+                            }];
                 }
             });
         });
@@ -149,10 +159,15 @@ var HospitalsService = /** @class */ (function () {
     //Get all private hospitals
     HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var hospitals;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        hospitals = _a.sent();
+                        return [2 /*return*/, {
+                                hospitals: hospitals
+                            }];
                 }
             });
         });
@@ -160,10 +175,15 @@ var HospitalsService = /** @class */ (function () {
     //Get all private hospitals
     HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var hospitals;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        hospitals = _a.sent();
+                        return [2 /*return*/, {
+                                hospitals: hospitals
+                            }];
                 }
             });
         });
@@ -259,7 +279,7 @@ var HospitalsService = /** @class */ (function () {
                         return [4 /*yield*/, hospital.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, { hospital: hospital }];
                 }
             });
         });
@@ -302,7 +322,7 @@ var HospitalsService = /** @class */ (function () {
                         return [4 /*yield*/, hospital.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, hospital];
+                        return [2 /*return*/, { hospital: hospital }];
                 }
             });
         });

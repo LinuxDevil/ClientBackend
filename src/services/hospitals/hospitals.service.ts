@@ -66,26 +66,38 @@ export class HospitalsService {
         let hospitalEntity = await this.hospitalRepo.create(hospital);
         hospitalEntity.location = city;
         await hospitalEntity.save();
-        return hospitalEntity;
+        return {hospitalEntity};
     }
 
     //Get all general hospitals
     async getAllGeneralHospitals() {
-        return await this.hospitalRepo.find({ where: { type: "General" } });
+        let hospitals =  await this.hospitalRepo.find({ where: { type: "general" } });
+        return {
+            hospitals
+        }
     }
 
     //Get all private hospitals
     async getAllPrivateHospitals() {
-        return await this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] });
+        let hospitals =   await this.hospitalRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] });
+        return {
+            hospitals
+        }
     }
 
     //Get all private hospitals
     async getAllFilteredPrivateHospitals(cityId: string) {
-        return await this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let hospitals =   await this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        return {
+            hospitals
+        }
     }
     //Get all private hospitals
     async getAllFilteredGeneralHospitals(cityId: string) {
-        return await this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let hospitals =   await this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        return {
+            hospitals
+        }
     }
 
     //Get hospital by id
@@ -140,7 +152,7 @@ export class HospitalsService {
         }
         await hospital.doctors.push(doctor);
         await hospital.save();
-        return hospital;
+        return {hospital};
     }
 
     //TODO: Generate appointment times for hospitals/ operations and everything else
@@ -172,7 +184,7 @@ export class HospitalsService {
         });
         hospital.appointmentTimes = appointmens;
         await hospital.save();
-        return hospital;
+        return {hospital};
     }
 
     async updateHospitalOperationDates(hospitalId: string, startDate: string, endDate: string) {
