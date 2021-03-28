@@ -15,14 +15,15 @@ var CitiesController = /** @class */ (function () {
     function CitiesController(citiesService) {
         this.citiesService = citiesService;
     }
-    CitiesController.prototype.getcities = function () {
-        return this.citiesService.getCities();
+    CitiesController.prototype.getcities = function (lang) {
+        return this.citiesService.getCities(lang);
     };
     CitiesController.prototype.createCity = function (cityDTO) {
         return this.citiesService.createNewCity(cityDTO);
     };
     __decorate([
-        common_1.Get()
+        common_1.Get(),
+        __param(0, common_1.Query('lang'))
     ], CitiesController.prototype, "getcities");
     __decorate([
         common_1.Post(),

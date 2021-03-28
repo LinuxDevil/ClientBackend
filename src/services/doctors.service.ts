@@ -15,12 +15,14 @@ export class DoctorsService {
     ) { }
 
     async getAllDoctors() {
-        return this.doctorRepo.find({relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital']});
+        let doctors = await this.doctorRepo.find({ relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital'] });
+        return { doctors }
     }
 
     async getDoctorById(doctorId: string) {
         try {
-            return await this.doctorRepo.findOne({ where: { id: +doctorId } })
+            let doctor = await this.doctorRepo.findOne({ where: { id: +doctorId } })
+            return { doctor };
         } catch (error) {
             return {
                 message: 'there is no doctor with that id',
@@ -99,31 +101,35 @@ export class DoctorsService {
         await doctor.save();
         upDoctor = doctor;
         await upDoctor.save();
-        return upDoctor;
+        return { doctor: upDoctor };
     }
 
     async updateDoctor(username: string, data: UpdateDoctorDTO) {
-            let doctor = await this.doctorRepo.findOne({ where: { username: "+".concat(username) } });
-            if (doctor === undefined || doctor === null) {
+        let doctor = await this.doctorRepo.findOne({ where: { username: "+".concat(username) } });
+        if (doctor === undefined || doctor === null) {
+            return {
+                status: 0,
+                message: 'There is no doctor with username' + username
+            }
+        }
+        if (data.insuranceCompanyId) {
+            let insurance = await this.insuranceRepo.findOne({ where: { id: data.insuranceCompanyId } });
+            if (insurance === null || insurance === undefined) {
                 return {
                     status: 0,
-                    message: 'There is no doctor with username' + username
+                    message: 'There is no insurance with id' + data.insuranceCompanyId
                 }
             }
-            if (data.insuranceCompanyId) {
-                let insurance = await this.insuranceRepo.findOne({ where: { id: data.insuranceCompanyId } });
-                if (insurance === null || insurance === undefined) {
-                    return {
-                        status: 0,
-                        message: 'There is no insurance with id' + data.insuranceCompanyId
-                    }
-                }
-                doctor.insuranceCompany = insurance;
-                await doctor.save();
-                delete data.insuranceCompanyId;
-            }
-            await this.doctorRepo.update({ username: "+".concat(username) }, data);
-            return await this.doctorRepo.findOne({ where: { username: "+".concat(username) } });
+            doctor.insuranceCompany = insurance;
+            await doctor.save();
+            delete data.insuranceCompanyId;
+        }
+        await this.doctorRepo.update({ username: "+".concat(username) }, data);
+        let doctorUp = await this.doctorRepo.findOne({ where: { username: "+".concat(username) } });
+        return {
+            doctor: doctorUp
+        }
+
     }
 
     async updateAppointmentDates(upDoctor: DoctorEntity, startDate: string, endDate: string) {

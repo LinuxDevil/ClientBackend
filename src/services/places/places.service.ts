@@ -64,13 +64,18 @@ export class PlacesService {
         let placeEntity = await this.placeRepo.create(place);
         placeEntity.location = city;
         await placeEntity.save();
-        return placeEntity;
+        return {placeEntity};
     }
 
     //Get all private places
     async getAllPlaces(type: string) {
         try {
-            return await this.placeRepo.find({ where: { type: type }, relations: ['location', 'doctors'] });
+            let places = await this.placeRepo.find({ where: { type: type }, relations: ['location', 'doctors'] });
+            return {
+                type,
+                places,
+                length: places.length
+            }
         } catch (error) {
             return {
                 message: 'There was an error',
@@ -81,7 +86,13 @@ export class PlacesService {
 
     //Get all private placess
     async getAllFilteredPlaces(cityId: string, type: string) {
-        return await this.placeRepo.find({ where: { type: type, location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let places = await this.placeRepo.find({ where: { type: type, location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        return {
+            type,
+            cityId,
+            places,
+            length: places.length
+        }
     }
 
     //Get place by id
@@ -93,7 +104,7 @@ export class PlacesService {
                 message: "There is no place with id " + placeId
             }
         }
-        return place;
+        return {place};
     }
 
     async deletePlace(placeId: string) {
@@ -107,7 +118,8 @@ export class PlacesService {
     }
 
     async deleteAllPlaces() {
-        return await this.placeRepo.delete({ type: 'Labs' });
+        let places = await this.placeRepo.delete({ type: 'Labs' });
+        return {places};
     }
 
     //TODO:: Add place to place
@@ -136,7 +148,7 @@ export class PlacesService {
         }
         await place.doctors.push(doctor);
         await place.save();
-        return place;
+        return {place};
     }
 
     //TODO: Generate appointment times for places/ operations and everything else
@@ -168,7 +180,7 @@ export class PlacesService {
         });
         place.appointmentTimes = appointmens;
         await place.save();
-        return place;
+        return {place};
     }
 
     async updatePlaceOperationDates(placeId: string, startDate: string, endDate: string) {

@@ -58,20 +58,28 @@ var DoctorsService = /** @class */ (function () {
     }
     DoctorsService.prototype.getAllDoctors = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var doctors;
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.doctorRepo.find({ relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital'] })];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.doctorRepo.find({ relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital'] })];
+                    case 1:
+                        doctors = _a.sent();
+                        return [2 /*return*/, { doctors: doctors }];
+                }
             });
         });
     };
     DoctorsService.prototype.getDoctorById = function (doctorId) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1;
+            var doctor, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        doctor = _a.sent();
+                        return [2 /*return*/, { doctor: doctor }];
                     case 2:
                         error_1 = _a.sent();
                         return [2 /*return*/, {
@@ -163,14 +171,14 @@ var DoctorsService = /** @class */ (function () {
                         return [4 /*yield*/, upDoctor.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, upDoctor];
+                        return [2 /*return*/, { doctor: upDoctor }];
                 }
             });
         });
     };
     DoctorsService.prototype.updateDoctor = function (username, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor, insurance;
+            var doctor, insurance, doctorUp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
@@ -202,7 +210,11 @@ var DoctorsService = /** @class */ (function () {
                     case 5:
                         _a.sent();
                         return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
-                    case 6: return [2 /*return*/, _a.sent()];
+                    case 6:
+                        doctorUp = _a.sent();
+                        return [2 /*return*/, {
+                                doctor: doctorUp
+                            }];
                 }
             });
         });

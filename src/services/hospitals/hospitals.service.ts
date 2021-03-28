@@ -86,17 +86,35 @@ export class HospitalsService {
     }
 
     //Get all private hospitals
-    async getAllFilteredPrivateHospitals(cityId: string) {
+    async getAllFilteredPrivateHospitals(cityId: string, langId: string) {
         let hospitals =   await this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let hospitalNames = [];
+        hospitals.forEach((hospital) => { 
+            if  (langId === "1") 
+                hospitalNames.push(hospital.nameEn)
+            else
+                hospitalNames.push(hospital.nameAr)
+        });
         return {
-            hospitals
+            hospitals,
+            length: hospitals.length,
+            hospitalNames
         }
     }
     //Get all private hospitals
-    async getAllFilteredGeneralHospitals(cityId: string) {
+    async getAllFilteredGeneralHospitals(cityId: string, langId: string) {
         let hospitals =   await this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let hospitalNames = [];
+        hospitals.forEach((hospital) => { 
+            if  (langId === "1") 
+                hospitalNames.push(hospital.nameEn)
+            else
+                hospitalNames.push(hospital.nameAr)
+        });
         return {
-            hospitals
+            hospitals,
+            length: hospitals.length,
+            hospitalNames
         }
     }
 

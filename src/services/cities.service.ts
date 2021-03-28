@@ -12,17 +12,34 @@ export class CitiesService {
     ) {}
 
     async createNewCity(cityDTO: CityDTO) {
+        let foundCity = await this.citiesRepo.findOne({where: {nameAr: cityDTO.nameAr}});
+        if (foundCity !== null || foundCity !== undefined) {
+            return {
+                message: "This city is found!",
+                foundCity
+            }
+        }
         let city = await this.citiesRepo.create(cityDTO);
         if (city === null) return {
             message: "City is null",
             status: 0
         }
         await city.save();
-        return city;
+        return {city};
     }
 
-    async getCities() {
-        return await this.citiesRepo.find();
+    async getCities(lang: string) {
+        let cities = await this.citiesRepo.find();
+        let uniqeCities = [];
+        if (lang === "1") {
+            uniqeCities = [...new Set(cities.map(item => item.nameEn))]
+        } else {
+            uniqeCities = [...new Set(cities.map(item => item.nameAr))]
+        }
+        return  {
+            cities: uniqeCities,
+            length: uniqeCities.length
+        }
     }
 
 }

@@ -44,6 +44,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 exports.CitiesService = void 0;
 var common_1 = require("@nestjs/common");
@@ -55,11 +62,20 @@ var CitiesService = /** @class */ (function () {
     }
     CitiesService.prototype.createNewCity = function (cityDTO) {
         return __awaiter(this, void 0, void 0, function () {
-            var city;
+            var foundCity, city;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.citiesRepo.create(cityDTO)];
+                    case 0: return [4 /*yield*/, this.citiesRepo.findOne({ where: { nameAr: cityDTO.nameAr } })];
                     case 1:
+                        foundCity = _a.sent();
+                        if (foundCity !== null || foundCity !== undefined) {
+                            return [2 /*return*/, {
+                                    message: "This city is found!",
+                                    foundCity: foundCity
+                                }];
+                        }
+                        return [4 /*yield*/, this.citiesRepo.create(cityDTO)];
+                    case 2:
                         city = _a.sent();
                         if (city === null)
                             return [2 /*return*/, {
@@ -67,19 +83,32 @@ var CitiesService = /** @class */ (function () {
                                     status: 0
                                 }];
                         return [4 /*yield*/, city.save()];
-                    case 2:
+                    case 3:
                         _a.sent();
-                        return [2 /*return*/, city];
+                        return [2 /*return*/, { city: city }];
                 }
             });
         });
     };
-    CitiesService.prototype.getCities = function () {
+    CitiesService.prototype.getCities = function (lang) {
         return __awaiter(this, void 0, void 0, function () {
+            var cities, uniqeCities;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.citiesRepo.find()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        cities = _a.sent();
+                        uniqeCities = [];
+                        if (lang === "1") {
+                            uniqeCities = __spreadArrays(new Set(cities.map(function (item) { return item.nameEn; })));
+                        }
+                        else {
+                            uniqeCities = __spreadArrays(new Set(cities.map(function (item) { return item.nameAr; })));
+                        }
+                        return [2 /*return*/, {
+                                cities: uniqeCities,
+                                length: uniqeCities.length
+                            }];
                 }
             });
         });

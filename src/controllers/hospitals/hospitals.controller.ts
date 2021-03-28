@@ -13,8 +13,8 @@ export class HospitalsController {
     }
 
     @Get('/private/filter')
-    getFilteredPrivateHospitals(@Query('city') city: string) {
-        return this.hospitalService.getAllFilteredPrivateHospitals(city);
+    getFilteredPrivateHospitals(@Query('city') city: string, @Query('langId')  langId: string) {
+        return this.hospitalService.getAllFilteredPrivateHospitals(city, langId);
     }
 
     @Get('/general')
@@ -23,8 +23,8 @@ export class HospitalsController {
     }
 
     @Get('/general/filter')
-    getFilteredGeneralHospitals(@Query('city') city: string) {
-        return this.hospitalService.getAllFilteredGeneralHospitals(city);
+    getFilteredGeneralHospitals(@Query('city') city: string, @Query('langId')  langId: string) {
+        return this.hospitalService.getAllFilteredGeneralHospitals(city, langId);
     }
 
     @Post()

@@ -64,26 +64,30 @@ export class DoctorplacesService {
         let doctorPlaceEntity = await this.doctorPlaceRepo.create(doctorPlace);
         doctorPlaceEntity.location = city;
         await doctorPlaceEntity.save();
-        return doctorPlaceEntity;
+        return {doctorPlaceEntity};
     }
 
     //Get all general doctorPlaces
     async getAllGeneralDoctorPlaces() {
-        return await this.doctorPlaceRepo.find();
+        let doctorPlaces = await this.doctorPlaceRepo.find();
+        return {doctorPlaces};
     }
 
     //Get all private doctorPlaces
     async getAllPrivateDoctorPlaces() {
-        return await this.doctorPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] });
+        let doctorPlaces = await this.doctorPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] });
+        return {doctorPlaces}
     }
 
     //Get all private doctorPlaces
     async getAllFilteredPrivateDoctorPlaces(cityId: string) {
-        return await this.doctorPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let doctorPlaces =  await this.doctorPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        return {doctorPlaces}
     }
     //Get all private doctorPlaces
     async getAllFilteredGeneralDoctorPlaces(cityId: string) {
-        return await this.doctorPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        let doctorPlaces =  await this.doctorPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] });
+        return {doctorPlaces};
     }
 
     //Get doctorPlace by id
@@ -95,7 +99,7 @@ export class DoctorplacesService {
                 message: "There is no doctorPlace with id " + doctorPlaceId
             }
         }
-        return doctorPlace;
+        return {doctorPlace};
     }
 
     async deleteDoctorPlace(doctorPlaceId: string) {
@@ -138,7 +142,7 @@ export class DoctorplacesService {
         }
         await doctorPlace.doctors.push(doctor);
         await doctorPlace.save();
-        return doctorPlace;
+        return {doctorPlace};
     }
 
     //TODO: Generate appointment times for doctorPlaces/ operations and everything else
@@ -170,7 +174,7 @@ export class DoctorplacesService {
         });
         doctorPlace.appointmentTimes = appointmens;
         await doctorPlace.save();
-        return doctorPlace;
+        return {doctorPlace};
     }
 
     async updateDoctorPlaceOperationDates(doctorPlaceId: string, startDate: string, endDate: string) {
@@ -181,7 +185,6 @@ export class DoctorplacesService {
         doctorPlace.appointmentDates = this.getDaysList(startDate, endDate, doctorPlace.appointmentDurations);
         await doctorPlace.save();
         return await this.updateDoctorPlaceOperationDurations(doctorPlaceId, doctorPlace.duration);
-
     }
 
 }

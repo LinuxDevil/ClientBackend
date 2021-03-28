@@ -119,7 +119,7 @@ var DoctorplacesService = /** @class */ (function () {
                         return [4 /*yield*/, doctorPlaceEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, doctorPlaceEntity];
+                        return [2 /*return*/, { doctorPlaceEntity: doctorPlaceEntity }];
                 }
             });
         });
@@ -127,10 +127,13 @@ var DoctorplacesService = /** @class */ (function () {
     //Get all general doctorPlaces
     DoctorplacesService.prototype.getAllGeneralDoctorPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var doctorPlaces;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorPlaceRepo.find()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        doctorPlaces = _a.sent();
+                        return [2 /*return*/, { doctorPlaces: doctorPlaces }];
                 }
             });
         });
@@ -138,10 +141,13 @@ var DoctorplacesService = /** @class */ (function () {
     //Get all private doctorPlaces
     DoctorplacesService.prototype.getAllPrivateDoctorPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var doctorPlaces;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        doctorPlaces = _a.sent();
+                        return [2 /*return*/, { doctorPlaces: doctorPlaces }];
                 }
             });
         });
@@ -149,10 +155,13 @@ var DoctorplacesService = /** @class */ (function () {
     //Get all private doctorPlaces
     DoctorplacesService.prototype.getAllFilteredPrivateDoctorPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var doctorPlaces;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        doctorPlaces = _a.sent();
+                        return [2 /*return*/, { doctorPlaces: doctorPlaces }];
                 }
             });
         });
@@ -160,10 +169,13 @@ var DoctorplacesService = /** @class */ (function () {
     //Get all private doctorPlaces
     DoctorplacesService.prototype.getAllFilteredGeneralDoctorPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var doctorPlaces;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.doctorPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        doctorPlaces = _a.sent();
+                        return [2 /*return*/, { doctorPlaces: doctorPlaces }];
                 }
             });
         });
@@ -183,7 +195,7 @@ var DoctorplacesService = /** @class */ (function () {
                                     message: "There is no doctorPlace with id " + doctorPlaceId
                                 }];
                         }
-                        return [2 /*return*/, doctorPlace];
+                        return [2 /*return*/, { doctorPlace: doctorPlace }];
                 }
             });
         });
@@ -259,7 +271,7 @@ var DoctorplacesService = /** @class */ (function () {
                         return [4 /*yield*/, doctorPlace.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, doctorPlace];
+                        return [2 /*return*/, { doctorPlace: doctorPlace }];
                 }
             });
         });
@@ -302,7 +314,7 @@ var DoctorplacesService = /** @class */ (function () {
                         return [4 /*yield*/, doctorPlace.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, doctorPlace];
+                        return [2 /*return*/, { doctorPlace: doctorPlace }];
                 }
             });
         });

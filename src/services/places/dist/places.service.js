@@ -119,7 +119,7 @@ var PlacesService = /** @class */ (function () {
                         return [4 /*yield*/, placeEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, placeEntity];
+                        return [2 /*return*/, { placeEntity: placeEntity }];
                 }
             });
         });
@@ -127,13 +127,19 @@ var PlacesService = /** @class */ (function () {
     //Get all private places
     PlacesService.prototype.getAllPlaces = function (type) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1;
+            var places, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.placeRepo.find({ where: { type: type }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        places = _a.sent();
+                        return [2 /*return*/, {
+                                type: type,
+                                places: places,
+                                length: places.length
+                            }];
                     case 2:
                         error_1 = _a.sent();
                         return [2 /*return*/, {
@@ -148,10 +154,18 @@ var PlacesService = /** @class */ (function () {
     //Get all private placess
     PlacesService.prototype.getAllFilteredPlaces = function (cityId, type) {
         return __awaiter(this, void 0, void 0, function () {
+            var places;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.placeRepo.find({ where: { type: type, location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        places = _a.sent();
+                        return [2 /*return*/, {
+                                type: type,
+                                cityId: cityId,
+                                places: places,
+                                length: places.length
+                            }];
                 }
             });
         });
@@ -171,7 +185,7 @@ var PlacesService = /** @class */ (function () {
                                     message: "There is no place with id " + placeId
                                 }];
                         }
-                        return [2 /*return*/, place];
+                        return [2 /*return*/, { place: place }];
                 }
             });
         });
@@ -198,10 +212,13 @@ var PlacesService = /** @class */ (function () {
     };
     PlacesService.prototype.deleteAllPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var places;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.placeRepo["delete"]({ type: 'Labs' })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        places = _a.sent();
+                        return [2 /*return*/, { places: places }];
                 }
             });
         });
@@ -247,7 +264,7 @@ var PlacesService = /** @class */ (function () {
                         return [4 /*yield*/, place.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, place];
+                        return [2 /*return*/, { place: place }];
                 }
             });
         });
@@ -290,7 +307,7 @@ var PlacesService = /** @class */ (function () {
                         return [4 /*yield*/, place.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, place];
+                        return [2 /*return*/, { place: place }];
                 }
             });
         });

@@ -157,32 +157,50 @@ var HospitalsService = /** @class */ (function () {
         });
     };
     //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId) {
+    HospitalsService.prototype.getAllFilteredPrivateHospitals = function (cityId, langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospitals;
+            var hospitals, hospitalNames;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1:
                         hospitals = _a.sent();
+                        hospitalNames = [];
+                        hospitals.forEach(function (hospital) {
+                            if (langId === "1")
+                                hospitalNames.push(hospital.nameEn);
+                            else
+                                hospitalNames.push(hospital.nameAr);
+                        });
                         return [2 /*return*/, {
-                                hospitals: hospitals
+                                hospitals: hospitals,
+                                length: hospitals.length,
+                                hospitalNames: hospitalNames
                             }];
                 }
             });
         });
     };
     //Get all private hospitals
-    HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId) {
+    HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId, langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospitals;
+            var hospitals, hospitalNames;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
                     case 1:
                         hospitals = _a.sent();
+                        hospitalNames = [];
+                        hospitals.forEach(function (hospital) {
+                            if (langId === "1")
+                                hospitalNames.push(hospital.nameEn);
+                            else
+                                hospitalNames.push(hospital.nameAr);
+                        });
                         return [2 /*return*/, {
-                                hospitals: hospitals
+                                hospitals: hospitals,
+                                length: hospitals.length,
+                                hospitalNames: hospitalNames
                             }];
                 }
             });
