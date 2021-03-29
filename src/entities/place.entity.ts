@@ -11,6 +11,7 @@ import { InsuranceCompanyEntity } from "./insurance.entity";
 import { DoctorEntity } from "./doctor.entity";
 import { UserEntity } from "./user.entity";
 import { Place } from "src/decorators/user.decorator";
+import { HospitalEntity } from "./hospital.entity";
 
 @Entity('place')
 export class PlaceEntity extends AbstractEntity {
@@ -66,6 +67,10 @@ export class PlaceEntity extends AbstractEntity {
     @ManyToOne(() => CityEntity, city => city.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     @JoinColumn()
     location: CityEntity;
+
+    @ManyToOne(()=> HospitalEntity, hospital => hospital.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
+    @JoinColumn()
+    hospital: HospitalEntity;
 
     @OneToMany(() => AppointmentEntity, appointment => appointment.id, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
     @JoinTable()

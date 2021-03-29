@@ -26,7 +26,6 @@ var appointment_entity_1 = require("./appointment.entity");
 var city_entity_1 = require("./city.entity");
 var doctor_entity_1 = require("./doctor.entity");
 var place_entity_1 = require("./place.entity");
-var user_entity_1 = require("./user.entity");
 var HospitalEntity = /** @class */ (function (_super) {
     __extends(HospitalEntity, _super);
     function HospitalEntity() {
@@ -83,37 +82,54 @@ var HospitalEntity = /** @class */ (function (_super) {
         typeorm_1.Column('date', { array: true })
     ], HospitalEntity.prototype, "holidays");
     __decorate([
-        typeorm_1.ManyToOne(function () { return city_entity_1.CityEntity; }, function (city) { return city.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.ManyToOne(function () { return city_entity_1.CityEntity; }, function (city) { return city.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], HospitalEntity.prototype, "location");
     __decorate([
-        typeorm_1.OneToMany(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
-        typeorm_1.JoinTable()
-    ], HospitalEntity.prototype, "JoinColumn");
-    __decorate([
-        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.hospital; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], HospitalEntity.prototype, "labs");
     __decorate([
-        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.hospital; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], HospitalEntity.prototype, "xrays");
     __decorate([
-        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.hospital; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], HospitalEntity.prototype, "pharmacies");
     __decorate([
-        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.hospital; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.hospital; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn({ name: 'doctors' })
     ], HospitalEntity.prototype, "doctors");
     __decorate([
-        typeorm_1.OneToMany(function () { return user_entity_1.UserEntity; }, function (user) { return user.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
-        typeorm_1.JoinColumn()
-    ], HospitalEntity.prototype, "user");
-    __decorate([
-        typeorm_1.OneToMany(function () { return HospitalEntity_1; }, function (hospital) { return hospital.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
-        typeorm_1.JoinColumn()
+        typeorm_1.OneToMany(function () { return HospitalEntity_1; }, function (hospital) { return hospital.parentHospital; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinTable()
     ], HospitalEntity.prototype, "subHospitals");
+    __decorate([
+        typeorm_1.ManyToOne(function () { return HospitalEntity_1; }, function (hospital) { return hospital.subHospitals; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinTable()
+    ], HospitalEntity.prototype, "parentHospital");
     __decorate([
         typeorm_1.ManyToOne(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.hospital; }),
         typeorm_1.JoinTable()

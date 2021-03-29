@@ -177,7 +177,7 @@ export class HospitalsService {
   }
   //Get all private hospitals
   async getAllFilteredGeneralHospitals(cityId: string, langId: string) {
-    try {
+    // try {
       let hospitals = await this.hospitalRepo.find({
         where: { type: 'general', location: { id: +cityId } },
         loadRelationIds: true,
@@ -192,12 +192,12 @@ export class HospitalsService {
         length: hospitals.length,
         hospitalNames,
       };
-    } catch (error) {
-      return {
-        status: new Constants().PREMADE_STATUS.Fail_GET,
-        error,
-      };
-    }
+    // } catch (error) {
+      // return {
+        // status: new Constants().PREMADE_STATUS.Fail_GET,
+        // error,
+      // };
+    // }
   }
 
   //Get hospital by id

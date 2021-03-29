@@ -179,10 +179,16 @@ var DoctorEntity = /** @class */ (function (_super) {
         typeorm_1.JoinTable()
     ], DoctorEntity.prototype, "qalifications");
     __decorate([
-        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.doctors; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.doctors; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        })
     ], DoctorEntity.prototype, "hospital");
     __decorate([
-        typeorm_1.ManyToOne(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.doctors; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
+        typeorm_1.ManyToOne(function () { return place_entity_1.PlaceEntity; }, function (place) { return place.doctors; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        })
     ], DoctorEntity.prototype, "place");
     __decorate([
         typeorm_1.BeforeInsert()

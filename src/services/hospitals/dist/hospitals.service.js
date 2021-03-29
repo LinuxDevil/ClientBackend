@@ -259,36 +259,27 @@ var HospitalsService = /** @class */ (function () {
     //Get all private hospitals
     HospitalsService.prototype.getAllFilteredGeneralHospitals = function (cityId, langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospitals, hospitalNames_4, error_5;
+            var hospitals, hospitalNames;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.hospitalRepo.find({
-                                where: { type: 'general', location: { id: +cityId } },
-                                loadRelationIds: true
-                            })];
+                    case 0: return [4 /*yield*/, this.hospitalRepo.find({
+                            where: { type: 'general', location: { id: +cityId } },
+                            loadRelationIds: true
+                        })];
                     case 1:
                         hospitals = _a.sent();
-                        hospitalNames_4 = [];
+                        hospitalNames = [];
                         hospitals.forEach(function (hospital) {
                             if (langId === '1')
-                                hospitalNames_4.push(hospital.nameEn);
+                                hospitalNames.push(hospital.nameEn);
                             else
-                                hospitalNames_4.push(hospital.nameAr);
+                                hospitalNames.push(hospital.nameAr);
                         });
                         return [2 /*return*/, {
                                 hospitals: hospitals,
                                 length: hospitals.length,
-                                hospitalNames: hospitalNames_4
+                                hospitalNames: hospitalNames
                             }];
-                    case 2:
-                        error_5 = _a.sent();
-                        return [2 /*return*/, {
-                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_5
-                            }];
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -296,7 +287,7 @@ var HospitalsService = /** @class */ (function () {
     //Get hospital by id
     HospitalsService.prototype.getHospitalById = function (hospitalId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, error_6;
+            var hospital, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -315,10 +306,10 @@ var HospitalsService = /** @class */ (function () {
                         }
                         return [2 /*return*/, hospital];
                     case 2:
-                        error_6 = _a.sent();
+                        error_5 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_6
+                                error: error_5
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -327,7 +318,7 @@ var HospitalsService = /** @class */ (function () {
     };
     HospitalsService.prototype.deleteHospital = function (hospitalId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, error_7;
+            var hospital, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -346,10 +337,10 @@ var HospitalsService = /** @class */ (function () {
                         return [4 /*yield*/, hospital.remove()];
                     case 2: return [2 /*return*/, _a.sent()];
                     case 3:
-                        error_7 = _a.sent();
+                        error_6 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_7
+                                error: error_6
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -358,7 +349,7 @@ var HospitalsService = /** @class */ (function () {
     };
     HospitalsService.prototype.deleteAllHospitals = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var deleted, error_8;
+            var deleted, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -371,10 +362,10 @@ var HospitalsService = /** @class */ (function () {
                                 status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
                             }];
                     case 2:
-                        error_8 = _a.sent();
+                        error_7 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_8
+                                error: error_7
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -384,7 +375,7 @@ var HospitalsService = /** @class */ (function () {
     //TODO: Add doctor to hospital
     HospitalsService.prototype.addDoctor = function (doctorId, hospitalId) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, doctor, error_9;
+            var hospital, doctor, error_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -425,10 +416,10 @@ var HospitalsService = /** @class */ (function () {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
                             }];
                     case 5:
-                        error_9 = _a.sent();
+                        error_8 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_9
+                                error: error_8
                             }];
                     case 6: return [2 /*return*/];
                 }
@@ -438,7 +429,7 @@ var HospitalsService = /** @class */ (function () {
     //TODO: Generate appointment times for hospitals/ operations and everything else
     HospitalsService.prototype.updateHospitalOperationDurations = function (hospitalId, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital_1, date, appointmens_1, error_10;
+            var hospital_1, date, appointmens_1, error_9;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -496,10 +487,10 @@ var HospitalsService = /** @class */ (function () {
                                 status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
                             }];
                     case 3:
-                        error_10 = _a.sent();
+                        error_9 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_10
+                                error: error_9
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -508,7 +499,7 @@ var HospitalsService = /** @class */ (function () {
     };
     HospitalsService.prototype.updateHospitalOperationDates = function (hospitalId, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, error_11;
+            var hospital, error_10;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -529,10 +520,10 @@ var HospitalsService = /** @class */ (function () {
                         return [4 /*yield*/, this.updateHospitalOperationDurations(hospitalId, hospital.duration)];
                     case 3: return [2 /*return*/, _a.sent()];
                     case 4:
-                        error_11 = _a.sent();
+                        error_10 = _a.sent();
                         return [2 /*return*/, {
                                 status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
-                                error: error_11
+                                error: error_10
                             }];
                     case 5: return [2 /*return*/];
                 }

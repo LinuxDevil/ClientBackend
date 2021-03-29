@@ -1,105 +1,120 @@
-import { classToPlain, Exclude } from "class-transformer";
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
-import { AbstractEntity } from "./abstract-entities";
-import { UserEntity } from "./user.entity";
+import { classToPlain, Exclude } from 'class-transformer';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
+import { AbstractEntity } from './abstract-entities';
+import { UserEntity } from './user.entity';
 import * as bcrypt from 'bcryptjs';
-import { QalificationsEntity } from "./qalification.entity";
-import { AppointmentEntity } from "./appointment.entity";
-import { InsuranceCompanyEntity } from "./insurance.entity";
-import { HospitalEntity } from "./hospital.entity";
-import { PlaceEntity } from "./place.entity";
+import { QalificationsEntity } from './qalification.entity';
+import { AppointmentEntity } from './appointment.entity';
+import { InsuranceCompanyEntity } from './insurance.entity';
+import { HospitalEntity } from './hospital.entity';
+import { PlaceEntity } from './place.entity';
 
 @Entity('doctor')
 export class DoctorEntity extends AbstractEntity {
+  @Column()
+  email: string;
 
-    @Column()
-    email: string;
+  @Column()
+  username: string;
 
-    @Column()
-    username: string;
+  @Column({ default: '' })
+  phone: string;
 
-    @Column({default: ''})
-    phone: string;
+  @Column({ default: '' })
+  bio: string;
 
-    @Column({default: ''}) 
-    bio: string;
+  @Column({ default: '', nullable: true })
+  nationalityId: string;
 
-    @Column({default: '', nullable: true})
-    nationalityId: string;
+  @Column({ default: '' })
+  name: string;
 
-    @Column({ default: '' })
-    name: string;
+  @Column({ default: null, nullable: true })
+  image: string | null;
 
-    @Column({default: null, nullable: true})
-    image: string | null;
+  @Column()
+  @Exclude()
+  password: string;
 
-    @Column()
-    @Exclude()
-    password: string;
+  @Column({ default: 8, nullable: true })
+  shiftDuration: number;
 
-    @Column({default: 8, nullable: true})
-    shiftDuration: number;
+  @Column({ default: '10', nullable: true })
+  duration: string;
 
-    @Column({default: '10', nullable: true})
-    duration: string;
+  @Column('text', { array: true, nullable: true })
+  appointmentTimes: string[];
 
-    @Column('text', {array: true, nullable: true})
-    appointmentTimes: string[];
+  @Column('text', { array: true, nullable: true })
+  appointmentDurations: string[];
 
-    @Column('text', {array: true, nullable: true})
-    appointmentDurations: string[];
+  @Column('text', { array: true, nullable: true })
+  appointmentDates: string[];
 
-    @Column('text', {array: true, nullable: true})
-    appointmentDates: string[];
+  @Column({ default: '' })
+  insuranceNumber: string;
 
-    @Column({ default: '' })
-    insuranceNumber: string;
-    
-    @Column({default: false})
-    isVerified: boolean;
+  @Column({ default: false })
+  isVerified: boolean;
 
-    @OneToMany(() => AppointmentEntity, appointment => appointment.doctor)
-    @JoinTable()
-    appointments: AppointmentEntity[];
+  @OneToMany(() => AppointmentEntity, (appointment) => appointment.doctor)
+  @JoinTable()
+  appointments: AppointmentEntity[];
 
-    @OneToOne(() => InsuranceCompanyEntity, insurance => insurance.id)
-    @JoinColumn()
-    insuranceCompany: InsuranceCompanyEntity;
-    
-    @ManyToMany(type => UserEntity, user => user.username)
-    @JoinTable()
-    patients: UserEntity[];
+  @OneToOne(() => InsuranceCompanyEntity, (insurance) => insurance.id)
+  @JoinColumn()
+  insuranceCompany: InsuranceCompanyEntity;
 
-    @OneToMany(() => QalificationsEntity, qalification => qalification.doctor)
-    @JoinTable()
-    qalifications: QalificationsEntity[];
+  @ManyToMany((type) => UserEntity, (user) => user.username)
+  @JoinTable()
+  patients: UserEntity[];
 
-    @ManyToOne(() => HospitalEntity, hospital => hospital.doctors, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
-    hospital: HospitalEntity;
+  @OneToMany(() => QalificationsEntity, (qalification) => qalification.doctor)
+  @JoinTable()
+  qalifications: QalificationsEntity[];
 
-    @ManyToOne(() => PlaceEntity, place => place.doctors, {onUpdate: 'CASCADE', onDelete: 'CASCADE'})
-    place: PlaceEntity;
+  @ManyToOne(() => HospitalEntity, (hospital) => hospital.doctors, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  hospital: HospitalEntity;
 
-    @BeforeInsert()
-    async hashPassword() {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
+  @ManyToOne(() => PlaceEntity, (place) => place.doctors, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  place: PlaceEntity;
 
-    async comparePassword(password: string) {
-        return await bcrypt.compare(password, this.password);
-    }
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 
-    toProfile(user?: DoctorEntity) {
-        let patients = null;
-        const profile: any = this.toJSON();
-        delete profile.patients;
-        return {
-            ...profile, patients
-        }
-    }
+  async comparePassword(password: string) {
+    return await bcrypt.compare(password, this.password);
+  }
 
-    toJSON() {
-        return classToPlain(this);       
-    }
+  toProfile(user?: DoctorEntity) {
+    const patients = null;
+    const profile: any = this.toJSON();
+    delete profile.patients;
+    return {
+      ...profile,
+      patients,
+    };
+  }
 
+  toJSON() {
+    return classToPlain(this);
+  }
 }
