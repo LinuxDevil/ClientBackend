@@ -47,6 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.ArmyplacesController = void 0;
 var common_1 = require("@nestjs/common");
+var Constants_1 = require("src/helpers/Constants");
 var ArmyplacesController = /** @class */ (function () {
     function ArmyplacesController(armyPlaceService) {
         this.armyPlaceService = armyPlaceService;
@@ -89,15 +90,23 @@ var ArmyplacesController = /** @class */ (function () {
             });
         });
     };
-    ArmyplacesController.prototype.deleteNewPrivate = function (body) {
+    ArmyplacesController.prototype.deleteArmyPlaceById = function (body) {
         if (body.id === undefined) {
             return {
-                "message": "Please provide an id",
-                status: 0
+                message: 'Please provide an id',
+                status: new Constants_1.Constants().PREMADE_STATUS.Fail_DELETED
             };
         }
-        // return this.armyPlaceService.deleteArmyPlace(body.id);
-        return this.armyPlaceService.deleteAllArmyPlaces();
+        return this.armyPlaceService.deleteArmyPlace(body.id);
+    };
+    ArmyplacesController.prototype.deleteAllArmyPlaces = function (body) {
+        if (body.type === undefined) {
+            return {
+                message: 'Please provide a type',
+                status: new Constants_1.Constants().PREMADE_STATUS.Fail_DELETED
+            };
+        }
+        return this.armyPlaceService.deleteAllArmyPlaces(body.type);
     };
     __decorate([
         common_1.Get('/private')
@@ -119,7 +128,8 @@ var ArmyplacesController = /** @class */ (function () {
     ], ArmyplacesController.prototype, "addNewPrivateArmyPlace");
     __decorate([
         common_1.Post('/createdoctor'),
-        __param(0, common_1.Body()), __param(1, common_1.Query('armyPlaceId'))
+        __param(0, common_1.Body()),
+        __param(1, common_1.Query('armyPlaceId'))
     ], ArmyplacesController.prototype, "createNewDoctor");
     __decorate([
         common_1.Post('/operations/times'),
@@ -130,9 +140,13 @@ var ArmyplacesController = /** @class */ (function () {
         __param(0, common_1.Body())
     ], ArmyplacesController.prototype, "updateArmyPlaceOperationDates");
     __decorate([
+        common_1.Delete('/'),
+        __param(0, common_1.Body())
+    ], ArmyplacesController.prototype, "deleteArmyPlaceById");
+    __decorate([
         common_1.Delete(),
         __param(0, common_1.Body())
-    ], ArmyplacesController.prototype, "deleteNewPrivate");
+    ], ArmyplacesController.prototype, "deleteAllArmyPlaces");
     ArmyplacesController = __decorate([
         common_1.Controller('armyplaces')
     ], ArmyplacesController);

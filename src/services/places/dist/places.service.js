@@ -51,6 +51,7 @@ var typeorm_1 = require("@nestjs/typeorm");
 var city_entity_1 = require("src/entities/city.entity");
 var doctor_entity_1 = require("src/entities/doctor.entity");
 var place_entity_1 = require("src/entities/place.entity");
+var Constants_1 = require("src/helpers/Constants");
 var PlacesService = /** @class */ (function () {
     function PlacesService(placeRepo, cityRepository, doctorRepo) {
         this.placeRepo = placeRepo;
@@ -58,9 +59,9 @@ var PlacesService = /** @class */ (function () {
         this.doctorRepo = doctorRepo;
     }
     PlacesService.prototype.getTimes = function (date, newDuration, shift) {
-        var quarterHours = ["00"];
-        if (newDuration === "0") {
-            quarterHours = ["00", "15", "30", "45"];
+        var quarterHours = ['00'];
+        if (newDuration === '0') {
+            quarterHours = ['00', '15', '30', '45'];
         }
         else {
             var oldValue = +newDuration;
@@ -70,48 +71,59 @@ var PlacesService = /** @class */ (function () {
             }
         }
         var times = [];
-        var appointmentStartTime = Number.parseInt(date.split(" ")[1]);
+        var appointmentStartTime = Number.parseInt(date.split(' ')[1]);
         for (var i = appointmentStartTime; i < appointmentStartTime + shift; i++) {
             for (var j = 0; j < quarterHours.length; j++) {
-                var time = i + ":" + quarterHours[j];
+                var time = i + ':' + quarterHours[j];
                 if (i < 10) {
-                    time = "0" + time;
+                    time = '0' + time;
                 }
-                times.push(date.split(" ")[0] + " " + time);
+                times.push(date.split(' ')[0] + ' ' + time);
             }
         }
         return times;
     };
     PlacesService.prototype.getDaysArray = function (start, end, timeToAdd) {
         for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-            arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
+            arr.push(new Date(dt).getDate() +
+                '/' +
+                (new Date(dt).getMonth() + 1) +
+                '/' +
+                new Date(dt).getFullYear() +
+                ' ' +
+                timeToAdd);
         }
         return arr;
     };
-    ;
     PlacesService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
         var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
-        daylist.map(function (v) {
+        daylist
+            .map(function (v) {
             var thing = v.slice(0, 15);
             return thing;
-        }).join("");
+        })
+            .join('');
         return daylist;
     };
     //Create new place
     PlacesService.prototype.createNewPlace = function (place) {
         return __awaiter(this, void 0, void 0, function () {
-            var city, placeEntity;
+            var city, placeEntity, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        _a.trys.push([0, 4, , 5]);
                         if (place === null) {
-                            return [2 /*return*/, new Error("Invalid input")];
+                            return [2 /*return*/, new Error('Invalid input')];
                         }
-                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: place.cityId } })];
+                        return [4 /*yield*/, this.cityRepository.findOne({
+                                where: { id: place.cityId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         city = _a.sent();
                         if (city === null)
-                            return [2 /*return*/, new Error("City id is not found")];
+                            return [2 /*return*/, new Error('City id is not found')];
                         return [4 /*yield*/, this.placeRepo.create(place)];
                     case 2:
                         placeEntity = _a.sent();
@@ -119,7 +131,17 @@ var PlacesService = /** @class */ (function () {
                         return [4 /*yield*/, placeEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, { placeEntity: placeEntity }];
+                        return [2 /*return*/, {
+                                placeEntity: placeEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 4:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -127,24 +149,28 @@ var PlacesService = /** @class */ (function () {
     //Get all private places
     PlacesService.prototype.getAllPlaces = function (type) {
         return __awaiter(this, void 0, void 0, function () {
-            var places, error_1;
+            var places, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.placeRepo.find({ where: { type: type }, relations: ['location', 'doctors'] })];
+                        return [4 /*yield*/, this.placeRepo.find({
+                                where: { type: type },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         places = _a.sent();
                         return [2 /*return*/, {
                                 type: type,
                                 places: places,
-                                length: places.length
+                                length: places.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
                     case 2:
-                        error_1 = _a.sent();
+                        error_2 = _a.sent();
                         return [2 /*return*/, {
-                                message: 'There was an error',
-                                error: error_1
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -154,18 +180,31 @@ var PlacesService = /** @class */ (function () {
     //Get all private placess
     PlacesService.prototype.getAllFilteredPlaces = function (cityId, type) {
         return __awaiter(this, void 0, void 0, function () {
-            var places;
+            var places, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.find({ where: { type: type, location: { id: +cityId } }, relations: ['location', 'doctors'] })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.placeRepo.find({
+                                where: { type: type, location: { id: +cityId } },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         places = _a.sent();
                         return [2 /*return*/, {
                                 type: type,
                                 cityId: cityId,
                                 places: places,
-                                length: places.length
+                                length: places.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
+                    case 2:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -173,71 +212,103 @@ var PlacesService = /** @class */ (function () {
     //Get place by id
     PlacesService.prototype.getPlaceById = function (placeId) {
         return __awaiter(this, void 0, void 0, function () {
-            var place;
+            var place, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId } })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
+                                loadRelationIds: true })];
                     case 1:
                         place = _a.sent();
                         if (place == null) {
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "There is no place with id " + placeId
+                                    message: 'There is no place with id ' + placeId
                                 }];
                         }
-                        return [2 /*return*/, { place: place }];
+                        return [2 /*return*/, { place: place, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET }];
+                    case 2:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     PlacesService.prototype.deletePlace = function (placeId) {
         return __awaiter(this, void 0, void 0, function () {
-            var place;
+            var place, deleted, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
+                                loadRelationIds: true })];
                     case 1:
                         place = _a.sent();
                         console.log(place);
                         if (place === null || place === undefined)
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "Place not found"
+                                    message: 'Place not found'
                                 }];
                         return [4 /*yield*/, place.remove()];
-                    case 2: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        deleted = _a.sent();
+                        return [2 /*return*/, {
+                                deleted: deleted,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 3:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     PlacesService.prototype.deleteAllPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var places;
+            var places, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo["delete"]({ type: 'Labs' })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.placeRepo["delete"]({ type: 'Labs' })];
                     case 1:
                         places = _a.sent();
-                        return [2 /*return*/, { places: places }];
+                        return [2 /*return*/, {
+                                deleted: places,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
+                            }];
+                    case 2:
+                        error_6 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_6
+                            }];
+                    case 3: return [2 /*return*/];
                 }
-            });
-        });
-    };
-    //TODO:: Add place to place
-    PlacesService.prototype.addPlace = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
             });
         });
     };
     //TODO: Add doctor to place
     PlacesService.prototype.addDoctor = function (doctorId, placeId) {
         return __awaiter(this, void 0, void 0, function () {
-            var place, doctor;
+            var place, doctor, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId } })];
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
+                                loadRelationIds: true })];
                     case 1:
                         place = _a.sent();
                         if (place === null || place === undefined) {
@@ -246,7 +317,10 @@ var PlacesService = /** @class */ (function () {
                                     status: 0
                                 }];
                         }
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { id: +doctorId },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         doctor = _a.sent();
                         if (doctor === null || doctor === undefined) {
@@ -264,7 +338,14 @@ var PlacesService = /** @class */ (function () {
                         return [4 /*yield*/, place.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, { place: place }];
+                        return [2 /*return*/, { place: place, status: new Constants_1.Constants().PREMADE_STATUS.Success_Created }];
+                    case 5:
+                        error_7 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_7
+                            }];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -272,56 +353,82 @@ var PlacesService = /** @class */ (function () {
     //TODO: Generate appointment times for places/ operations and everything else
     PlacesService.prototype.updatePlaceOperationDurations = function (placeId, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var place, date, appointmens;
+            var place_1, date, appointmens_1, error_8;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
+                                loadRelationIds: true })];
                     case 1:
-                        place = _a.sent();
-                        if (place === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Place is null")];
+                        place_1 = _a.sent();
+                        if (place_1 === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException('Place is null')];
                         }
-                        if (place.shiftDuration === null) {
-                            place.shiftDuration = 8;
+                        if (place_1.shiftDuration === null) {
+                            place_1.shiftDuration = 8;
                         }
-                        if (place.appointmentTimes === null) {
-                            place.appointmentTimes = [];
+                        if (place_1.appointmentTimes === null) {
+                            place_1.appointmentTimes = [];
                         }
-                        if (place.appointmentDates === null || place.appointmentDates.length < 1) {
-                            place.appointmentDates = [];
+                        if (place_1.appointmentDates === null ||
+                            place_1.appointmentDates.length < 1) {
+                            place_1.appointmentDates = [];
                             date = new Date();
-                            place.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
-                            place.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                            place_1.appointmentDates.push(date.getDate() +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 08:00:00');
+                            place_1.appointmentDates.push(date.getDate() +
+                                1 +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 14:00:00');
                         }
-                        if (place.appointmentDurations === null || place.appointmentDurations.length < 1) {
-                            place.appointmentDurations = [];
-                            place.appointmentDurations.push("02:00");
+                        if (place_1.appointmentDurations === null ||
+                            place_1.appointmentDurations.length < 1) {
+                            place_1.appointmentDurations = [];
+                            place_1.appointmentDurations.push('02:00');
                         }
-                        place.duration = newDuration;
-                        appointmens = [];
-                        place.appointmentDates.forEach(function (appointment) {
-                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, place.shiftDuration));
+                        place_1.duration = newDuration;
+                        appointmens_1 = [];
+                        place_1.appointmentDates.forEach(function (appointment) {
+                            appointmens_1.push.apply(appointmens_1, _this.getTimes(appointment, newDuration, place_1.shiftDuration));
                         });
-                        place.appointmentTimes = appointmens;
-                        return [4 /*yield*/, place.save()];
+                        place_1.appointmentTimes = appointmens_1;
+                        return [4 /*yield*/, place_1.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, { place: place }];
+                        return [2 /*return*/, { place: place_1, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED }];
+                    case 3:
+                        error_8 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_8
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     PlacesService.prototype.updatePlaceOperationDates = function (placeId, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var place;
+            var place, error_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId } })];
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
+                                loadRelationIds: true })];
                     case 1:
                         place = _a.sent();
                         if (place === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Place Entity is null")];
+                            return [2 /*return*/, new common_1.InternalServerErrorException('Place Entity is null')];
                         }
                         place.appointmentDates = this.getDaysList(startDate, endDate, place.appointmentDurations);
                         return [4 /*yield*/, place.save()];
@@ -329,6 +436,13 @@ var PlacesService = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, this.updatePlaceOperationDurations(placeId, place.duration)];
                     case 3: return [2 /*return*/, _a.sent()];
+                    case 4:
+                        error_9 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_9
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

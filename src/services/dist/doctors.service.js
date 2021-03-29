@@ -50,6 +50,7 @@ var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var doctor_entity_1 = require("src/entities/doctor.entity");
 var insurance_entity_1 = require("src/entities/insurance.entity");
+var Constants_1 = require("src/helpers/Constants");
 require("../helpers/DateExt");
 var DoctorsService = /** @class */ (function () {
     function DoctorsService(doctorRepo, insuranceRepo) {
@@ -61,7 +62,9 @@ var DoctorsService = /** @class */ (function () {
             var doctors;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.doctorRepo.find({ relations: ['appointments', 'insuranceCompany', 'patients', 'qalifications', 'hospital'] })];
+                    case 0: return [4 /*yield*/, this.doctorRepo.find({
+                            loadRelationIds: true
+                        })];
                     case 1:
                         doctors = _a.sent();
                         return [2 /*return*/, { doctors: doctors }];
@@ -76,15 +79,18 @@ var DoctorsService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { id: +doctorId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         doctor = _a.sent();
                         return [2 /*return*/, { doctor: doctor }];
                     case 2:
                         error_1 = _a.sent();
                         return [2 /*return*/, {
-                                message: 'there is no doctor with that id',
-                                status: 0
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -92,9 +98,9 @@ var DoctorsService = /** @class */ (function () {
         });
     };
     DoctorsService.prototype.getTimes = function (date, newDuration, shift) {
-        var quarterHours = ["00"];
-        if (newDuration === "0") {
-            quarterHours = ["00", "15", "30", "45"];
+        var quarterHours = ['00'];
+        if (newDuration === '0') {
+            quarterHours = ['00', '15', '30', '45'];
         }
         else {
             var oldValue = +newDuration;
@@ -104,84 +110,120 @@ var DoctorsService = /** @class */ (function () {
             }
         }
         var times = [];
-        var appointmentStartTime = Number.parseInt(date.split(" ")[1]);
+        var appointmentStartTime = Number.parseInt(date.split(' ')[1]);
         for (var i = appointmentStartTime; i < appointmentStartTime + shift; i++) {
             for (var j = 0; j < quarterHours.length; j++) {
-                var time = i + ":" + quarterHours[j];
+                var time = i + ':' + quarterHours[j];
                 if (i < 10) {
-                    time = "0" + time;
+                    time = '0' + time;
                 }
-                times.push(date.split(" ")[0] + " " + time);
+                times.push(date.split(' ')[0] + ' ' + time);
             }
         }
         return times;
     };
     DoctorsService.prototype.getDaysArray = function (start, end, timeToAdd) {
         for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-            arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
+            arr.push(new Date(dt).getDate() +
+                '/' +
+                (new Date(dt).getMonth() + 1) +
+                '/' +
+                new Date(dt).getFullYear() +
+                ' ' +
+                timeToAdd);
         }
         return arr;
     };
-    ;
     DoctorsService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
         var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
-        daylist.map(function (v) {
+        daylist
+            .map(function (v) {
             var thing = v.slice(0, 15);
             return thing;
-        }).join("");
+        })
+            .join('');
         return daylist;
     };
     DoctorsService.prototype.updateAppointmentDuration = function (upDoctor, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor, date, appointmens;
+            var doctor_1, date, appointmens_1, error_2;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        doctor = upDoctor;
-                        if (doctor === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Doctor Entity is null")];
+                        _a.trys.push([0, 3, , 4]);
+                        doctor_1 = upDoctor;
+                        if (doctor_1 === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException('Doctor Entity is null')];
                         }
-                        if (doctor.shiftDuration === null) {
-                            doctor.shiftDuration = 8;
+                        if (doctor_1.shiftDuration === null) {
+                            doctor_1.shiftDuration = 8;
                         }
-                        if (doctor.appointmentTimes === null) {
-                            doctor.appointmentTimes = [];
+                        if (doctor_1.appointmentTimes === null) {
+                            doctor_1.appointmentTimes = [];
                         }
-                        if (doctor.appointmentDates === null || doctor.appointmentDates.length < 1) {
-                            doctor.appointmentDates = [];
+                        if (doctor_1.appointmentDates === null ||
+                            doctor_1.appointmentDates.length < 1) {
+                            doctor_1.appointmentDates = [];
                             date = new Date();
-                            doctor.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
-                            doctor.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                            doctor_1.appointmentDates.push(date.getDate() +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 08:00:00');
+                            doctor_1.appointmentDates.push(date.getDate() +
+                                1 +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 14:00:00');
                         }
-                        if (doctor.appointmentDurations === null || doctor.appointmentDurations.length < 1) {
-                            doctor.appointmentDurations = [];
-                            doctor.appointmentDurations.push("02:00");
+                        if (doctor_1.appointmentDurations === null ||
+                            doctor_1.appointmentDurations.length < 1) {
+                            doctor_1.appointmentDurations = [];
+                            doctor_1.appointmentDurations.push('02:00');
                         }
-                        doctor.duration = newDuration;
-                        appointmens = [];
-                        doctor.appointmentDates.forEach(function (appointment) {
-                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, doctor.shiftDuration));
+                        doctor_1.duration = newDuration;
+                        appointmens_1 = [];
+                        doctor_1.appointmentDates.forEach(function (appointment) {
+                            appointmens_1.push.apply(appointmens_1, _this.getTimes(appointment, newDuration, doctor_1.shiftDuration));
                         });
-                        doctor.appointmentTimes = appointmens;
-                        return [4 /*yield*/, doctor.save()];
+                        doctor_1.appointmentTimes = appointmens_1;
+                        return [4 /*yield*/, doctor_1.save()];
                     case 1:
                         _a.sent();
-                        upDoctor = doctor;
+                        upDoctor = doctor_1;
                         return [4 /*yield*/, upDoctor.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, { doctor: upDoctor }];
+                        return [2 /*return*/, {
+                                doctor: upDoctor,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
+                            }];
+                    case 3:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     DoctorsService.prototype.updateDoctor = function (username, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor, insurance, doctorUp;
+            var doctor, insurance, doctorUp, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { username: '+'.concat(username) },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         doctor = _a.sent();
                         if (doctor === undefined || doctor === null) {
@@ -191,7 +233,10 @@ var DoctorsService = /** @class */ (function () {
                                 }];
                         }
                         if (!data.insuranceCompanyId) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.insuranceRepo.findOne({ where: { id: data.insuranceCompanyId } })];
+                        return [4 /*yield*/, this.insuranceRepo.findOne({
+                                where: { id: data.insuranceCompanyId },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         insurance = _a.sent();
                         if (insurance === null || insurance === undefined) {
@@ -206,28 +251,39 @@ var DoctorsService = /** @class */ (function () {
                         _a.sent();
                         delete data.insuranceCompanyId;
                         _a.label = 4;
-                    case 4: return [4 /*yield*/, this.doctorRepo.update({ username: "+".concat(username) }, data)];
+                    case 4: return [4 /*yield*/, this.doctorRepo.update({ username: '+'.concat(username) }, data)];
                     case 5:
                         _a.sent();
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: "+".concat(username) } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { username: '+'.concat(username) }
+                            })];
                     case 6:
                         doctorUp = _a.sent();
                         return [2 /*return*/, {
-                                doctor: doctorUp
+                                doctor: doctorUp,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
                             }];
+                    case 7:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
     };
     DoctorsService.prototype.updateAppointmentDates = function (upDoctor, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor;
+            var doctor, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        _a.trys.push([0, 3, , 4]);
                         doctor = upDoctor;
                         if (doctor === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("Doctor Entity is null")];
+                            return [2 /*return*/, new common_1.InternalServerErrorException('Doctor Entity is null')];
                         }
                         doctor.appointmentDates = this.getDaysList(startDate, endDate, doctor.appointmentDurations);
                         return [4 /*yield*/, doctor.save()];
@@ -235,24 +291,36 @@ var DoctorsService = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, this.updateAppointmentDuration(doctor, doctor.duration)];
                     case 2: return [2 /*return*/, _a.sent()];
+                    case 3:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     DoctorsService.prototype.deleteDoctorById = function (doctorId) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_2;
+            var deleted, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorRepo["delete"]({ id: +doctorId })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        error_2 = _a.sent();
+                    case 1:
+                        deleted = _a.sent();
                         return [2 /*return*/, {
-                                message: 'there is no doctor with that id',
-                                status: 0
+                                deleted: deleted,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
+                            }];
+                    case 2:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
                             }];
                     case 3: return [2 /*return*/];
                 }

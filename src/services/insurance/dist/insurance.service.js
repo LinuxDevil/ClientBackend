@@ -49,6 +49,7 @@ exports.InsuranceService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var insurance_entity_1 = require("src/entities/insurance.entity");
+var Constants_1 = require("src/helpers/Constants");
 var InsuranceService = /** @class */ (function () {
     function InsuranceService(insuranceRepoo) {
         this.insuranceRepoo = insuranceRepoo;
@@ -68,14 +69,12 @@ var InsuranceService = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, {
                                 insuranceEntity: insuranceEntity,
-                                status: 1,
-                                message: 'Success'
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
                             }];
                     case 3:
                         error_1 = _a.sent();
                         return [2 /*return*/, {
-                                status: 0,
-                                message: 'There was an error',
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
                                 error: error_1
                             }];
                     case 4: return [2 /*return*/];
@@ -95,14 +94,12 @@ var InsuranceService = /** @class */ (function () {
                         updatedInsurance = _a.sent();
                         return [2 /*return*/, {
                                 updatedInsurance: updatedInsurance,
-                                status: 1,
-                                message: 'Success'
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
                             }];
                     case 2:
                         error_2 = _a.sent();
                         return [2 /*return*/, {
-                                status: 0,
-                                message: 'There was an error',
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
                                 error: error_2
                             }];
                     case 3: return [2 /*return*/];
@@ -117,7 +114,7 @@ var InsuranceService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.insuranceRepoo.findOne({ where: { id: id } })];
+                        return [4 /*yield*/, this.insuranceRepoo.findOne({ where: { id: id }, loadRelationIds: true })];
                     case 1:
                         insurance = _a.sent();
                         return [4 /*yield*/, this.insuranceRepoo.remove(insurance)];
@@ -125,14 +122,12 @@ var InsuranceService = /** @class */ (function () {
                         removedInsurance = _a.sent();
                         return [2 /*return*/, {
                                 removedInsurance: removedInsurance,
-                                status: 1,
-                                message: 'Success'
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
                             }];
                     case 3:
                         error_3 = _a.sent();
                         return [2 /*return*/, {
-                                status: 0,
-                                message: 'There was an error',
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
                                 error: error_3
                             }];
                     case 4: return [2 /*return*/];
@@ -147,15 +142,16 @@ var InsuranceService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.insuranceRepoo.find()];
+                        return [4 /*yield*/, this.insuranceRepoo.find({
+                                loadRelationIds: true
+                            })];
                     case 1:
                         insurances = _a.sent();
-                        return [2 /*return*/, { insurances: insurances }];
+                        return [2 /*return*/, { insurances: insurances, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET }];
                     case 2:
                         error_4 = _a.sent();
                         return [2 /*return*/, {
-                                status: 0,
-                                message: 'There was an error',
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
                                 error: error_4
                             }];
                     case 3: return [2 /*return*/];

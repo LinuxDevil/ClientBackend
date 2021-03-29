@@ -51,14 +51,14 @@ var HospitalsController = /** @class */ (function () {
     function HospitalsController(hospitalService) {
         this.hospitalService = hospitalService;
     }
-    HospitalsController.prototype.getPrivateHospitals = function () {
-        return this.hospitalService.getAllPrivateHospitals();
+    HospitalsController.prototype.getPrivateHospitals = function (langId) {
+        return this.hospitalService.getAllPrivateHospitals(langId);
     };
     HospitalsController.prototype.getFilteredPrivateHospitals = function (city, langId) {
         return this.hospitalService.getAllFilteredPrivateHospitals(city, langId);
     };
-    HospitalsController.prototype.getAllGeneralHospitals = function () {
-        return this.hospitalService.getAllGeneralHospitals();
+    HospitalsController.prototype.getAllGeneralHospitals = function (langId) {
+        return this.hospitalService.getAllGeneralHospitals(langId);
     };
     HospitalsController.prototype.getFilteredGeneralHospitals = function (city, langId) {
         return this.hospitalService.getAllFilteredGeneralHospitals(city, langId);
@@ -100,14 +100,16 @@ var HospitalsController = /** @class */ (function () {
         return this.hospitalService.deleteAllHospitals();
     };
     __decorate([
-        common_1.Get('/private')
+        common_1.Get('/private'),
+        __param(0, common_1.Query('langId'))
     ], HospitalsController.prototype, "getPrivateHospitals");
     __decorate([
         common_1.Get('/private/filter'),
         __param(0, common_1.Query('city')), __param(1, common_1.Query('langId'))
     ], HospitalsController.prototype, "getFilteredPrivateHospitals");
     __decorate([
-        common_1.Get('/general')
+        common_1.Get('/general'),
+        __param(0, common_1.Query('langId'))
     ], HospitalsController.prototype, "getAllGeneralHospitals");
     __decorate([
         common_1.Get('/general/filter'),

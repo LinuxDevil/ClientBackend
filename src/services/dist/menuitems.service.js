@@ -49,114 +49,260 @@ exports.MenuitemsService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var menuitem_entity_1 = require("src/entities/menuitem.entity");
+var Constants_1 = require("src/helpers/Constants");
 var MenuitemsService = /** @class */ (function () {
     function MenuitemsService(menuItemRepo) {
         this.menuItemRepo = menuItemRepo;
     }
     MenuitemsService.prototype.addMenuItem = function (menuItem) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItemEntity;
+            var menuItemFund, menuItemEntity, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.create(menuItem)];
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, this.menuItemRepo.findOne({
+                                where: { id: menuItem.nameEn },
+                                loadRelationIds: true
+                            })];
                     case 1:
+                        menuItemFund = _a.sent();
+                        if (!(menuItemFund !== null)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.menuItemRepo.create(menuItem)];
+                    case 2:
                         menuItemEntity = _a.sent();
                         return [4 /*yield*/, menuItemEntity.save()];
-                    case 2:
+                    case 3:
                         _a.sent();
-                        return [2 /*return*/, menuItemEntity];
+                        return [2 /*return*/, {
+                                menuItemEntity: menuItemEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 4: return [2 /*return*/, {
+                            message: 'There is already a menu item with that name',
+                            status: new Constants_1.Constants().PREMADE_STATUS.Fail_Created
+                        }];
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     MenuitemsService.prototype.addSubMenuItem = function (menuItem) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItemEntity;
+            var menuItemFnd, menuItemEntity, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.create(menuItem)];
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, this.menuItemRepo.findOne({
+                                where: { id: menuItem.nameEn },
+                                loadRelationIds: true
+                            })];
                     case 1:
+                        menuItemFnd = _a.sent();
+                        if (!(menuItemFnd !== null)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.menuItemRepo.create(menuItem)];
+                    case 2:
                         menuItemEntity = _a.sent();
                         return [4 /*yield*/, menuItemEntity.save()];
-                    case 2:
+                    case 3:
                         _a.sent();
-                        return [2 /*return*/, menuItemEntity];
+                        return [2 /*return*/, {
+                                menuItemEntity: menuItemEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 4: return [2 /*return*/, {
+                            message: 'There is already a menu item with that name',
+                            status: new Constants_1.Constants().PREMADE_STATUS.Fail_Created
+                        }];
+                    case 5: return [3 /*break*/, 7];
+                    case 6:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     MenuitemsService.prototype.removeMenuItem = function (menuItemId) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItem;
+            var menuItem, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.findOne({ where: { id: menuItemId } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.menuItemRepo.findOne({
+                                where: { id: menuItemId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         menuItem = _a.sent();
                         return [4 /*yield*/, menuItem.remove()];
                     case 2:
                         _a.sent();
                         return [2 /*return*/, {
-                                menuItem: menuItem
+                                menuItem: menuItem,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
                             }];
+                    case 3:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     MenuitemsService.prototype.updateMenuItem = function (menuItemId, menuItemUpdate) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItem;
+            var menuItem, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.update({ id: +menuItemId }, menuItemUpdate)];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.menuItemRepo.update({ id: +menuItemId }, menuItemUpdate)];
                     case 1:
                         menuItem = _a.sent();
-                        return [2 /*return*/, { menuItem: menuItem }];
+                        return [2 /*return*/, {
+                                menuItem: menuItem,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
+                            }];
+                    case 2:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    MenuitemsService.prototype.findSubUserMenuItems = function () {
+    MenuitemsService.prototype.findSubUserMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItems;
+            var menuItems, menuItemNames_1, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.find({ where: { isSub: true } })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.menuItemRepo.find({
+                                where: { isSub: true },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         menuItems = _a.sent();
+                        menuItemNames_1 = [];
+                        menuItems.forEach(function (item) {
+                            if (langId === '1') {
+                                menuItemNames_1.push(item.nameEn);
+                            }
+                            else {
+                                menuItemNames_1.push(item.nameAr);
+                            }
+                        });
                         return [2 /*return*/, {
-                                menuArray: menuItems
+                                menuArray: menuItems,
+                                length: menuItems.length,
+                                menuItemNames: menuItemNames_1,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
+                    case 2:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    MenuitemsService.prototype.findUserMenuItems = function () {
+    MenuitemsService.prototype.findUserMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItems;
+            var menuItems, menuItemNames_2, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.find({ where: { isUser: true } })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.menuItemRepo.find({
+                                where: { isUser: true },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         menuItems = _a.sent();
+                        menuItemNames_2 = [];
+                        menuItems.forEach(function (item) {
+                            if (langId === '1') {
+                                menuItemNames_2.push(item.nameEn);
+                            }
+                            else {
+                                menuItemNames_2.push(item.nameAr);
+                            }
+                        });
                         return [2 /*return*/, {
-                                menuArray: menuItems
+                                menuArray: menuItems,
+                                length: menuItems.length,
+                                menuItemNames: menuItemNames_2,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
+                    case 2:
+                        error_6 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_6
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    MenuitemsService.prototype.findDoctorMenuItems = function () {
+    MenuitemsService.prototype.findDoctorMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
-            var menuItems;
+            var menuItems, menuItemNames_3, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemRepo.find({ where: { isUser: false } })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.menuItemRepo.find({
+                                where: { isUser: false },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         menuItems = _a.sent();
+                        menuItemNames_3 = [];
+                        menuItems.forEach(function (item) {
+                            if (langId === '1') {
+                                menuItemNames_3.push(item.nameEn);
+                            }
+                            else {
+                                menuItemNames_3.push(item.nameAr);
+                            }
+                        });
                         return [2 /*return*/, {
-                                menuArray: menuItems
+                                menuArray: menuItems,
+                                length: menuItems.length,
+                                menuItemNames: menuItemNames_3,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
+                    case 2:
+                        error_7 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_7
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

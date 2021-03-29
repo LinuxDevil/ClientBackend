@@ -51,9 +51,11 @@ var nestjs_twilio_1 = require("nestjs-twilio");
 var SmsService = /** @class */ (function () {
     function SmsService(twillo) {
         this.twillo = twillo;
-        this.twillo.verify.services.create({
+        this.twillo.verify.services
+            .create({
             friendlyName: 'MyClinic'
-        }).then(function (service) { return console.log(service.sid); });
+        })
+            .then(function (service) { return console.log(service.sid); });
     }
     SmsService.prototype.sendSMS = function (phoneNumber, message) {
         return __awaiter(this, void 0, void 0, function () {
@@ -79,11 +81,13 @@ var SmsService = /** @class */ (function () {
     SmsService.prototype.sendVerification = function (phoneNumber) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.twillo.verify.services(process.env.SERVICE_SID)
+                this.twillo.verify
+                    .services(process.env.SERVICE_SID)
                     .verifications.create({
                     to: phoneNumber,
                     channel: 'sms'
-                }).then(function (verification) {
+                })
+                    .then(function (verification) {
                     console.log(verification);
                 });
                 return [2 /*return*/];
@@ -101,12 +105,15 @@ var SmsService = /** @class */ (function () {
                     case 1:
                         _a.trys.push([1, 3, , 4]);
                         value_1 = '';
-                        return [4 /*yield*/, this.twillo.verify.services(process.env.SERVICE_SID)
-                                .verificationChecks
-                                .create({
+                        return [4 /*yield*/, this.twillo.verify
+                                .services(process.env.SERVICE_SID)
+                                .verificationChecks.create({
                                 to: phoneNumber,
                                 code: code
-                            }).then(function (verf) { value_1 = verf.status; })];
+                            })
+                                .then(function (verf) {
+                                value_1 = verf.status;
+                            })];
                     case 2:
                         _a.sent();
                         return [2 /*return*/, value_1];

@@ -56,21 +56,27 @@ exports.CitiesService = void 0;
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var city_entity_1 = require("src/entities/city.entity");
+var Constants_1 = require("src/helpers/Constants");
 var CitiesService = /** @class */ (function () {
     function CitiesService(citiesRepo) {
         this.citiesRepo = citiesRepo;
     }
     CitiesService.prototype.createNewCity = function (cityDTO) {
         return __awaiter(this, void 0, void 0, function () {
-            var foundCity, city;
+            var foundCity, city, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.citiesRepo.findOne({ where: { nameAr: cityDTO.nameAr } })];
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, this.citiesRepo.findOne({
+                                where: { nameAr: cityDTO.nameAr },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         foundCity = _a.sent();
                         if (foundCity !== null || foundCity !== undefined) {
                             return [2 /*return*/, {
-                                    message: "This city is found!",
+                                    message: 'This city is found!',
                                     foundCity: foundCity
                                 }];
                         }
@@ -79,27 +85,38 @@ var CitiesService = /** @class */ (function () {
                         city = _a.sent();
                         if (city === null)
                             return [2 /*return*/, {
-                                    message: "City is null",
+                                    message: 'City is null',
                                     status: 0
                                 }];
                         return [4 /*yield*/, city.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, { city: city }];
+                        return [2 /*return*/, { city: city, status: new Constants_1.Constants().PREMADE_STATUS.Success_Created }];
+                    case 4:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
     };
     CitiesService.prototype.getCities = function (lang) {
         return __awaiter(this, void 0, void 0, function () {
-            var cities, uniqeCities;
+            var cities, uniqeCities, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.citiesRepo.find()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.citiesRepo.find({
+                                loadRelationIds: true
+                            })];
                     case 1:
                         cities = _a.sent();
                         uniqeCities = [];
-                        if (lang === "1") {
+                        if (lang === '1') {
                             uniqeCities = __spreadArrays(new Set(cities.map(function (item) { return item.nameEn; })));
                         }
                         else {
@@ -107,8 +124,16 @@ var CitiesService = /** @class */ (function () {
                         }
                         return [2 /*return*/, {
                                 cities: uniqeCities,
-                                length: uniqeCities.length
+                                length: uniqeCities.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
                             }];
+                    case 2:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

@@ -61,6 +61,7 @@ var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var doctor_entity_1 = require("src/entities/doctor.entity");
 var user_entity_1 = require("src/entities/user.entity");
+var Constants_1 = require("src/helpers/Constants");
 var AuthService = /** @class */ (function () {
     function AuthService(userRepo, doctorRepo, jwtService, smsService) {
         this.userRepo = userRepo;
@@ -70,16 +71,25 @@ var AuthService = /** @class */ (function () {
     }
     AuthService.prototype.deleteUser = function (username) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var user, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: username } })];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, this.userRepo["delete"](user.id)];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, user];
+                        return [2 /*return*/, { user: user, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED }];
+                    case 3:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -95,7 +105,7 @@ var AuthService = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         if (!(response === 'approved')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.smsService.sendSMS(username, "Hello, Welcome to My Clinic App")];
+                        return [4 /*yield*/, this.smsService.sendSMS(username, 'Hello, Welcome to My Clinic App')];
                     case 2:
                         _a.sent();
                         return [2 /*return*/, {
@@ -112,29 +122,32 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.register = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, payload, token, error_1;
+            var user, payload, token, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         user = this.userRepo.create(credentials);
-                        console.log("GOt user", credentials);
+                        console.log('GOt user', credentials);
                         return [4 /*yield*/, user.save()];
                     case 1:
                         _a.sent();
                         payload = { username: user.username };
-                        console.log("payload", payload);
+                        console.log('payload', payload);
                         return [4 /*yield*/, this.smsService.sendVerification(user.username)];
                     case 2:
                         _a.sent();
                         token = this.jwtService.sign(payload);
-                        return [2 /*return*/, { user: __assign(__assign({}, user.toJSON()), { token: token }) }];
+                        return [2 /*return*/, { user: __assign(__assign({}, user.toJSON()), { token: token }), status: new Constants_1.Constants().PREMADE_STATUS.Success_Created }];
                     case 3:
-                        error_1 = _a.sent();
-                        if (error_1.code === '23505') {
+                        error_2 = _a.sent();
+                        if (error_2.code === '23505') {
                             throw new common_1.ConflictException('Username has already been taken');
                         }
-                        return [2 /*return*/, new common_1.InternalServerErrorException()];
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_Alone,
+                                error: error_2
+                            }];
                     case 4: return [2 /*return*/];
                 }
             });
@@ -142,12 +155,15 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.login = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, isValid, payload, token, error_2;
+            var user, isValid, payload, token, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: credentials.email } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: credentials.email },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, user.comparePassword(credentials.password)];
@@ -161,10 +177,10 @@ var AuthService = /** @class */ (function () {
                         _a.sent();
                         payload = { username: user.username };
                         token = this.jwtService.sign(payload);
-                        return [2 /*return*/, { user: __assign(__assign({}, user.toJSON()), { token: token }) }];
+                        return [2 /*return*/, { user: __assign(__assign({}, user.toJSON()), { token: token }), status: new Constants_1.Constants().PREMADE_STATUS.Success_Alone }];
                     case 4:
-                        error_2 = _a.sent();
-                        throw new common_1.UnauthorizedException("Invalid Credintials");
+                        error_3 = _a.sent();
+                        throw new common_1.UnauthorizedException('Invalid Credintials');
                     case 5: return [2 /*return*/];
                 }
             });
@@ -172,7 +188,7 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.registerDoctor = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, payload, token, error_3;
+            var user, payload, token, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -186,13 +202,16 @@ var AuthService = /** @class */ (function () {
                     case 2:
                         _a.sent();
                         token = this.jwtService.sign(payload);
-                        return [2 /*return*/, { doctor: __assign(__assign({}, user.toJSON()), { token: token }) }];
+                        return [2 /*return*/, { doctor: __assign(__assign({}, user.toJSON()), { token: token }), status: new Constants_1.Constants().PREMADE_STATUS.Success_Created }];
                     case 3:
-                        error_3 = _a.sent();
-                        if (error_3.code === '23505') {
+                        error_4 = _a.sent();
+                        if (error_4.code === '23505') {
                             throw new common_1.ConflictException('Username has already been taken');
                         }
-                        return [2 /*return*/, new common_1.InternalServerErrorException()];
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
                     case 4: return [2 /*return*/];
                 }
             });
@@ -200,12 +219,15 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.loginDoctor = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, isValid, payload, token, error_4;
+            var user, isValid, payload, token, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: credentials.password } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { username: credentials.password },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, user.comparePassword(credentials.password)];
@@ -219,10 +241,10 @@ var AuthService = /** @class */ (function () {
                         _a.sent();
                         payload = { username: user.username };
                         token = this.jwtService.sign(payload);
-                        return [2 /*return*/, { doctor: __assign(__assign({}, user.toJSON()), { token: token }) }];
+                        return [2 /*return*/, { doctor: __assign(__assign({}, user.toJSON()), { token: token }), status: new Constants_1.Constants().PREMADE_STATUS.Success_Alone }];
                     case 4:
-                        error_4 = _a.sent();
-                        throw new common_1.UnauthorizedException("Invalid Credintials");
+                        error_5 = _a.sent();
+                        throw new common_1.UnauthorizedException('Invalid Credintials');
                     case 5: return [2 /*return*/];
                 }
             });
@@ -232,27 +254,38 @@ var AuthService = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var error, usernameToken, token;
             return __generator(this, function (_a) {
-                console.log(username);
-                if (username === undefined) {
-                    error = new Error("Please provide a good username");
+                try {
+                    console.log(username);
+                    if (username === undefined) {
+                        error = new Error('Please provide a good username');
+                        return [2 /*return*/, {
+                                error: error,
+                                status: 0
+                            }];
+                    }
+                    usernameToken = this.jwtService.decode(username);
+                    if (usernameToken === null)
+                        return [2 /*return*/, {
+                                message: 'decoding failed, please provide a valid JWT',
+                                status: 0
+                            }];
+                    console.log(usernameToken);
+                    token = this.jwtService.sign({
+                        username: usernameToken['username']
+                    });
+                    console.log(token);
                     return [2 /*return*/, {
-                            error: error,
-                            status: 0
+                            token: token,
+                            status: new Constants_1.Constants().PREMADE_STATUS.Success_Alone
                         }];
                 }
-                usernameToken = this.jwtService.decode(username);
-                if (usernameToken === null)
+                catch (error) {
                     return [2 /*return*/, {
-                            message: "decoding failed",
-                            status: 0
+                            status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                            error: error
                         }];
-                console.log(usernameToken);
-                token = this.jwtService.sign({ username: usernameToken['username'] });
-                console.log(token);
-                return [2 /*return*/, {
-                        token: token,
-                        status: 1
-                    }];
+                }
+                return [2 /*return*/];
             });
         });
     };

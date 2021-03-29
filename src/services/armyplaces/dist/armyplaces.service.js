@@ -51,6 +51,7 @@ var typeorm_1 = require("@nestjs/typeorm");
 var armyplaces_entity_1 = require("src/entities/armyplaces.entity");
 var city_entity_1 = require("src/entities/city.entity");
 var doctor_entity_1 = require("src/entities/doctor.entity");
+var Constants_1 = require("src/helpers/Constants");
 var ArmyplacesService = /** @class */ (function () {
     function ArmyplacesService(armyPlaceRepo, cityRepository, doctorRepo) {
         this.armyPlaceRepo = armyPlaceRepo;
@@ -58,9 +59,9 @@ var ArmyplacesService = /** @class */ (function () {
         this.doctorRepo = doctorRepo;
     }
     ArmyplacesService.prototype.getTimes = function (date, newDuration, shift) {
-        var quarterHours = ["00"];
-        if (newDuration === "0") {
-            quarterHours = ["00", "15", "30", "45"];
+        var quarterHours = ['00'];
+        if (newDuration === '0') {
+            quarterHours = ['00', '15', '30', '45'];
         }
         else {
             var oldValue = +newDuration;
@@ -70,48 +71,58 @@ var ArmyplacesService = /** @class */ (function () {
             }
         }
         var times = [];
-        var appointmentStartTime = Number.parseInt(date.split(" ")[1]);
+        var appointmentStartTime = Number.parseInt(date.split(' ')[1]);
         for (var i = appointmentStartTime; i < appointmentStartTime + shift; i++) {
             for (var j = 0; j < quarterHours.length; j++) {
-                var time = i + ":" + quarterHours[j];
+                var time = i + ':' + quarterHours[j];
                 if (i < 10) {
-                    time = "0" + time;
+                    time = '0' + time;
                 }
-                times.push(date.split(" ")[0] + " " + time);
+                times.push(date.split(' ')[0] + ' ' + time);
             }
         }
         return times;
     };
     ArmyplacesService.prototype.getDaysArray = function (start, end, timeToAdd) {
         for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-            arr.push(new Date(dt).getDate() + "/" + (new Date(dt).getMonth() + 1) + "/" + new Date(dt).getFullYear() + " " + timeToAdd);
+            arr.push(new Date(dt).getDate() +
+                '/' +
+                (new Date(dt).getMonth() + 1) +
+                '/' +
+                new Date(dt).getFullYear() +
+                ' ' +
+                timeToAdd);
         }
         return arr;
     };
-    ;
     ArmyplacesService.prototype.getDaysList = function (startDate, endDate, timeToAdd) {
         var daylist = this.getDaysArray(new Date(startDate), new Date(endDate), timeToAdd);
-        daylist.map(function (v) {
+        daylist
+            .map(function (v) {
             var thing = v.slice(0, 15);
             return thing;
-        }).join("");
+        })
+            .join('');
         return daylist;
     };
     //Create new armyPlace
     ArmyplacesService.prototype.createNewArmyPlace = function (armyPlace) {
         return __awaiter(this, void 0, void 0, function () {
-            var city, armyPlaceEntity;
+            var city, armyPlaceEntity, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        _a.trys.push([0, 4, , 5]);
                         if (armyPlace === null) {
-                            return [2 /*return*/, new Error("Invalid input")];
+                            return [2 /*return*/, new Error('Invalid input')];
                         }
-                        return [4 /*yield*/, this.cityRepository.findOne({ where: { id: armyPlace.cityId } })];
+                        return [4 /*yield*/, this.cityRepository.findOne({
+                                where: { id: armyPlace.cityId }
+                            })];
                     case 1:
                         city = _a.sent();
                         if (city === null)
-                            return [2 /*return*/, new Error("City id is not found")];
+                            return [2 /*return*/, new Error('City id is not found')];
                         return [4 /*yield*/, this.armyPlaceRepo.create(armyPlace)];
                     case 2:
                         armyPlaceEntity = _a.sent();
@@ -119,7 +130,17 @@ var ArmyplacesService = /** @class */ (function () {
                         return [4 /*yield*/, armyPlaceEntity.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, armyPlaceEntity];
+                        return [2 /*return*/, {
+                                armyPlaceEntity: armyPlaceEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 4:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -127,10 +148,28 @@ var ArmyplacesService = /** @class */ (function () {
     //Get all general armyPlaces
     ArmyplacesService.prototype.getAllGeneralArmyPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var armyPlaces, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo.find({
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        armyPlaces = _a.sent();
+                        return [2 /*return*/, {
+                                armyPlaces: armyPlaces,
+                                length: armyPlaces.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -138,10 +177,29 @@ var ArmyplacesService = /** @class */ (function () {
     //Get all private armyPlaces
     ArmyplacesService.prototype.getAllPrivateArmyPlaces = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var armyPlaces, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "private" }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo.find({
+                                where: { type: 'private' },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        armyPlaces = _a.sent();
+                        return [2 /*return*/, {
+                                armyPlaces: armyPlaces,
+                                length: armyPlaces.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -149,10 +207,29 @@ var ArmyplacesService = /** @class */ (function () {
     //Get all private armyPlaces
     ArmyplacesService.prototype.getAllFilteredPrivateArmyPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var armyPlaces, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "private", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo.find({
+                                where: { type: 'private', location: { id: +cityId } },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        armyPlaces = _a.sent();
+                        return [2 /*return*/, {
+                                armyPlaces: armyPlaces,
+                                length: armyPlaces.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -160,10 +237,29 @@ var ArmyplacesService = /** @class */ (function () {
     //Get all private armyPlaces
     ArmyplacesService.prototype.getAllFilteredGeneralArmyPlaces = function (cityId) {
         return __awaiter(this, void 0, void 0, function () {
+            var armyPlaces, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.find({ where: { type: "general", location: { id: +cityId } }, relations: ['location', 'doctors'] })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo.find({
+                                where: { type: 'general', location: { id: +cityId } },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        armyPlaces = _a.sent();
+                        return [2 /*return*/, {
+                                armyPlaces: armyPlaces,
+                                length: armyPlaces.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -171,68 +267,109 @@ var ArmyplacesService = /** @class */ (function () {
     //Get armyPlace by id
     ArmyplacesService.prototype.getArmyPlaceById = function (armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace;
+            var armyPlace, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +armyPlaceId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         armyPlace = _a.sent();
                         if (armyPlace == null) {
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "There is no armyPlace with id " + armyPlaceId
+                                    message: 'There is no armyPlace with id ' + armyPlaceId
                                 }];
                         }
-                        return [2 /*return*/, armyPlace];
+                        return [2 /*return*/, { armyPlace: armyPlace, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET }];
+                    case 2:
+                        error_6 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_6
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     ArmyplacesService.prototype.deleteArmyPlace = function (armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace;
+            var armyPlace, removed, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +armyPlaceId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         armyPlace = _a.sent();
                         console.log(armyPlace);
                         if (armyPlace === null || armyPlace === undefined)
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: "ArmyPlace not found"
+                                    message: 'ArmyPlace not found'
                                 }];
                         return [4 /*yield*/, armyPlace.remove()];
-                    case 2: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        removed = _a.sent();
+                        return [2 /*return*/, {
+                                deleted: removed,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
+                            }];
+                    case 3:
+                        error_7 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_7
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    ArmyplacesService.prototype.deleteAllArmyPlaces = function () {
+    ArmyplacesService.prototype.deleteAllArmyPlaces = function (type) {
         return __awaiter(this, void 0, void 0, function () {
+            var removed, error_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo["delete"]({ type: 'private' })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.armyPlaceRepo["delete"]({ type: type })];
+                    case 1:
+                        removed = _a.sent();
+                        return [2 /*return*/, {
+                                deleted: removed,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
+                            }];
+                    case 2:
+                        error_8 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_8
+                            }];
+                    case 3: return [2 /*return*/];
                 }
-            });
-        });
-    };
-    //TODO:: Add place to armyPlace
-    ArmyplacesService.prototype.addPlace = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
             });
         });
     };
     //TODO: Add doctor to armyPlace
     ArmyplacesService.prototype.addDoctor = function (doctorId, armyPlaceId) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace, doctor;
+            var armyPlace, doctor, error_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +armyPlaceId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         armyPlace = _a.sent();
                         if (armyPlace === null || armyPlace === undefined) {
@@ -241,7 +378,9 @@ var ArmyplacesService = /** @class */ (function () {
                                     status: 0
                                 }];
                         }
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { id: +doctorId }
+                            })];
                     case 2:
                         doctor = _a.sent();
                         if (doctor === null || doctor === undefined) {
@@ -259,7 +398,17 @@ var ArmyplacesService = /** @class */ (function () {
                         return [4 /*yield*/, armyPlace.save()];
                     case 4:
                         _a.sent();
-                        return [2 /*return*/, armyPlace];
+                        return [2 /*return*/, {
+                                armyPlace: armyPlace,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 5:
+                        error_9 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_9
+                            }];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -267,56 +416,89 @@ var ArmyplacesService = /** @class */ (function () {
     //TODO: Generate appointment times for armyPlaces/ operations and everything else
     ArmyplacesService.prototype.updateArmyPlaceOperationDurations = function (armyPlaceId, newDuration) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace, date, appointmens;
+            var armyPlace_1, date, appointmens_1, error_10;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +armyPlaceId },
+                                loadRelationIds: true
+                            })];
                     case 1:
-                        armyPlace = _a.sent();
-                        if (armyPlace === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("ArmyPlace is null")];
+                        armyPlace_1 = _a.sent();
+                        if (armyPlace_1 === null) {
+                            return [2 /*return*/, new common_1.InternalServerErrorException('ArmyPlace is null')];
                         }
-                        if (armyPlace.shiftDuration === null) {
-                            armyPlace.shiftDuration = 8;
+                        if (armyPlace_1.shiftDuration === null) {
+                            armyPlace_1.shiftDuration = 8;
                         }
-                        if (armyPlace.appointmentTimes === null) {
-                            armyPlace.appointmentTimes = [];
+                        if (armyPlace_1.appointmentTimes === null) {
+                            armyPlace_1.appointmentTimes = [];
                         }
-                        if (armyPlace.appointmentDates === null || armyPlace.appointmentDates.length < 1) {
-                            armyPlace.appointmentDates = [];
+                        if (armyPlace_1.appointmentDates === null ||
+                            armyPlace_1.appointmentDates.length < 1) {
+                            armyPlace_1.appointmentDates = [];
                             date = new Date();
-                            armyPlace.appointmentDates.push(date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + " 08:00:00");
-                            armyPlace.appointmentDates.push((date.getDate() + 1) + "/" + date.getMonth() + "/" + date.getFullYear() + " 14:00:00");
+                            armyPlace_1.appointmentDates.push(date.getDate() +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 08:00:00');
+                            armyPlace_1.appointmentDates.push(date.getDate() +
+                                1 +
+                                '/' +
+                                date.getMonth() +
+                                '/' +
+                                date.getFullYear() +
+                                ' 14:00:00');
                         }
-                        if (armyPlace.appointmentDurations === null || armyPlace.appointmentDurations.length < 1) {
-                            armyPlace.appointmentDurations = [];
-                            armyPlace.appointmentDurations.push("02:00");
+                        if (armyPlace_1.appointmentDurations === null ||
+                            armyPlace_1.appointmentDurations.length < 1) {
+                            armyPlace_1.appointmentDurations = [];
+                            armyPlace_1.appointmentDurations.push('02:00');
                         }
-                        armyPlace.duration = newDuration;
-                        appointmens = [];
-                        armyPlace.appointmentDates.forEach(function (appointment) {
-                            appointmens.push.apply(appointmens, _this.getTimes(appointment, newDuration, armyPlace.shiftDuration));
+                        armyPlace_1.duration = newDuration;
+                        appointmens_1 = [];
+                        armyPlace_1.appointmentDates.forEach(function (appointment) {
+                            appointmens_1.push.apply(appointmens_1, _this.getTimes(appointment, newDuration, armyPlace_1.shiftDuration));
                         });
-                        armyPlace.appointmentTimes = appointmens;
-                        return [4 /*yield*/, armyPlace.save()];
+                        armyPlace_1.appointmentTimes = appointmens_1;
+                        return [4 /*yield*/, armyPlace_1.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, armyPlace];
+                        return [2 /*return*/, {
+                                armyPlace: armyPlace_1,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
+                            }];
+                    case 3:
+                        error_10 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_10
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     ArmyplacesService.prototype.updateArmyPlaceOperationDates = function (armyPlaceId, startDate, endDate) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace;
+            var armyPlace, error_11;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +armyPlaceId } })];
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +armyPlaceId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         armyPlace = _a.sent();
                         if (armyPlace === null) {
-                            return [2 /*return*/, new common_1.InternalServerErrorException("ArmyPlace Entity is null")];
+                            return [2 /*return*/, new common_1.InternalServerErrorException('ArmyPlace Entity is null')];
                         }
                         armyPlace.appointmentDates = this.getDaysList(startDate, endDate, armyPlace.appointmentDurations);
                         return [4 /*yield*/, armyPlace.save()];
@@ -324,6 +506,13 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.sent();
                         return [4 /*yield*/, this.updateArmyPlaceOperationDurations(armyPlaceId, armyPlace.duration)];
                     case 3: return [2 /*return*/, _a.sent()];
+                    case 4:
+                        error_11 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_11
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

@@ -50,6 +50,7 @@ var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var user_entity_1 = require("src/entities/user.entity");
 var insurance_entity_1 = require("src/entities/insurance.entity");
+var Constants_1 = require("src/helpers/Constants");
 var UserService = /** @class */ (function () {
     function UserService(userRepo, insuranceRepo, auth) {
         this.userRepo = userRepo;
@@ -57,25 +58,46 @@ var UserService = /** @class */ (function () {
         this.auth = auth;
     }
     UserService.prototype.findByUsername = function (username, user) {
-        return __awaiter(this, void 0, Promise, function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username }, relations: ['followers'] })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username },
+                                relations: ['followers']
+                            })];
                     case 1: return [2 /*return*/, (_a.sent()).toProfile(user)];
+                    case 2:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     UserService.prototype.updateUser = function (username, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, insurance;
+            var user, insurance, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username } })];
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
-                        if (!(data.insuranceCompanyId !== null && data.insuranceCompanyId !== undefined)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.insuranceRepo.findOne({ where: { id: +data.insuranceCompanyId } })];
+                        if (!(data.insuranceCompanyId !== null &&
+                            data.insuranceCompanyId !== undefined)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.insuranceRepo.findOne({
+                                where: { id: +data.insuranceCompanyId }
+                            })];
                     case 2:
                         insurance = _a.sent();
                         if (insurance === null || insurance === undefined) {
@@ -95,60 +117,104 @@ var UserService = /** @class */ (function () {
                     case 5: return [4 /*yield*/, this.userRepo.update({ username: username }, data)];
                     case 6:
                         _a.sent();
-                        return [2 /*return*/, user];
+                        return [2 /*return*/, { user: user, status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED }];
+                    case 7:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
     };
     UserService.prototype.followUser = function (currentUser, username) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var user, userF, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username }, relations: ['followers'] })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
                         user.followers.push(currentUser);
                         return [4 /*yield*/, user.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, user.toProfile(currentUser)];
+                        userF = user.toProfile(currentUser);
+                        return [2 /*return*/, {
+                                user: userF,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 3:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     UserService.prototype.unfollowUser = function (currentUser, username) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var user, userProfile, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username }, relations: ['followers'] })];
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
                         user.followers = user.followers.filter(function (follower) { return follower != currentUser; });
                         return [4 /*yield*/, user.save()];
                     case 2:
                         _a.sent();
-                        return [2 /*return*/, user.toProfile(currentUser)];
+                        userProfile = user.toProfile(currentUser);
+                        return [2 /*return*/, {
+                                user: userProfile,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 3:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
     UserService.prototype.addSubUser = function (currentUser, username) {
         return __awaiter(this, void 0, void 0, function () {
-            var newUser, user;
+            var newUser, user, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.auth.register({
-                            email: username.subUsername + "@myclinic.com",
-                            password: username.subUsername,
-                            username: username.subUsername
-                        })];
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, this.auth.register({
+                                email: username.subUsername + '@myclinic.com',
+                                password: username.subUsername,
+                                username: username.subUsername
+                            })];
                     case 1:
                         newUser = _a.sent();
                         console.log(newUser);
                         console.log(username);
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: username.subUsername } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username.subUsername },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         user = _a.sent();
                         if (currentUser.subUsers === undefined)
@@ -157,7 +223,17 @@ var UserService = /** @class */ (function () {
                         return [4 /*yield*/, currentUser.save()];
                     case 3:
                         _a.sent();
-                        return [2 /*return*/, currentUser];
+                        return [2 /*return*/, {
+                                user: currentUser,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
+                            }];
+                    case 4:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
+                            }];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

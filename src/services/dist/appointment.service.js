@@ -55,6 +55,7 @@ var doctorplace_entity_1 = require("src/entities/doctorplace.entity");
 var hospital_entity_1 = require("src/entities/hospital.entity");
 var place_entity_1 = require("src/entities/place.entity");
 var user_entity_1 = require("src/entities/user.entity");
+var Constants_1 = require("src/helpers/Constants");
 var AppointmentService = /** @class */ (function () {
     function AppointmentService(appointmentRepo, doctorRepo, userRepo, placeRepo, hospitalRepo, doctorPlaceRepo, armyPlaceRepo) {
         this.appointmentRepo = appointmentRepo;
@@ -78,29 +79,48 @@ var AppointmentService = /** @class */ (function () {
         });
     };
     AppointmentService.prototype.findDoctor = function (username, doctor) {
-        return __awaiter(this, void 0, Promise, function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('findDoctorCalled');
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: username } })];
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: username }, loadRelationIds: true })];
                     case 1: return [2 /*return*/, (_a.sent()).toProfile(doctor)];
+                    case 2:
+                        error_1 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_1
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.addAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctor, user, place, appointmentEntity, index, date, convertedDate;
+            var doctor, user, place, appointmentEntity, index, date, convertedDate, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: appointment.doctor } })];
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, this.doctorRepo.findOne({
+                                where: { username: appointment.doctor },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         doctor = _a.sent();
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: appointment.user },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         user = _a.sent();
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { placeName: appointment.place } })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { placeName: appointment.place },
+                                loadRelationIds: true
+                            })];
                     case 3:
                         place = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
@@ -118,8 +138,8 @@ var AppointmentService = /** @class */ (function () {
                         _a.sent();
                         appointmentEntity.doctor = doctor;
                         appointmentEntity.place = place;
-                        date = appointment.date.split("/");
-                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        date = appointment.date.split('/');
+                        convertedDate = date[1] + '/' + date[0] + '/' + date[2];
                         appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
@@ -132,7 +152,17 @@ var AppointmentService = /** @class */ (function () {
                         return [4 /*yield*/, appointmentEntity.save()];
                     case 6:
                         _a.sent();
-                        return [2 /*return*/, appointmentEntity];
+                        return [2 /*return*/, {
+                                appointmentEntity: appointmentEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 7:
+                        error_2 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_2
+                            }];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
@@ -144,16 +174,27 @@ var AppointmentService = /** @class */ (function () {
      */
     AppointmentService.prototype.addHospitalAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var hospital, user, place, appointmentEntity, index, date, convertedDate;
+            var hospital, user, place, appointmentEntity, index, date, convertedDate, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.hospitalRepo.findOne({ where: { id: +appointment.hospitalId } })];
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, this.hospitalRepo.findOne({
+                                where: { id: +appointment.hospitalId },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         hospital = _a.sent();
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: appointment.user },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         user = _a.sent();
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { placeName: appointment.place } })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { placeName: appointment.place },
+                                loadRelationIds: true
+                            })];
                     case 3:
                         place = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
@@ -161,7 +202,7 @@ var AppointmentService = /** @class */ (function () {
                         index = hospital.appointmentTimes.indexOf(appointment.time);
                         if (index === -1) {
                             return [2 /*return*/, {
-                                    status: 0,
+                                    status: new Constants_1.Constants().PREMADE_STATUS.Fail_Created,
                                     message: 'there was no time'
                                 }];
                         }
@@ -171,8 +212,8 @@ var AppointmentService = /** @class */ (function () {
                         _a.sent();
                         appointmentEntity.hospital = hospital;
                         appointmentEntity.place = place;
-                        date = appointment.date.split("/");
-                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        date = appointment.date.split('/');
+                        convertedDate = date[1] + '/' + date[0] + '/' + date[2];
                         appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
@@ -185,20 +226,38 @@ var AppointmentService = /** @class */ (function () {
                         return [4 /*yield*/, appointmentEntity.save()];
                     case 6:
                         _a.sent();
-                        return [2 /*return*/, appointmentEntity];
+                        return [2 /*return*/, {
+                                appointmentEntity: appointmentEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_UPDATED
+                            }];
+                    case 7:
+                        error_3 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_3
+                            }];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.addPlacesAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, place, appointmentEntity, index, date, convertedDate;
+            var user, place, appointmentEntity, index, date, convertedDate, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: appointment.user },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         user = _a.sent();
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +appointment.place } })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +appointment.place },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         place = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
@@ -206,7 +265,7 @@ var AppointmentService = /** @class */ (function () {
                         index = place.appointmentTimes.indexOf(appointment.time);
                         if (index === -1) {
                             return [2 /*return*/, {
-                                    status: 0,
+                                    status: new Constants_1.Constants().PREMADE_STATUS.Fail_Created,
                                     message: 'there was no time'
                                 }];
                         }
@@ -215,8 +274,8 @@ var AppointmentService = /** @class */ (function () {
                     case 3:
                         _a.sent();
                         appointmentEntity.place = place;
-                        date = appointment.date.split("/");
-                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        date = appointment.date.split('/');
+                        convertedDate = date[1] + '/' + date[0] + '/' + date[2];
                         appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
@@ -229,20 +288,38 @@ var AppointmentService = /** @class */ (function () {
                         return [4 /*yield*/, appointmentEntity.save()];
                     case 5:
                         _a.sent();
-                        return [2 /*return*/, appointmentEntity];
+                        return [2 /*return*/, {
+                                appointmentEntity: appointmentEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 6:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_4
+                            }];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.addDoctorPlaceAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var doctorPlacce, user, appointmentEntity, index, date, convertedDate;
+            var doctorPlacce, user, appointmentEntity, index, date, convertedDate, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.doctorPlaceRepo.findOne({ where: { id: +appointment.place } })];
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, this.doctorPlaceRepo.findOne({
+                                where: { id: +appointment.place },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         doctorPlacce = _a.sent();
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: appointment.user },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         user = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
@@ -251,7 +328,7 @@ var AppointmentService = /** @class */ (function () {
                         if (index === -1) {
                             return [2 /*return*/, {
                                     status: 0,
-                                    message: 'there was no time'
+                                    message: new Constants_1.Constants().PREMADE_STATUS.Fail_Created
                                 }];
                         }
                         doctorPlacce.appointmentTimes.splice(index, 1);
@@ -259,8 +336,8 @@ var AppointmentService = /** @class */ (function () {
                     case 3:
                         _a.sent();
                         appointmentEntity.doctorPlaces = doctorPlacce;
-                        date = appointment.date.split("/");
-                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        date = appointment.date.split('/');
+                        convertedDate = date[1] + '/' + date[0] + '/' + date[2];
                         appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
@@ -273,20 +350,38 @@ var AppointmentService = /** @class */ (function () {
                         return [4 /*yield*/, appointmentEntity.save()];
                     case 5:
                         _a.sent();
-                        return [2 /*return*/, appointmentEntity];
+                        return [2 /*return*/, {
+                                appointmentEntity: appointmentEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 6:
+                        error_5 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_5
+                            }];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.addArmyPlaceAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var armyPlace, user, appointmentEntity, index, date, convertedDate;
+            var armyPlace, user, appointmentEntity, index, date, convertedDate, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.armyPlaceRepo.findOne({ where: { id: +appointment.place } })];
+                    case 0:
+                        _a.trys.push([0, 6, , 7]);
+                        return [4 /*yield*/, this.armyPlaceRepo.findOne({
+                                where: { id: +appointment.place },
+                                loadRelationIds: true
+                            })];
                     case 1:
                         armyPlace = _a.sent();
-                        return [4 /*yield*/, this.userRepo.findOne({ where: { username: appointment.user } })];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: appointment.user },
+                                loadRelationIds: true
+                            })];
                     case 2:
                         user = _a.sent();
                         appointmentEntity = new appointment_entity_1.AppointmentEntity();
@@ -303,8 +398,8 @@ var AppointmentService = /** @class */ (function () {
                     case 3:
                         _a.sent();
                         appointmentEntity.armyPlaces = armyPlace;
-                        date = appointment.date.split("/");
-                        convertedDate = date[1] + "/" + date[0] + "/" + date[2];
+                        date = appointment.date.split('/');
+                        convertedDate = date[1] + '/' + date[0] + '/' + date[2];
                         appointmentEntity.date = new Date(convertedDate);
                         appointmentEntity.time = appointment.time;
                         appointmentEntity.rate = 0;
@@ -317,53 +412,126 @@ var AppointmentService = /** @class */ (function () {
                         return [4 /*yield*/, appointmentEntity.save()];
                     case 5:
                         _a.sent();
-                        return [2 /*return*/, appointmentEntity];
+                        return [2 /*return*/, {
+                                appointmentEntity: appointmentEntity,
+                                status: new Constants_1.Constants().PREMADE_STATUS.Success_Created
+                            }];
+                    case 6:
+                        error_6 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_6
+                            }];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.deleteAppointment = function (appointment) {
         return __awaiter(this, void 0, void 0, function () {
-            var appointmentEntity;
+            var appointmentEntity, deleted;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.appointmentRepo.findOne({ where: { id: appointment } })];
+                    case 0: return [4 /*yield*/, this.appointmentRepo.findOne({
+                            where: { id: appointment },
+                            loadRelationIds: true
+                        })];
                     case 1:
                         appointmentEntity = _a.sent();
                         return [4 /*yield*/, this.appointmentRepo.remove(appointmentEntity)];
-                    case 2: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        deleted = _a.sent();
+                        return [2 /*return*/, {
+                                deleted: deleted,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_DELETED
+                            }];
                 }
             });
         });
     };
     AppointmentService.prototype.getUserAppointments = function (user) {
         return __awaiter(this, void 0, void 0, function () {
+            var userAppointments, error_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.appointmentRepo.find({ where: { user: user.id } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.appointmentRepo.find({
+                                where: { user: user.id },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        userAppointments = _a.sent();
+                        return [2 /*return*/, {
+                                userAppointments: userAppointments,
+                                length: userAppointments.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_7 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_7
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.getAllDoctorsAppointments = function (user) {
         return __awaiter(this, void 0, void 0, function () {
+            var doctorAppointments, error_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log(user);
-                        return [4 /*yield*/, this.appointmentRepo.find({ where: { doctor: user.id } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.appointmentRepo.find({
+                                where: { doctor: user.id },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        doctorAppointments = _a.sent();
+                        return [2 /*return*/, {
+                                doctorAppointments: doctorAppointments,
+                                length: doctorAppointments.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_8 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_8
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     AppointmentService.prototype.getAllPlaceAppointments = function (place) {
         return __awaiter(this, void 0, void 0, function () {
+            var placeAppointments, error_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.appointmentRepo.find({ where: { place: place.id } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.appointmentRepo.find({
+                                where: { place: place.id },
+                                loadRelationIds: true
+                            })];
+                    case 1:
+                        placeAppointments = _a.sent();
+                        return [2 /*return*/, {
+                                placeAppointments: placeAppointments,
+                                length: placeAppointments.length,
+                                status: new Constants_1.Constants().PREMADE_STATUS.SUCCESS_GET
+                            }];
+                    case 2:
+                        error_9 = _a.sent();
+                        return [2 /*return*/, {
+                                status: new Constants_1.Constants().PREMADE_STATUS.Fail_GET,
+                                error: error_9
+                            }];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

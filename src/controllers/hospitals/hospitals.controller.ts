@@ -8,8 +8,8 @@ export class HospitalsController {
     constructor(private hospitalService: HospitalsService) { }
 
     @Get('/private')
-    getPrivateHospitals() {
-        return this.hospitalService.getAllPrivateHospitals();
+    getPrivateHospitals(@Query('langId')  langId: string) {
+        return this.hospitalService.getAllPrivateHospitals(langId);
     }
 
     @Get('/private/filter')
@@ -18,8 +18,8 @@ export class HospitalsController {
     }
 
     @Get('/general')
-    getAllGeneralHospitals() {
-        return this.hospitalService.getAllGeneralHospitals();
+    getAllGeneralHospitals( @Query('langId')  langId: string) {
+        return this.hospitalService.getAllGeneralHospitals(langId);
     }
 
     @Get('/general/filter')

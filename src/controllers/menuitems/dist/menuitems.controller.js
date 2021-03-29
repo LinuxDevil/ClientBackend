@@ -91,31 +91,31 @@ var MenuitemsController = /** @class */ (function () {
             });
         });
     };
-    MenuitemsController.prototype.getSubMenuItems = function () {
+    MenuitemsController.prototype.getSubMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemService.findSubUserMenuItems()];
+                    case 0: return [4 /*yield*/, this.menuItemService.findSubUserMenuItems(langId)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    MenuitemsController.prototype.getUserMenuItems = function () {
+    MenuitemsController.prototype.getUserMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemService.findUserMenuItems()];
+                    case 0: return [4 /*yield*/, this.menuItemService.findUserMenuItems(langId)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    MenuitemsController.prototype.getDoctorMenuItems = function () {
+    MenuitemsController.prototype.getDoctorMenuItems = function (langId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.menuItemService.findDoctorMenuItems()];
+                    case 0: return [4 /*yield*/, this.menuItemService.findDoctorMenuItems(langId)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -127,7 +127,8 @@ var MenuitemsController = /** @class */ (function () {
     ], MenuitemsController.prototype, "addMenuItem");
     __decorate([
         common_1.Post('/update/:menuItem'),
-        __param(0, common_1.Body()), __param(1, common_1.Param('menuItem'))
+        __param(0, common_1.Body()),
+        __param(1, common_1.Param('menuItem'))
     ], MenuitemsController.prototype, "updateMenuItem");
     __decorate([
         common_1.Post('/sub'),
@@ -138,13 +139,16 @@ var MenuitemsController = /** @class */ (function () {
         __param(0, common_1.Body())
     ], MenuitemsController.prototype, "deleteMenuItem");
     __decorate([
-        common_1.Get('/sub')
+        common_1.Get('/sub'),
+        __param(0, common_1.Query('langId'))
     ], MenuitemsController.prototype, "getSubMenuItems");
     __decorate([
-        common_1.Get('/user')
+        common_1.Get('/user'),
+        __param(0, common_1.Query('langId'))
     ], MenuitemsController.prototype, "getUserMenuItems");
     __decorate([
-        common_1.Get('/doctor')
+        common_1.Get('/doctor'),
+        __param(0, common_1.Query('langId'))
     ], MenuitemsController.prototype, "getDoctorMenuItems");
     MenuitemsController = __decorate([
         common_1.Controller('menuitems')
