@@ -181,6 +181,7 @@ export class HospitalsService {
       let hospitals = await this.hospitalRepo.find({
         where: { type: 'general', location: { id: +cityId } },
         loadRelationIds: true,
+        relations: ['location', 'doctors']
       });
       let hospitalNames = [];
       hospitals.forEach((hospital) => {

@@ -14,8 +14,7 @@ export class CitiesService {
   async createNewCity(cityDTO: CityDTO) {
     try {
       let foundCity = await this.citiesRepo.findOne({
-        where: { nameAr: cityDTO.nameAr },
-        loadRelationIds: true,
+        where: { nameAr: cityDTO.nameAr }
       });
       if (foundCity !== null || foundCity !== undefined) {
         return {
@@ -41,8 +40,7 @@ export class CitiesService {
 
   async getCities(lang: string) {
     try {
-      let cities = await this.citiesRepo.find({
-        loadRelationIds: true});
+      let cities = await this.citiesRepo.find();
       let uniqeCities = [];
       if (lang === '1') {
         uniqeCities = [...new Set(cities.map((item) => item.nameEn))];

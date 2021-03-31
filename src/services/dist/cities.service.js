@@ -69,8 +69,7 @@ var CitiesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, this.citiesRepo.findOne({
-                                where: { nameAr: cityDTO.nameAr },
-                                loadRelationIds: true
+                                where: { nameAr: cityDTO.nameAr }
                             })];
                     case 1:
                         foundCity = _a.sent();
@@ -110,9 +109,7 @@ var CitiesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.citiesRepo.find({
-                                loadRelationIds: true
-                            })];
+                        return [4 /*yield*/, this.citiesRepo.find()];
                     case 1:
                         cities = _a.sent();
                         uniqeCities = [];

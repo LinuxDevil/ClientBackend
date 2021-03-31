@@ -264,7 +264,8 @@ var HospitalsService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({
                             where: { type: 'general', location: { id: +cityId } },
-                            loadRelationIds: true
+                            loadRelationIds: true,
+                            relations: ['location', 'doctors']
                         })];
                     case 1:
                         hospitals = _a.sent();
