@@ -83,39 +83,66 @@ var PlaceEntity = /** @class */ (function (_super) {
         typeorm_1.Column('date', { array: true })
     ], PlaceEntity.prototype, "holidays");
     __decorate([
-        typeorm_1.ManyToOne(function () { return city_entity_1.CityEntity; }, function (city) { return city.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.ManyToOne(function () { return city_entity_1.CityEntity; }, function (city) { return city.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "location");
     __decorate([
-        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.ManyToOne(function () { return hospital_entity_1.HospitalEntity; }, function (hospital) { return hospital.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "hospital");
     __decorate([
-        typeorm_1.OneToMany(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return appointment_entity_1.AppointmentEntity; }, function (appointment) { return appointment.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinTable()
     ], PlaceEntity.prototype, "JoinColumn");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "labs");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "xrays");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "pharmacies");
     __decorate([
-        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.place; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return doctor_entity_1.DoctorEntity; }, function (doctor) { return doctor.place; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn({ name: 'doctors' })
     ], PlaceEntity.prototype, "doctors");
     __decorate([
-        typeorm_1.OneToMany(function () { return user_entity_1.UserEntity; }, function (user) { return user.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return user_entity_1.UserEntity; }, function (user) { return user.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "user");
     __decorate([
-        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, { onUpdate: 'CASCADE', onDelete: 'CASCADE' }),
+        typeorm_1.OneToMany(function () { return PlaceEntity_1; }, function (place) { return place.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
         typeorm_1.JoinColumn()
     ], PlaceEntity.prototype, "subvPlaces");
     __decorate([

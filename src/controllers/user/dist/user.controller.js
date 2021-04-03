@@ -23,9 +23,9 @@ var UserController = /** @class */ (function () {
     };
     UserController.prototype.getUser = function (user) {
         if (user === undefined) {
-            return new common_1.UnauthorizedException("No user");
+            return new common_1.UnauthorizedException('No user');
         }
-        return user === null ? { message: "No User", status: 0 } : user;
+        return user === null ? { message: 'No User', status: 0 } : { user: user };
     };
     UserController.prototype.update = function (_a, data) {
         var username = _a.username;
@@ -47,12 +47,14 @@ var UserController = /** @class */ (function () {
     __decorate([
         common_1.Put(),
         common_1.UseGuards(passport_1.AuthGuard()),
-        __param(0, user_decorator_1.User()), __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+        __param(0, user_decorator_1.User()),
+        __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
     ], UserController.prototype, "update");
     __decorate([
         common_1.Post('/addSub'),
         common_1.UseGuards(passport_1.AuthGuard()),
-        __param(0, user_decorator_1.User()), __param(1, common_1.Body())
+        __param(0, user_decorator_1.User()),
+        __param(1, common_1.Body())
     ], UserController.prototype, "addSubUser");
     UserController = __decorate([
         common_1.Controller('user')

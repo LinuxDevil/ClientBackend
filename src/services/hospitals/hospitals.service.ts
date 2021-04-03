@@ -106,7 +106,7 @@ export class HospitalsService {
     try {
       let hospitals = await this.hospitalRepo.find({
         where: { type: 'general' },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       let hospitalNames = [];
       hospitals.forEach((hospital) => {
@@ -131,7 +131,7 @@ export class HospitalsService {
     try {
       let hospitals = await this.hospitalRepo.find({
         where: { type: 'private' },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       let hospitalNames = [];
       hospitals.forEach((hospital) => {
@@ -156,7 +156,7 @@ export class HospitalsService {
     try {
       let hospitals = await this.hospitalRepo.find({
         where: { type: 'private', location: { id: +cityId } },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       let hospitalNames = [];
       hospitals.forEach((hospital) => {
@@ -178,26 +178,25 @@ export class HospitalsService {
   //Get all private hospitals
   async getAllFilteredGeneralHospitals(cityId: string, langId: string) {
     // try {
-      let hospitals = await this.hospitalRepo.find({
-        where: { type: 'general', location: { id: +cityId } },
-        loadRelationIds: true,
-        relations: ['location', 'doctors']
-      });
-      let hospitalNames = [];
-      hospitals.forEach((hospital) => {
-        if (langId === '1') hospitalNames.push(hospital.nameEn);
-        else hospitalNames.push(hospital.nameAr);
-      });
-      return {
-        hospitals,
-        length: hospitals.length,
-        hospitalNames,
-      };
+    let hospitals = await this.hospitalRepo.find({
+      where: { type: 'general', location: { id: +cityId } },
+      relations: ['location', 'doctors'],
+    });
+    let hospitalNames = [];
+    hospitals.forEach((hospital) => {
+      if (langId === '1') hospitalNames.push(hospital.nameEn);
+      else hospitalNames.push(hospital.nameAr);
+    });
+    return {
+      hospitals,
+      length: hospitals.length,
+      hospitalNames,
+    };
     // } catch (error) {
-      // return {
-        // status: new Constants().PREMADE_STATUS.Fail_GET,
-        // error,
-      // };
+    // return {
+    // status: new Constants().PREMADE_STATUS.Fail_GET,
+    // error,
+    // };
     // }
   }
 
@@ -263,7 +262,7 @@ export class HospitalsService {
     try {
       let hospital = await this.hospitalRepo.findOne({
         where: { id: +hospitalId },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       if (hospital === null || hospital === undefined) {
         return {
@@ -271,8 +270,7 @@ export class HospitalsService {
           status: 0,
         };
       }
-      let doctor = await this.doctorRepo.findOne({ where: { id: +doctorId },
-        loadRelationIds: true, });
+      let doctor = await this.doctorRepo.findOne({ where: { id: +doctorId } });
       if (doctor === null || doctor === undefined) {
         return {
           message: "There's no doctor with that id",
@@ -304,7 +302,6 @@ export class HospitalsService {
     try {
       let hospital = await this.hospitalRepo.findOne({
         where: { id: +hospitalId },
-        loadRelationIds: true,
       });
       if (hospital === null) {
         return new InternalServerErrorException('Hospital is null');
@@ -375,7 +372,6 @@ export class HospitalsService {
     try {
       let hospital = await this.hospitalRepo.findOne({
         where: { id: +hospitalId },
-        loadRelationIds: true,
       });
       if (hospital === null) {
         return new InternalServerErrorException('Hospital Entity is null');

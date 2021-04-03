@@ -99,14 +99,12 @@ export class HospitalEntity extends AbstractEntity {
   @JoinColumn({ name: 'doctors' })
   doctors: DoctorEntity[];
 
-//   @OneToMany(() => UserEntity, (user) => user.id, {
-//     onUpdate: 'CASCADE',
-//     onDelete: 'CASCADE',
-//   })
-//   @JoinColumn()
-//   user: UserEntity[];
-
-
+  @OneToMany(() => UserEntity, (user) => user.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
+  user: UserEntity[];
 
   @OneToMany(() => HospitalEntity, (hospital) => hospital.parentHospital, {
     onUpdate: 'CASCADE',

@@ -65,7 +65,8 @@ var AppointmentController = /** @class */ (function () {
     __decorate([
         common_1.Post(),
         common_1.UseGuards(passport_1.AuthGuard()),
-        __param(0, user_decorator_1.User()), __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
+        __param(0, user_decorator_1.User()),
+        __param(1, common_1.Body(new common_1.ValidationPipe({ transform: true, whitelist: true })))
     ], AppointmentController.prototype, "createNewAppointment");
     __decorate([
         common_1.Post('/hospital'),

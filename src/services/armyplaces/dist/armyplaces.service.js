@@ -154,7 +154,7 @@ var ArmyplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.armyPlaceRepo.find({
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlaces = _a.sent();
@@ -184,7 +184,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.armyPlaceRepo.find({
                                 where: { type: 'private' },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlaces = _a.sent();
@@ -214,7 +214,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.armyPlaceRepo.find({
                                 where: { type: 'private', location: { id: +cityId } },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlaces = _a.sent();
@@ -244,7 +244,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.armyPlaceRepo.find({
                                 where: { type: 'general', location: { id: +cityId } },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlaces = _a.sent();
@@ -274,7 +274,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.armyPlaceRepo.findOne({
                                 where: { id: +armyPlaceId },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlace = _a.sent();
@@ -424,7 +424,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.armyPlaceRepo.findOne({
                                 where: { id: +armyPlaceId },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlace_1 = _a.sent();
@@ -493,7 +493,7 @@ var ArmyplacesService = /** @class */ (function () {
                         _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, this.armyPlaceRepo.findOne({
                                 where: { id: +armyPlaceId },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         armyPlace = _a.sent();

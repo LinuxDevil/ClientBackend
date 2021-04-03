@@ -104,8 +104,7 @@ export class ArmyplacesService {
   async getAllGeneralArmyPlaces() {
     try {
       const armyPlaces = await this.armyPlaceRepo.find({
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       return {
         armyPlaces,
         length: armyPlaces.length,
@@ -124,8 +123,7 @@ export class ArmyplacesService {
     try {
       const armyPlaces = await this.armyPlaceRepo.find({
         where: { type: 'private' },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       return {
         armyPlaces,
         length: armyPlaces.length,
@@ -144,8 +142,7 @@ export class ArmyplacesService {
     try {
       const armyPlaces = await this.armyPlaceRepo.find({
         where: { type: 'private', location: { id: +cityId } },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       return {
         armyPlaces,
         length: armyPlaces.length,
@@ -163,8 +160,7 @@ export class ArmyplacesService {
     try {
       const armyPlaces = await this.armyPlaceRepo.find({
         where: { type: 'general', location: { id: +cityId } },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       return {
         armyPlaces,
         length: armyPlaces.length,
@@ -183,8 +179,7 @@ export class ArmyplacesService {
     try {
       const armyPlace = await this.armyPlaceRepo.findOne({
         where: { id: +armyPlaceId },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       if (armyPlace == null) {
         return {
           status: 0,
@@ -287,8 +282,7 @@ export class ArmyplacesService {
     try {
       const armyPlace = await this.armyPlaceRepo.findOne({
         where: { id: +armyPlaceId },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       if (armyPlace === null) {
         return new InternalServerErrorException('ArmyPlace is null');
       }
@@ -358,8 +352,7 @@ export class ArmyplacesService {
     try {
       const armyPlace = await this.armyPlaceRepo.findOne({
         where: { id: +armyPlaceId },
-        loadRelationIds: true,
-      });
+        relations: ['location', 'doctors'],      });
       if (armyPlace === null) {
         return new InternalServerErrorException('ArmyPlace Entity is null');
       }

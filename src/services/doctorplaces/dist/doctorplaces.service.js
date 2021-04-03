@@ -153,9 +153,7 @@ var DoctorplacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.doctorPlaceRepo.find({
-                                loadRelationIds: true
-                            })];
+                        return [4 /*yield*/, this.doctorPlaceRepo.find()];
                     case 1:
                         doctorPlaces = _a.sent();
                         return [2 /*return*/, {
@@ -183,8 +181,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorPlaceRepo.find({
-                                where: { type: 'private' },
-                                loadRelationIds: true
+                                where: { type: 'private' }, relations: ['location', 'doctors']
                             })];
                     case 1:
                         doctorPlaces = _a.sent();
@@ -213,8 +210,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorPlaceRepo.find({
-                                where: { type: 'private', location: { id: +cityId } },
-                                loadRelationIds: true
+                                where: { type: 'private', location: { id: +cityId } }, relations: ['location', 'doctors']
                             })];
                     case 1:
                         doctorPlaces = _a.sent();
@@ -242,8 +238,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorPlaceRepo.find({
-                                where: { type: 'general', location: { id: +cityId } },
-                                loadRelationIds: true
+                                where: { type: 'general', location: { id: +cityId } }, relations: ['location', 'doctors']
                             })];
                     case 1:
                         doctorPlaces = _a.sent();
@@ -271,8 +266,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.doctorPlaceRepo.findOne({
-                                where: { id: +doctorPlaceId },
-                                loadRelationIds: true
+                                where: { id: +doctorPlaceId }, relations: ['location', 'doctors']
                             })];
                     case 1:
                         doctorPlace = _a.sent();
@@ -419,8 +413,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.doctorPlaceRepo.findOne({
-                                where: { id: +doctorPlaceId },
-                                loadRelationIds: true
+                                where: { id: +doctorPlaceId }
                             })];
                     case 1:
                         doctorPlace_1 = _a.sent();
@@ -485,8 +478,7 @@ var DoctorplacesService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, this.doctorPlaceRepo.findOne({
-                                where: { id: +doctorPlaceId },
-                                loadRelationIds: true
+                                where: { id: +doctorPlaceId }
                             })];
                     case 1:
                         doctorPlace = _a.sent();

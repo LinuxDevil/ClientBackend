@@ -103,8 +103,7 @@ export class DoctorplacesService {
   //Get all general doctorPlaces
   async getAllGeneralDoctorPlaces() {
     try {
-      const doctorPlaces = await this.doctorPlaceRepo.find({
-        loadRelationIds: true,});
+      const doctorPlaces = await this.doctorPlaceRepo.find();
       return {
         doctorPlaces,
         length: doctorPlaces.length,
@@ -122,8 +121,8 @@ export class DoctorplacesService {
   async getAllPrivateDoctorPlaces() {
     try {
       const doctorPlaces = await this.doctorPlaceRepo.find({
-        where: { type: 'private' },
-        loadRelationIds: true,
+        where: { type: 'private' },          relations: ['location', 'doctors'],
+
       });
       return {
         doctorPlaces,
@@ -142,8 +141,8 @@ export class DoctorplacesService {
   async getAllFilteredPrivateDoctorPlaces(cityId: string) {
     try {
       const doctorPlaces = await this.doctorPlaceRepo.find({
-        where: { type: 'private', location: { id: +cityId } },
-        loadRelationIds: true,
+        where: { type: 'private', location: { id: +cityId } },         relations: ['location', 'doctors'],
+
       });
       return {
         doctorPlaces,
@@ -160,8 +159,8 @@ export class DoctorplacesService {
   async getAllFilteredGeneralDoctorPlaces(cityId: string) {
     try {
       const doctorPlaces = await this.doctorPlaceRepo.find({
-        where: { type: 'general', location: { id: +cityId } },
-        loadRelationIds: true,
+        where: { type: 'general', location: { id: +cityId } },        relations: ['location', 'doctors'],
+
       });
       return {
         doctorPlaces,
@@ -179,8 +178,8 @@ export class DoctorplacesService {
   async getDoctorPlaceById(doctorPlaceId: string) {
     try {
       const doctorPlace = await this.doctorPlaceRepo.findOne({
-        where: { id: +doctorPlaceId },
-        loadRelationIds: true,
+        where: { id: +doctorPlaceId },        relations: ['location', 'doctors'],
+
       });
       if (doctorPlace == null) {
         return {
@@ -282,7 +281,6 @@ export class DoctorplacesService {
     try {
       const doctorPlace = await this.doctorPlaceRepo.findOne({
         where: { id: +doctorPlaceId },
-        loadRelationIds: true,
       });
       if (doctorPlace === null) {
         return new InternalServerErrorException('DoctorPlace is null');
@@ -350,7 +348,6 @@ export class DoctorplacesService {
     try {
       const doctorPlace = await this.doctorPlaceRepo.findOne({
         where: { id: +doctorPlaceId },
-        loadRelationIds: true,
       });
       if (doctorPlace === null) {
         return new InternalServerErrorException('DoctorPlace Entity is null');

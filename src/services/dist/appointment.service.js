@@ -85,7 +85,7 @@ var AppointmentService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: username }, loadRelationIds: true })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { username: username } })];
                     case 1: return [2 /*return*/, (_a.sent()).toProfile(doctor)];
                     case 2:
                         error_1 = _a.sent();
@@ -106,20 +106,17 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 7, , 8]);
                         return [4 /*yield*/, this.doctorRepo.findOne({
-                                where: { username: appointment.doctor },
-                                loadRelationIds: true
+                                where: { username: appointment.doctor }
                             })];
                     case 1:
                         doctor = _a.sent();
                         return [4 /*yield*/, this.userRepo.findOne({
-                                where: { username: appointment.user },
-                                loadRelationIds: true
+                                where: { username: appointment.user }
                             })];
                     case 2:
                         user = _a.sent();
                         return [4 /*yield*/, this.placeRepo.findOne({
-                                where: { placeName: appointment.place },
-                                loadRelationIds: true
+                                where: { nameEn: appointment.place }
                             })];
                     case 3:
                         place = _a.sent();
@@ -181,19 +178,17 @@ var AppointmentService = /** @class */ (function () {
                         _a.trys.push([0, 7, , 8]);
                         return [4 /*yield*/, this.hospitalRepo.findOne({
                                 where: { id: +appointment.hospitalId },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         hospital = _a.sent();
                         return [4 /*yield*/, this.userRepo.findOne({
-                                where: { username: appointment.user },
-                                loadRelationIds: true
+                                where: { username: appointment.user }
                             })];
                     case 2:
                         user = _a.sent();
                         return [4 /*yield*/, this.placeRepo.findOne({
-                                where: { placeName: appointment.place },
-                                loadRelationIds: true
+                                where: { nameEn: appointment.place }
                             })];
                     case 3:
                         place = _a.sent();
@@ -249,14 +244,12 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, this.userRepo.findOne({
-                                where: { username: appointment.user },
-                                loadRelationIds: true
+                                where: { username: appointment.user }
                             })];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, this.placeRepo.findOne({
-                                where: { id: +appointment.place },
-                                loadRelationIds: true
+                                where: { id: +appointment.place }
                             })];
                     case 2:
                         place = _a.sent();
@@ -311,14 +304,12 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, this.doctorPlaceRepo.findOne({
-                                where: { id: +appointment.place },
-                                loadRelationIds: true
+                                where: { id: +appointment.place }
                             })];
                     case 1:
                         doctorPlacce = _a.sent();
                         return [4 /*yield*/, this.userRepo.findOne({
-                                where: { username: appointment.user },
-                                loadRelationIds: true
+                                where: { username: appointment.user }
                             })];
                     case 2:
                         user = _a.sent();
@@ -373,14 +364,12 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 6, , 7]);
                         return [4 /*yield*/, this.armyPlaceRepo.findOne({
-                                where: { id: +appointment.place },
-                                loadRelationIds: true
+                                where: { id: +appointment.place }
                             })];
                     case 1:
                         armyPlace = _a.sent();
                         return [4 /*yield*/, this.userRepo.findOne({
-                                where: { username: appointment.user },
-                                loadRelationIds: true
+                                where: { username: appointment.user }
                             })];
                     case 2:
                         user = _a.sent();
@@ -433,8 +422,7 @@ var AppointmentService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.appointmentRepo.findOne({
-                            where: { id: appointment },
-                            loadRelationIds: true
+                            where: { id: appointment }
                         })];
                     case 1:
                         appointmentEntity = _a.sent();
@@ -457,8 +445,7 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.appointmentRepo.find({
-                                where: { user: user.id },
-                                loadRelationIds: true
+                                where: { user: user.id }
                             })];
                     case 1:
                         userAppointments = _a.sent();
@@ -486,8 +473,7 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.appointmentRepo.find({
-                                where: { doctor: user.id },
-                                loadRelationIds: true
+                                where: { doctor: user.id }
                             })];
                     case 1:
                         doctorAppointments = _a.sent();
@@ -515,8 +501,7 @@ var AppointmentService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.appointmentRepo.find({
-                                where: { place: place.id },
-                                loadRelationIds: true
+                                where: { place: place.id }
                             })];
                     case 1:
                         placeAppointments = _a.sent();

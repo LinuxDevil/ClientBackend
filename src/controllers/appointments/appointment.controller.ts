@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { doc } from 'prettier';
 import { Doctor, Place, User } from 'src/decorators/user.decorator';
@@ -10,70 +18,90 @@ import { AppointmentService } from 'src/services/appointment.service';
 
 @Controller('appointment')
 export class AppointmentController {
+  constructor(private appointmentService: AppointmentService) {}
 
-    constructor(private appointmentService: AppointmentService) {}
+  @Get()
+  @UseGuards(AuthGuard())
+  findCurrentUser(@User() { username }: UserEntity) {
+    return this.appointmentService.findUser(username);
+  }
 
-    @Get()
-    @UseGuards(AuthGuard())
-    findCurrentUser(@User() {username}: UserEntity) {
-        return this.appointmentService.findUser(username);
-    }
+  @Get()
+  @UseGuards(AuthGuard())
+  findCurrentDoctor(@Doctor() { username }: DoctorEntity) {
+    return this.appointmentService.findDoctor(username);
+  }
 
-    @Get()
-    @UseGuards(AuthGuard())
-    findCurrentDoctor(@Doctor() {username}: DoctorEntity) {
-        return this.appointmentService.findDoctor(username);
-    }
+  @Post()
+  @UseGuards(AuthGuard())
+  createNewAppointment(
+    @User() user: UserEntity,
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    data: AppointmentDTO,
+  ) {
+    return this.appointmentService.addAppointment(data);
+  }
 
-    @Post()
-    @UseGuards(AuthGuard())
-    createNewAppointment(@User() user: UserEntity, @Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
-        return this.appointmentService.addAppointment(data);
-    }
+  @Post('/hospital')
+  createHospitalOperationAppointment(
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    data: AppointmentDTO,
+  ) {
+    return this.appointmentService.addHospitalAppointment(data);
+  }
 
-    @Post('/hospital')
-    createHospitalOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
-        return this.appointmentService.addHospitalAppointment(data);
-    }
+  @Post('/doctorplaces')
+  createDoctorPlaceOperationAppointment(
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    data: AppointmentDTO,
+  ) {
+    return this.appointmentService.addDoctorPlaceAppointment(data);
+  }
 
-    @Post('/doctorplaces')
-    createDoctorPlaceOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
-        return this.appointmentService.addDoctorPlaceAppointment(data);
-    }
+  @Post('/places')
+  createPlacesOperationAppointment(
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    data: AppointmentDTO,
+  ) {
+    return this.appointmentService.addPlacesAppointment(data);
+  }
 
-    @Post('/places')
-    createPlacesOperationAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
-        return this.appointmentService.addPlacesAppointment(data);
-    }
+  @Post('/armyplaces')
+  createArmyPlaceAppointment(
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    data: AppointmentDTO,
+  ) {
+    return this.appointmentService.addArmyPlaceAppointment(data);
+  }
 
+  @Delete('/delete')
+  @UseGuards(AuthGuard())
+  deleteAppointment(
+    @Body(new ValidationPipe({ transform: true }))
+    appointmentId: {
+      appointmentId: string;
+    },
+  ) {
+    return this.appointmentService.deleteAppointment(
+      appointmentId.appointmentId,
+    );
+  }
 
-    @Post('/armyplaces')
-    createArmyPlaceAppointment(@Body(new ValidationPipe({transform: true, whitelist: true})) data: AppointmentDTO) {
-        return this.appointmentService.addArmyPlaceAppointment(data);
-    }
+  @Post('/getUserAppointments')
+  @UseGuards(AuthGuard())
+  getAppointmentsForUser(@User() user: UserEntity) {
+    return this.appointmentService.getUserAppointments(user);
+  }
 
+  @Post('/getDoctorAppointments')
+  @UseGuards(AuthGuard())
+  getAppointmentsForDoctor(@Doctor() doctor: DoctorEntity) {
+    return this.appointmentService.getAllDoctorsAppointments(doctor);
+  }
 
-    @Delete('/delete')
-    @UseGuards(AuthGuard())
-    deleteAppointment(@Body(new ValidationPipe({transform: true})) appointmentId: {appointmentId: string}) {
-        return this.appointmentService.deleteAppointment(appointmentId.appointmentId);
-    }
-
-    @Post('/getUserAppointments')
-    @UseGuards(AuthGuard())
-    getAppointmentsForUser(@User() user: UserEntity) {
-        return this.appointmentService.getUserAppointments(user);
-    }
-
-    @Post('/getDoctorAppointments')
-    @UseGuards(AuthGuard())
-    getAppointmentsForDoctor(@Doctor() doctor: DoctorEntity) {
-        return this.appointmentService.getAllDoctorsAppointments(doctor);
-    }
-
-    @Post('/getAllPlaceAppointments')
-    @UseGuards(AuthGuard())
-    getAppointmentsForPlace(@Place() place: PlaceEntity) {
-        return this.appointmentService.getAllPlaceAppointments(place);
-    }
+  @Post('/getAllPlaceAppointments')
+  @UseGuards(AuthGuard())
+  getAppointmentsForPlace(@Place() place: PlaceEntity) {
+    return this.appointmentService.getAllPlaceAppointments(place);
+  }
 }

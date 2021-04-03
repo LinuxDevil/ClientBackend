@@ -38,8 +38,7 @@ export class AppointmentService {
 
   async findDoctor(username: string, doctor?: DoctorEntity) {
     try {
-      return (await this.doctorRepo.findOne({ where: { username },
-        loadRelationIds: true, })).toProfile(
+      return (await this.doctorRepo.findOne({ where: { username } })).toProfile(
         doctor,
       );
     } catch (error) {
@@ -54,15 +53,12 @@ export class AppointmentService {
     try {
       const doctor = await this.doctorRepo.findOne({
         where: { username: appointment.doctor },
-        loadRelationIds: true,
       });
       const user = await this.userRepo.findOne({
         where: { username: appointment.user },
-        loadRelationIds: true,
       });
       const place = await this.placeRepo.findOne({
-        where: { placeName: appointment.place },
-        loadRelationIds: true,
+        where: { nameEn: appointment.place },
       });
       const appointmentEntity: AppointmentEntity = new AppointmentEntity();
       appointmentEntity.user = user;
@@ -108,15 +104,13 @@ export class AppointmentService {
     try {
       const hospital = await this.hospitalRepo.findOne({
         where: { id: +appointment.hospitalId },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       const user = await this.userRepo.findOne({
         where: { username: appointment.user },
-        loadRelationIds: true,
       });
       const place = await this.placeRepo.findOne({
-        where: { placeName: appointment.place },
-        loadRelationIds: true,
+        where: { nameEn: appointment.place },
       });
       const appointmentEntity: AppointmentEntity = new AppointmentEntity();
       appointmentEntity.user = user;
@@ -157,11 +151,9 @@ export class AppointmentService {
     try {
       const user = await this.userRepo.findOne({
         where: { username: appointment.user },
-        loadRelationIds: true,
       });
       const place = await this.placeRepo.findOne({
         where: { id: +appointment.place },
-        loadRelationIds: true,
       });
       const appointmentEntity: AppointmentEntity = new AppointmentEntity();
       appointmentEntity.user = user;
@@ -201,11 +193,9 @@ export class AppointmentService {
     try {
       const doctorPlacce = await this.doctorPlaceRepo.findOne({
         where: { id: +appointment.place },
-        loadRelationIds: true,
       });
       const user = await this.userRepo.findOne({
         where: { username: appointment.user },
-        loadRelationIds: true,
       });
       const appointmentEntity: AppointmentEntity = new AppointmentEntity();
       appointmentEntity.user = user;
@@ -245,11 +235,9 @@ export class AppointmentService {
     try {
       const armyPlace = await this.armyPlaceRepo.findOne({
         where: { id: +appointment.place },
-        loadRelationIds: true,
       });
       const user = await this.userRepo.findOne({
         where: { username: appointment.user },
-        loadRelationIds: true,
       });
       const appointmentEntity: AppointmentEntity = new AppointmentEntity();
       appointmentEntity.user = user;
@@ -288,7 +276,6 @@ export class AppointmentService {
   async deleteAppointment(appointment: string) {
     const appointmentEntity = await this.appointmentRepo.findOne({
       where: { id: appointment },
-      loadRelationIds: true,
     });
     const deleted = await this.appointmentRepo.remove(appointmentEntity);
     return {
@@ -301,7 +288,6 @@ export class AppointmentService {
     try {
       const userAppointments = await this.appointmentRepo.find({
         where: { user: user.id },
-        loadRelationIds: true,
       });
       return {
         userAppointments,
@@ -320,7 +306,6 @@ export class AppointmentService {
     try {
       const doctorAppointments = await this.appointmentRepo.find({
         where: { doctor: user.id },
-        loadRelationIds: true,
       });
       return {
         doctorAppointments,
@@ -339,7 +324,6 @@ export class AppointmentService {
     try {
       const placeAppointments = await this.appointmentRepo.find({
         where: { place: place.id },
-        loadRelationIds: true,
       });
       return {
         placeAppointments,

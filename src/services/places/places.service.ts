@@ -82,7 +82,6 @@ export class PlacesService {
       }
       const city = await this.cityRepository.findOne({
         where: { id: place.cityId },
-        loadRelationIds: true,
       });
       if (city === null) return new Error('City id is not found');
       const placeEntity = await this.placeRepo.create(place);
@@ -105,7 +104,7 @@ export class PlacesService {
     try {
       const places = await this.placeRepo.find({
         where: { type: type },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       return {
         type,
@@ -126,7 +125,7 @@ export class PlacesService {
     try {
       const places = await this.placeRepo.find({
         where: { type: type, location: { id: +cityId } },
-        loadRelationIds: true,
+        relations: ['location', 'doctors'],
       });
       return {
         type,
@@ -146,8 +145,10 @@ export class PlacesService {
   //Get place by id
   async getPlaceById(placeId: string) {
     try {
-      const place = await this.placeRepo.findOne({ where: { id: +placeId },
-        loadRelationIds: true, });
+      const place = await this.placeRepo.findOne({
+        where: { id: +placeId },
+        relations: ['location', 'doctors'],
+      });
       if (place == null) {
         return {
           status: 0,
@@ -165,8 +166,9 @@ export class PlacesService {
 
   async deletePlace(placeId: string) {
     try {
-      const place = await this.placeRepo.findOne({ where: { id: +placeId },
-        loadRelationIds: true, });
+      const place = await this.placeRepo.findOne({
+        where: { id: +placeId },
+      });
       console.log(place);
       if (place === null || place === undefined)
         return {
@@ -204,8 +206,10 @@ export class PlacesService {
   //TODO: Add doctor to place
   async addDoctor(doctorId: string, placeId: string) {
     try {
-      const place = await this.placeRepo.findOne({ where: { id: +placeId },
-        loadRelationIds: true, });
+      const place = await this.placeRepo.findOne({
+        where: { id: +placeId },
+        relations: ['location', 'doctors'],
+      });
       if (place === null || place === undefined) {
         return {
           message: "There's no place with that id",
@@ -239,8 +243,10 @@ export class PlacesService {
   //TODO: Generate appointment times for places/ operations and everything else
   async updatePlaceOperationDurations(placeId: string, newDuration: string) {
     try {
-      const place = await this.placeRepo.findOne({ where: { id: +placeId },
-        loadRelationIds: true, });
+      const place = await this.placeRepo.findOne({
+        where: { id: +placeId },
+        relations: ['location', 'doctors'],
+      });
       if (place === null) {
         return new InternalServerErrorException('Place is null');
       }
@@ -305,8 +311,10 @@ export class PlacesService {
     endDate: string,
   ) {
     try {
-      const place = await this.placeRepo.findOne({ where: { id: +placeId },
-        loadRelationIds: true, });
+      const place = await this.placeRepo.findOne({
+        where: { id: +placeId },
+        relations: ['location', 'doctors'],
+      });
       if (place === null) {
         return new InternalServerErrorException('Place Entity is null');
       }

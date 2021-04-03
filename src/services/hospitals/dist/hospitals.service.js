@@ -155,7 +155,7 @@ var HospitalsService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.hospitalRepo.find({
                                 where: { type: 'general' },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         hospitals = _a.sent();
@@ -192,7 +192,7 @@ var HospitalsService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.hospitalRepo.find({
                                 where: { type: 'private' },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         hospitals = _a.sent();
@@ -229,7 +229,7 @@ var HospitalsService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.hospitalRepo.find({
                                 where: { type: 'private', location: { id: +cityId } },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         hospitals = _a.sent();
@@ -264,7 +264,6 @@ var HospitalsService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.hospitalRepo.find({
                             where: { type: 'general', location: { id: +cityId } },
-                            loadRelationIds: true,
                             relations: ['location', 'doctors']
                         })];
                     case 1:
@@ -383,7 +382,7 @@ var HospitalsService = /** @class */ (function () {
                         _a.trys.push([0, 5, , 6]);
                         return [4 /*yield*/, this.hospitalRepo.findOne({
                                 where: { id: +hospitalId },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         hospital = _a.sent();
@@ -393,8 +392,7 @@ var HospitalsService = /** @class */ (function () {
                                     status: 0
                                 }];
                         }
-                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.doctorRepo.findOne({ where: { id: +doctorId } })];
                     case 2:
                         doctor = _a.sent();
                         if (doctor === null || doctor === undefined) {
@@ -437,8 +435,7 @@ var HospitalsService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.hospitalRepo.findOne({
-                                where: { id: +hospitalId },
-                                loadRelationIds: true
+                                where: { id: +hospitalId }
                             })];
                     case 1:
                         hospital_1 = _a.sent();
@@ -506,8 +503,7 @@ var HospitalsService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, this.hospitalRepo.findOne({
-                                where: { id: +hospitalId },
-                                loadRelationIds: true
+                                where: { id: +hospitalId }
                             })];
                     case 1:
                         hospital = _a.sent();

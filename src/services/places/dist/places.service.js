@@ -117,8 +117,7 @@ var PlacesService = /** @class */ (function () {
                             return [2 /*return*/, new Error('Invalid input')];
                         }
                         return [4 /*yield*/, this.cityRepository.findOne({
-                                where: { id: place.cityId },
-                                loadRelationIds: true
+                                where: { id: place.cityId }
                             })];
                     case 1:
                         city = _a.sent();
@@ -156,7 +155,7 @@ var PlacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.placeRepo.find({
                                 where: { type: type },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         places = _a.sent();
@@ -187,7 +186,7 @@ var PlacesService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.placeRepo.find({
                                 where: { type: type, location: { id: +cityId } },
-                                loadRelationIds: true
+                                relations: ['location', 'doctors']
                             })];
                     case 1:
                         places = _a.sent();
@@ -217,8 +216,10 @@ var PlacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +placeId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         place = _a.sent();
                         if (place == null) {
@@ -246,8 +247,9 @@ var PlacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +placeId }
+                            })];
                     case 1:
                         place = _a.sent();
                         console.log(place);
@@ -307,8 +309,10 @@ var PlacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +placeId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         place = _a.sent();
                         if (place === null || place === undefined) {
@@ -359,8 +363,10 @@ var PlacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +placeId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         place_1 = _a.sent();
                         if (place_1 === null) {
@@ -423,8 +429,10 @@ var PlacesService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, this.placeRepo.findOne({ where: { id: +placeId },
-                                loadRelationIds: true })];
+                        return [4 /*yield*/, this.placeRepo.findOne({
+                                where: { id: +placeId },
+                                relations: ['location', 'doctors']
+                            })];
                     case 1:
                         place = _a.sent();
                         if (place === null) {

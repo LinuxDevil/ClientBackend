@@ -26,6 +26,7 @@ var appointment_entity_1 = require("./appointment.entity");
 var city_entity_1 = require("./city.entity");
 var doctor_entity_1 = require("./doctor.entity");
 var place_entity_1 = require("./place.entity");
+var user_entity_1 = require("./user.entity");
 var HospitalEntity = /** @class */ (function (_super) {
     __extends(HospitalEntity, _super);
     function HospitalEntity() {
@@ -116,6 +117,13 @@ var HospitalEntity = /** @class */ (function (_super) {
         }),
         typeorm_1.JoinColumn({ name: 'doctors' })
     ], HospitalEntity.prototype, "doctors");
+    __decorate([
+        typeorm_1.OneToMany(function () { return user_entity_1.UserEntity; }, function (user) { return user.id; }, {
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
+        }),
+        typeorm_1.JoinColumn()
+    ], HospitalEntity.prototype, "user");
     __decorate([
         typeorm_1.OneToMany(function () { return HospitalEntity_1; }, function (hospital) { return hospital.parentHospital; }, {
             onUpdate: 'CASCADE',
